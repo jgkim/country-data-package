@@ -37,13 +37,12 @@ Feature('Country Data Scraping',
         const countries = callback.getCall(0).args[1];
         expect(countries).to.have.length.of.at.least(3);
 
-        const korea = _.find(countries, { iso_3166_1_alpha_2: 'KR' });
-        expect(korea.english_short_name).to.equal('Korea (Republic of)');
-        expect(korea.iso_3166_1_alpha_3).to.equal('KOR');
-        expect(korea.iso_3166_1_numeric).to.equal('410');
-        expect(korea.iso_3166_2).to.equal('ISO 3166-2:KR');
-        expect(korea.dbpedia_url).to.equal('http://dbpedia.org/resource/Korea_(Republic_of)');
-        expect(korea.wikipedia_iso_3166_2_url).to.equal('https://en.wikipedia.org/wiki/ISO_3166-2:KR');
+        const korea = _.find(countries, { isoTwoLetterCountryCode: 'KR' });
+        expect(korea.englishShortName).to.equal('Korea (Republic of)');
+        expect(korea.isoThreeLetterCountryCode).to.equal('KOR');
+        expect(korea.isoThreeDigitCountryCode).to.equal('410');
+        expect(korea.isoCountrySubdivisionCode).to.equal('ISO 3166-2:KR');
+        expect(korea.wikipediaSlug).to.equal('Korea_(Republic_of)');
 
         nock.cleanAll();
         nock.restore();
