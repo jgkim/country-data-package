@@ -18,7 +18,7 @@
     "watch": "mocha --opts tests/mocha.opts --compilers js:babel-core/register --watch `find tests -path tests/coverage -prune -o -name '*.js' -print`"
   },
   "bin": {
-    "get-country-data": "scripts/scraper.js"
+    "get-country-data": "scripts/Scraper.js"
   },
   "dependencies": {
     "x-ray": "^2.0.2",

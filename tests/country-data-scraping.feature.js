@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import nock from 'nock';
 import _ from 'lodash';
-import Scraper from '../scripts/scraper.js';
+import Scraper from '../scripts/Scraper';
 
 chai.use(dirtyChai);
 chai.use(sinonChai);
