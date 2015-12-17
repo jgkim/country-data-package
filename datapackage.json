@@ -1,0 +1,22 @@
+{
+  "name": "country-data-package",
+  "version": "0.0.1",
+  "title": "Country Data Package",
+  "description": "A Data Package for names and codes for countries and their subdivisions",
+  "keywords": [
+    "data package",
+    "country",
+    "subdivision",
+    "iso 3166",
+    "iso 3166-1",
+    "iso 3166-2"
+  ],
+  "author": "James G. Kim <jgkim@jayg.org> (http://jayg.org/)",
+  "license": "ODC-PDDL-1.0",
+  "format": "csv",
+  "sources": [{
+    "name": "Wikipedia",
+    "web": "https://en.wikipedia.org/wiki/ISO_3166-1"
+  }],
+  "resources": []
+}
