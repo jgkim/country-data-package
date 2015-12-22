@@ -2,7 +2,6 @@
 
 import 'babel-polyfill';
 import xray from 'x-ray';
-import rdf from 'rdflib';
 
 class Scraper {
   constructor() {
@@ -12,6 +11,9 @@ class Scraper {
 
   /**
   * _getCountryList() scrapes names and codes of countries in ISO 3166-1 from Wikipedia.
+  *
+  * @access private
+  * @return {Promise}
   */
   _getCountryList() {
     return new Promise((resolve, reject) => {
@@ -34,7 +36,14 @@ class Scraper {
     });
   }
 
-  _getWikidataIds(countries) {
+  /**
+  * _getWikiIds() scrapes the Wikipedia canonical slug and the Wikidata ID of each country.
+  *
+  * @access private
+  * @param {Array} countries
+  * @return {Promise} a promise that waits for all promises for countries to be fulfilled
+  */
+  _getWikiIds(countries) {
     const promises = [];
 
     countries.map((country) => {
@@ -60,11 +69,17 @@ class Scraper {
     return Promise.all(promises);
   }
 
+  /**
+  * getCountries() scrapes data about countries in ISO 3166-1.
+  *
+  * @access public
+  * @return {Promise}
+  */
   getCountries() {
     if (!this.countries.length) {
       return this._getCountryList()
         .then((countries) => {
-          return this._getWikidataIds(countries);
+          return this._getWikiIds(countries);
         })
         .then((countries) => {
           this.countries = countries;
