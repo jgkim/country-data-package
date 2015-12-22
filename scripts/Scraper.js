@@ -123,7 +123,7 @@ class Scraper {
                 }).toArray();
 
                 if (!filtered.length) {
-                  throw new Error('Cannot find a GeoNames ID for this country');
+                  throw new Error(`Cannot find a GeoNames ID for this country: ${country.englishShortName}`);
                 }
 
                 const newCountry = Object.assign({}, country);
