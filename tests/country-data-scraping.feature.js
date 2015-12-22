@@ -36,18 +36,18 @@ Feature('Country Data Scraping',
           .matchHeader('Accept', /text\/(n3|turtle)/)
           .get('/resource/Q31')
           .replyWithFile(200, `${__dirname}/fixtures/Q31.n3`, {
-              'Content-Type': 'text/n3',
-            })
+            'Content-Type': 'text/n3',
+          })
           .matchHeader('Accept', /application\/n\-triples/)
           .get('/resource/Q884')
           .replyWithFile(200, `${__dirname}/fixtures/Q884.ntriples`, {
-              'Content-Type': 'application/n-triples; qs=0.95',
-            })
+            'Content-Type': 'application/n-triples; qs=0.95',
+          })
           .matchHeader('Accept', /application\/rdf\+xml/)
           .get('/resource/Q30')
           .replyWithFile(200, `${__dirname}/fixtures/Q30.rdf`, {
-              'Content-Type': 'application/rdf+xml',
-            });
+            'Content-Type': 'application/rdf+xml',
+          });
       });
 
       When('the data consumer starts scraping', () => {
