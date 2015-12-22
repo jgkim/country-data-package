@@ -4,12 +4,14 @@ import 'babel-polyfill';
 import _ from 'lodash';
 import xray from 'x-ray';
 
-import superagent from 'superagent';
-import superagentRetry from 'superagent-retry';
-const request = superagentRetry(superagent);
-superagentRetry.retries.push(function internalServerError(error, response) {
-  return response && response.status === 500;
-});
+// import superagent from 'superagent';
+// import superagentRetry from 'superagent-retry';
+// const request = superagentRetry(superagent);
+// superagentRetry.retries.push(function internalServerError(error, response) {
+//   return response && response.status === 500;
+// });
+
+import SparqlStore from 'rdf-store-sparql';
 
 import rdf from 'rdf-ext';
 import N3Parser from 'rdf-parser-n3';
@@ -111,45 +113,59 @@ class Scraper {
           refCountry.geoNamesId = '1668284';
           resolve(refCountry);
         } else {
-          /*
-           * TODO: It takes too long so we need to use the SPARQL endpoint instead to only select sameAs triples.
-           *
-           * SELECT DISTINCT ?Concept
-           *   WHERE {
-           *     <http://wikidata.dbpedia.org/resource/Q31> owl:sameAs ?Concept
-           *     FILTER STRSTARTS(STR(?Concept),'http://sws.geonames.org/')
-           *   }
-           */
-          const dbpediaUri = `http://wikidata.dbpedia.org/resource/${refCountry.wikidataId}`;
+          const dbpediaGraphUri = 'http://wikidata.dbpedia.org';
+          const dbpediaUri = `${dbpediaGraphUri}/resource/${refCountry.wikidataId}`;
+          const store = new SparqlStore({
+            endpointUrl: 'http://wikidata.dbpedia.org/sparql',
+            // The SPARQL endpoint of DBpedia cannot support "application/n-triples".
+            mimeType: 'text/plain',
+          });
 
-          request.get(dbpediaUri)
-            .accept('text/turtle, text/n3, application/rdf+xml, application/n-triples')
-            .buffer(true)
-            .retry(5)
-            .end((error, response) => {
-              if (error) {
-                reject(error);
-              } else {
-                rdf.parsers.parse(response.type, response.text).then((graph) => {
-                  const filtered = graph.filter((triple) => {
-                    return triple.subject.equals(dbpediaUri) &&
-                      triple.predicate.equals(rdf.resolve('owl:sameAs')) &&
-                      triple.object.toString().match(/http:\/\/sws\.geonames\.org/i);
-                  }).toArray();
+          store.match(dbpediaUri, rdf.resolve('owl:sameAs'), undefined, dbpediaGraphUri).then((graph) => {
+            const filtered = graph.filter((triple) => {
+              return triple.object.toString().match(/http:\/\/sws\.geonames\.org/i);
+            }).toArray();
 
-                  if (!filtered.length) {
-                    throw new Error(`Cannot find a GeoNames ID for this country: ${refCountry.englishShortName}`);
-                  }
+            if (!filtered.length) {
+              throw new Error(`Cannot find a GeoNames ID for this country: ${refCountry.englishShortName}`);
+            }
 
-                  const geoNamesUrl = _.trimRight(filtered[0].object.toString(), '/');
-                  refCountry.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
+            const geoNamesUrl = _.trimRight(filtered[0].object.toString(), '/');
+            refCountry.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
 
-                  resolve(refCountry);
-                }).catch((exception) => {
-                  reject(exception);
-                });
-              }
-            });
+            resolve(refCountry);
+          }).catch((exception) => {
+            reject(exception);
+          });
+
+          // request.get(dbpediaUri)
+          //   .accept('text/turtle, text/n3, application/rdf+xml, application/n-triples')
+          //   .buffer(true)
+          //   .retry(5)
+          //   .end((error, response) => {
+          //     if (error) {
+          //       reject(error);
+          //     } else {
+          //       rdf.parsers.parse(response.type, response.text).then((graph) => {
+          //         const filtered = graph.filter((triple) => {
+          //           return triple.subject.equals(dbpediaUri) &&
+          //             triple.predicate.equals(rdf.resolve('owl:sameAs')) &&
+          //             triple.object.toString().match(/http:\/\/sws\.geonames\.org/i);
+          //         }).toArray();
+          //
+          //         if (!filtered.length) {
+          //           throw new Error(`Cannot find a GeoNames ID for this country: ${refCountry.englishShortName}`);
+          //         }
+          //
+          //         const geoNamesUrl = _.trimRight(filtered[0].object.toString(), '/');
+          //         refCountry.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
+          //
+          //         resolve(refCountry);
+          //       }).catch((exception) => {
+          //         reject(exception);
+          //       });
+          //     }
+          //   });
         }
       }));
     });

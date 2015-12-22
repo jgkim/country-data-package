@@ -33,21 +33,42 @@ Feature('Country Data Scraping',
           .replyWithFile(200, `${__dirname}/fixtures/US.html`);
 
         nock('http://wikidata.dbpedia.org')
-          .matchHeader('Accept', /text\/(n3|turtle)/)
-          .get('/resource/Q31')
-          .replyWithFile(200, `${__dirname}/fixtures/Q31.n3`, {
-            'Content-Type': 'text/n3',
+          .get('/sparql')
+          .query({
+            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q31><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q31><http://www.w3.org/2002/07/owl#sameAs>?o}}',
           })
-          .matchHeader('Accept', /application\/n\-triples/)
-          .get('/resource/Q884')
+          .replyWithFile(200, `${__dirname}/fixtures/Q31.ntriples`, {
+            'Content-Type': 'text/plain',
+          })
+          .get('/sparql')
+          .query({
+            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q884><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q884><http://www.w3.org/2002/07/owl#sameAs>?o}}',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q884.ntriples`, {
-            'Content-Type': 'application/n-triples; qs=0.95',
+            'Content-Type': 'text/plain',
           })
-          .matchHeader('Accept', /application\/rdf\+xml/)
-          .get('/resource/Q30')
-          .replyWithFile(200, `${__dirname}/fixtures/Q30.rdf`, {
-            'Content-Type': 'application/rdf+xml',
+          .get('/sparql')
+          .query({
+            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q30><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q30><http://www.w3.org/2002/07/owl#sameAs>?o}}',
+          })
+          .replyWithFile(200, `${__dirname}/fixtures/Q30.ntriples`, {
+            'Content-Type': 'text/plain',
           });
+          // .matchHeader('Accept', /text\/(n3|turtle)/)
+          // .get('/resource/Q31')
+          // .replyWithFile(200, `${__dirname}/fixtures/Q31.n3`, {
+          //   'Content-Type': 'text/n3',
+          // })
+          // .matchHeader('Accept', /application\/n\-triples/)
+          // .get('/resource/Q884')
+          // .replyWithFile(200, `${__dirname}/fixtures/Q884.ntriples`, {
+          //   'Content-Type': 'application/n-triples; qs=0.95',
+          // })
+          // .matchHeader('Accept', /application\/rdf\+xml/)
+          // .get('/resource/Q30')
+          // .replyWithFile(200, `${__dirname}/fixtures/Q30.rdf`, {
+          //   'Content-Type': 'application/rdf+xml',
+          // });
       });
 
       When('the data consumer starts scraping', () => {
