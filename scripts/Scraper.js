@@ -7,8 +7,8 @@ import xray from 'x-ray';
 import superagent from 'superagent';
 import superagentRetry from 'superagent-retry';
 const request = superagentRetry(superagent);
-superagentRetry.retries.push(function internalServerError(error) {
-  return error && error.status === 500;
+superagentRetry.retries.push(function internalServerError(error, response) {
+  return response && response.status === 500;
 });
 
 import rdf from 'rdf-ext';
@@ -111,7 +111,15 @@ class Scraper {
           refCountry.geoNamesId = '1668284';
           resolve(refCountry);
         } else {
-          // TODO: It takes too long so we need to use the SPARQL endpoint instead to only select sameAs triples.
+          /*
+           * TODO: It takes too long so we need to use the SPARQL endpoint instead to only select sameAs triples.
+           *
+           * SELECT DISTINCT ?Concept
+           *   WHERE {
+           *     <http://wikidata.dbpedia.org/resource/Q31> owl:sameAs ?Concept
+           *     FILTER STRSTARTS(STR(?Concept),'http://sws.geonames.org/')
+           *   }
+           */
           const dbpediaUri = `http://wikidata.dbpedia.org/resource/${refCountry.wikidataId}`;
 
           request.get(dbpediaUri)
