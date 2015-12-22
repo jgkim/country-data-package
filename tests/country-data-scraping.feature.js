@@ -1,71 +1,83 @@
 import chai, { expect } from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import dirtyChai from 'dirty-chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
 import nock from 'nock';
 import _ from 'lodash';
 import Scraper from '../scripts/Scraper';
 
+chai.use(chaiAsPromised);
 chai.use(dirtyChai);
-chai.use(sinonChai);
 
 Feature('Country Data Scraping',
   'As a data consumer',
   'I want to scrape data about countries from the Web',
   'so that I can re-use the data for other purposes', () => {
     let scraper;
-    let callback;
-
-    beforeEach(() => {
-      scraper = new Scraper();
-    });
+    let promise;
 
     Scenario('Good Network Connection', () => {
-      Given('the network connection is okay', () => {
+      before(() => {
+        scraper = new Scraper();
         if (!nock.isActive()) nock.activate();
+      });
+
+      Given('the network connection is okay', () => {
         nock('https://en.wikipedia.org')
           .get('/wiki/ISO_3166-1')
-          .replyWithFile(200, `${__dirname}/fixtures/ISO_3166-1.html`);
+          .replyWithFile(200, `${__dirname}/fixtures/ISO_3166-1.html`)
+          .get('/wiki/Belgium')
+          .replyWithFile(200, `${__dirname}/fixtures/BE.html`)
+          .get('/wiki/Korea_(Republic_of)')
+          .replyWithFile(200, `${__dirname}/fixtures/KR.html`)
+          .get('/wiki/United_States_of_America')
+          .replyWithFile(200, `${__dirname}/fixtures/US.html`);
       });
 
-      When('the data consumer starts scraping', (done) => {
-        callback = sinon.spy((error) => { done(error); });
-        scraper.getCountries(callback);
+      When('the data consumer starts scraping', () => {
+        promise = scraper.getCountries();
       });
 
-      Then('data about countries will be returned', () => {
-        const countries = callback.getCall(0).args[1];
-        expect(countries).to.have.length.of.at.least(3);
+      Then('data about countries will eventually be returned', () => {
+        return promise.then((countries) => {
+          expect(countries).to.have.length.of.at.least(3);
 
-        const korea = _.find(countries, { isoTwoLetterCountryCode: 'KR' });
-        expect(korea.englishShortName).to.equal('Korea (Republic of)');
-        expect(korea.isoThreeLetterCountryCode).to.equal('KOR');
-        expect(korea.isoThreeDigitCountryCode).to.equal('410');
-        expect(korea.isoCountrySubdivisionCode).to.equal('ISO 3166-2:KR');
-        expect(korea.wikipediaSlug).to.equal('Korea_(Republic_of)');
+          const korea = _.find(countries, { isoTwoLetterCountryCode: 'KR' });
+          expect(korea.englishShortName).to.equal('Korea (Republic of)');
+          expect(korea.isoThreeLetterCountryCode).to.equal('KOR');
+          expect(korea.isoThreeDigitCountryCode).to.equal('410');
+          expect(korea.isoCountrySubdivisionCode).to.equal('ISO 3166-2:KR');
+          expect(korea.wikipediaSlug).to.equal('South_Korea');
+          expect(korea.wikidataId).to.equal('Q884');
+        });
+      });
 
+      after(() => {
         nock.cleanAll();
         nock.restore();
       });
     });
 
     Scenario('Bad Network Connection', () => {
-      Given('the network connection is refused', () => {
+      before(() => {
+        scraper = new Scraper();
         if (!nock.isActive()) nock.activate();
+      });
+
+      Given('the network connection is refused', () => {
         nock('https://en.wikipedia.org')
           .get('/wiki/ISO_3166-1')
           .replyWithError('Connection refused');
       });
 
-      When('the data consumer starts scraping', (done) => {
-        callback = sinon.spy(() => { done(); });
-        scraper.getCountries(callback);
+      When('the data consumer starts scraping', () => {
+        promise = scraper.getCountries();
       });
 
-      Then('an error will be returned', () => {
-        expect(callback).to.have.been.calledWith(sinon.match.instanceOf(Error), []);
-        expect(callback).to.have.been.calledWith(sinon.match.has('message', 'Connection refused'));
+      Then('an error will eventually be returned', () => {
+        return expect(promise).to.be.rejectedWith(Error, 'Connection refused');
+      });
 
+      after(() => {
         nock.cleanAll();
         nock.restore();
       });
