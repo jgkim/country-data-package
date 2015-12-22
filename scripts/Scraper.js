@@ -104,39 +104,45 @@ class Scraper {
 
     countries.map((country) => {
       promises.push(new Promise((resolve, reject) => {
-        // TODO: It takes too long so we need to use the SPARQL endpoint instead to only select sameAs triples.
-        const dbpediaUri = `http://wikidata.dbpedia.org/resource/${country.wikidataId}`;
+        const refCountry = country;
 
-        request.get(dbpediaUri)
-          .accept('text/turtle, text/n3, application/rdf+xml, application/n-triples')
-          .buffer(true)
-          .retry(5)
-          .end((error, response) => {
-            if (error) {
-              reject(error);
-            } else {
-              rdf.parsers.parse(response.type, response.text).then((graph) => {
-                const filtered = graph.filter((triple) => {
-                  return triple.subject.equals(dbpediaUri) &&
-                    triple.predicate.equals(rdf.resolve('owl:sameAs')) &&
-                    triple.object.toString().match(/http:\/\/sws\.geonames\.org/i);
-                }).toArray();
+        // Exception handling for Taiwan (cf. https://en.wikipedia.org/wiki/ISO_3166-1#cite_note-18)
+        if (/TW/i.test(refCountry.isoTwoLetterCountryCode)) {
+          refCountry.geoNamesId = '1668284';
+          resolve(refCountry);
+        } else {
+          // TODO: It takes too long so we need to use the SPARQL endpoint instead to only select sameAs triples.
+          const dbpediaUri = `http://wikidata.dbpedia.org/resource/${refCountry.wikidataId}`;
 
-                if (!filtered.length) {
-                  throw new Error(`Cannot find a GeoNames ID for this country: ${country.englishShortName}`);
-                }
+          request.get(dbpediaUri)
+            .accept('text/turtle, text/n3, application/rdf+xml, application/n-triples')
+            .buffer(true)
+            .retry(5)
+            .end((error, response) => {
+              if (error) {
+                reject(error);
+              } else {
+                rdf.parsers.parse(response.type, response.text).then((graph) => {
+                  const filtered = graph.filter((triple) => {
+                    return triple.subject.equals(dbpediaUri) &&
+                      triple.predicate.equals(rdf.resolve('owl:sameAs')) &&
+                      triple.object.toString().match(/http:\/\/sws\.geonames\.org/i);
+                  }).toArray();
 
-                const refCountry = country;
+                  if (!filtered.length) {
+                    throw new Error(`Cannot find a GeoNames ID for this country: ${refCountry.englishShortName}`);
+                  }
 
-                const geoNamesUrl = _.trimRight(filtered[0].object.toString(), '/');
-                refCountry.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
+                  const geoNamesUrl = _.trimRight(filtered[0].object.toString(), '/');
+                  refCountry.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
 
-                resolve(refCountry);
-              }).catch((exception) => {
-                reject(exception);
-              });
-            }
-          });
+                  resolve(refCountry);
+                }).catch((exception) => {
+                  reject(exception);
+                });
+              }
+            });
+        }
       }));
     });
 
