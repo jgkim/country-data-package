@@ -2,6 +2,18 @@
 
 import 'babel-polyfill';
 import xray from 'x-ray';
+import request from 'superagent';
+import rdf from 'rdf-ext';
+import N3Parser from 'rdf-parser-n3';
+import RdfXmlParser from 'rdf-parser-rdfxml';
+import _ from 'lodash';
+
+rdf.parsers = new rdf.Parsers({
+  'text/n3': N3Parser,
+  'text/turtle': N3Parser,
+  'application/n-triples': N3Parser,
+  'application/rdf+xml': RdfXmlParser,
+});
 
 class Scraper {
   constructor() {
@@ -56,13 +68,68 @@ class Scraper {
           if (error) {
             reject(error);
           } else {
-            country.wikipediaSlug = data.wikipediaSlug.substring(data.wikipediaSlug.lastIndexOf('/') + 1);
-            country.wikidataId = data.wikidataId.substring(data.wikidataId.lastIndexOf('/') + 1);
-            delete country._wikipediaUri;
+            const newCountry = Object.assign({}, country);
+            delete newCountry._wikipediaUri;
 
-            resolve(country);
+            const wikipediaSlug = _.trimRight(data.wikipediaSlug, '/');
+            newCountry.wikipediaSlug = wikipediaSlug.substring(wikipediaSlug.lastIndexOf('/') + 1);
+
+            const wikidataId = _.trimRight(data.wikidataId, '/');
+            newCountry.wikidataId = wikidataId.substring(wikidataId.lastIndexOf('/') + 1);
+
+            resolve(newCountry);
           }
         });
+      }));
+    });
+
+    return Promise.all(promises);
+  }
+
+  /**
+  * _getGeoNamesIds() scrapes the GeoNames ID of each country.
+  *
+  * @access private
+  * @param {Array} countries
+  * @return {Promise} a promise that waits for all promises for countries to be fulfilled
+  */
+  _getGeoNamesIds(countries) {
+    const promises = [];
+
+    countries.map((country) => {
+      promises.push(new Promise((resolve, reject) => {
+        // TODO: It takes too long so we need to use the SPARQL endpoint instead to only select sameAs triples.
+        const dbpediaUri = `http://wikidata.dbpedia.org/resource/${country.wikidataId}`;
+
+        request.get(dbpediaUri)
+          .accept('text/turtle, text/n3, application/rdf+xml, application/n-triples')
+          .buffer(true)
+          .end((error, response) => {
+            if (error) {
+              reject(error);
+            } else {
+              rdf.parsers.parse(response.type, response.text).then((graph) => {
+                const filtered = graph.filter((triple) => {
+                  return triple.subject.equals(dbpediaUri) &&
+                    triple.predicate.equals(rdf.resolve('owl:sameAs')) &&
+                    triple.object.toString().match(/http:\/\/sws\.geonames\.org/i);
+                }).toArray();
+
+                if (!filtered.length) {
+                  throw new Error('Cannot find a GeoNames ID for this country');
+                }
+
+                const newCountry = Object.assign({}, country);
+
+                const geoNamesUrl = _.trimRight(filtered[0].object.toString(), '/');
+                newCountry.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
+
+                resolve(newCountry);
+              }).catch((exception) => {
+                reject(exception);
+              });
+            }
+          });
       }));
     });
 
@@ -80,6 +147,9 @@ class Scraper {
       return this._getCountryList()
         .then((countries) => {
           return this._getWikiIds(countries);
+        })
+        .then((countries) => {
+          return this._getGeoNamesIds(countries);
         })
         .then((countries) => {
           this.countries = countries;

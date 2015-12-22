@@ -1,0 +1,283 @@
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/wikiPageRevisionID>	"207414084"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"L\u00F5una-Korea"@et .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://nl.dbpedia.org/resource/Zuid-Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ckb.dbpedia.org/resource/\u06A9\u06C6\u0631\u06CC\u0627\u06CC_\u0628\u0627\u0634\u0648\u0648\u0631> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ms.dbpedia.org/resource/Korea_Selatan> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ar.dbpedia.org/resource/\u0643\u0648\u0631\u064A\u0627_\u0627\u0644\u062C\u0646\u0648\u0628\u064A\u0629> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\u5927\u97E9\u6C11\u56FD"@zh .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://nah.dbpedia.org/resource/Corea_Huitztl\u0101mpa> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://als.dbpedia.org/resource/S\u00FCdkorea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/continent>	<http://wikidata.dbpedia.org/resource/Q48> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://dbpedia.org/ontology/Location> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://eo.dbpedia.org/resource/Sud-Koreio> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://kl.dbpedia.org/resource/Korea_Kujalleq> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/country>	<http://wikidata.dbpedia.org/resource/Q884> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://hy.dbpedia.org/resource/\u053F\u0578\u0580\u0565\u0561\u0575\u056B_\u0540\u0561\u0576\u0580\u0561\u057A\u0565\u057F\u0578\u0582\u0569\u0575\u0578\u0582\u0576> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://si.dbpedia.org/resource/\u0DAF\u0D9A\u0DD4\u0DAB\u0DD4_\u0D9A\u0DDC\u0DBB\u0DD2\u0DBA\u0DCF\u0DC0> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sa.dbpedia.org/resource/\u0926\u0915\u094D\u0937\u093F\u0923\u0915\u094B\u0930\u093F\u092F\u093E> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://rm.dbpedia.org/resource/Corea_dal_Sid> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://pms.dbpedia.org/resource/Cor\u00E9a_d\u00EBl_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://so.dbpedia.org/resource/Koonfur_Kuuriya> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://lt.dbpedia.org/resource/Piet\u0173_Kor\u0117ja> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://musicbrainz.org/area/b9f7d640-46e8-313e-b158-ded6d18593b3> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://cdo.dbpedia.org/resource/D\u00E2i-h\u00E0ng_M\u00ECng-gu\u00F3k> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://frr.dbpedia.org/resource/S\u00FC\u00FCdkorea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://war.dbpedia.org/resource/Salatan_nga_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://hsb.dbpedia.org/resource/Ju\u017Ena_Koreja> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://dbpedia.org/ontology/Place> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://dbpedia.org/ontology/PopulatedPlace> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://kbd.dbpedia.org/resource/\u041A\u04C0\u044D\u0440\u0435\u0439_\u0420\u0435\u0441\u043F\u0443\u0431\u043B\u0438\u043A\u044D> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ba.dbpedia.org/resource/\u041A\u04E9\u043D\u044C\u044F\u04A1_\u041A\u043E\u0440\u0435\u044F> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://qu.dbpedia.org/resource/Tayhan_Republika> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://gd.dbpedia.org/resource/Coir\u00E8a_a_Deas> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://pl.dbpedia.org/resource/Korea_Po\u0142udniowa> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://vi.dbpedia.org/resource/H\u00E0n_Qu\u1ED1c> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ga.dbpedia.org/resource/An_Ch\u00F3ir\u00E9_Theas> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://th.dbpedia.org/resource/\u0E1B\u0E23\u0E30\u0E40\u0E17\u0E28\u0E40\u0E01\u0E32\u0E2B\u0E25\u0E35\u0E43\u0E15\u0E49> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"K\u00F3rejsk\u00E1 republika"@sk .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://zea.dbpedia.org/resource/Zuud-Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Hego Korea"@eu .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://jbo.dbpedia.org/resource/Snanu_zei_.xanguk> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://az.dbpedia.org/resource/Koreya_Respublikas\u0131> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ln.dbpedia.org/resource/Kor\u00E9_ya_S\u00FAdi> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ilo.dbpedia.org/resource/Abagatan_a_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://wuu.dbpedia.org/resource/\u5927\u97E9\u6C11\u56FD> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://id.ndl.go.jp/auth/ndla/00573706> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://lij.dbpedia.org/resource/Corea_do_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\u062C\u0646\u0648\u0628\u06CC \u06A9\u0648\u0631\u06CC\u0627"@ur .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\u0643\u0648\u0631\u064A\u0627 \u0627\u0644\u062C\u0646\u0648\u0628\u064A\u0629"@ar .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Corea del Sud"@it .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ka.dbpedia.org/resource/\u10E1\u10D0\u10DB\u10EE\u10E0\u10D4\u10D7\u10D8_\u10D9\u10DD\u10E0\u10D4\u10D0> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://mk.dbpedia.org/resource/\u0408\u0443\u0436\u043D\u0430_\u041A\u043E\u0440\u0435\u0458\u0430> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://pnb.dbpedia.org/resource/\u062F\u06A9\u06BE\u0646\u06CC_\u06A9\u0648\u0631\u06CC\u0627> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ru.dbpedia.org/resource/\u0420\u0435\u0441\u043F\u0443\u0431\u043B\u0438\u043A\u0430_\u041A\u043E\u0440\u0435\u044F> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://fa.dbpedia.org/resource/\u06A9\u0631\u0647_\u062C\u0646\u0648\u0628\u06CC> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://pt.dbpedia.org/resource/Coreia_do_Sul> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Ju\u017Ena Koreja"@sl .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://kn.dbpedia.org/resource/\u0CA6\u0C95\u0CCD\u0CB7\u0CBF\u0CA3_\u0C95\u0CCA\u0CB0\u0CBF\u0CAF\u0CBE> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://wikidata.org/entity/Q884> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://fr.dbpedia.org/resource/Cor\u00E9e_du_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://gan.dbpedia.org/resource/\u97D3\u570B> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://vep.dbpedia.org/resource/Korejan_Tazovaldkund> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://arz.dbpedia.org/resource/\u0643\u0648\u0631\u064A\u0627_\u0627\u0644\u062C\u0646\u0648\u0628\u064A\u0647> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://fy.dbpedia.org/resource/S\u00FAd-Kore\u00E4> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://it.dbpedia.org/resource/Corea_del_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://hu.dbpedia.org/resource/D\u00E9l-Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://kw.dbpedia.org/resource/Korea_Dhyhow> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://tet.dbpedia.org/resource/Koreia_S\u00FAl> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://lv.dbpedia.org/resource/Dienvidkoreja> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ss.dbpedia.org/resource/IKhoriya_leseNingizimu> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://et.dbpedia.org/resource/L\u00F5una-Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\u053F\u0578\u0580\u0565\u0561\u0575\u056B \u0540\u0561\u0576\u0580\u0561\u057A\u0565\u057F\u0578\u0582\u0569\u0575\u0578\u0582\u0576"@hy .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://scn.dbpedia.org/resource/Corea_d\u00FB_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://fi.dbpedia.org/resource/Korean_tasavalta> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://bpy.dbpedia.org/resource/\u0996\u09BE_\u0995\u09CB\u09B0\u09BF\u09AF\u09BC\u09BE> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://za.dbpedia.org/resource/Hanzgoz> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://min.dbpedia.org/resource/Korea_Salatan> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://lb.dbpedia.org/resource/Republik_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://li.dbpedia.org/resource/Zuud-Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://nrm.dbpedia.org/resource/Cor\u00E9e_du_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sw.dbpedia.org/resource/Korea_Kusini> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://oc.dbpedia.org/resource/Cor\u00E8a_del_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://frp.dbpedia.org/resource/Cor\u00EA_du_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://hak.dbpedia.org/resource/Thai-h\u00F2n_M\u00ECn-koet> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://tr.dbpedia.org/resource/G\u00FCney_Kore> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://mn.dbpedia.org/resource/\u04E8\u043C\u043D\u04E9\u0434_\u0421\u043E\u043B\u043E\u043D\u0433\u043E\u0441> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\u09A6\u0995\u09CD\u09B7\u09BF\u09A3 \u0995\u09CB\u09B0\u09BF\u09AF\u09BC\u09BE"@bn .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://br.dbpedia.org/resource/Republik_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://na.dbpedia.org/resource/Ripubrikin_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://mo.dbpedia.org/resource/\u041A\u043E\u0440\u0435\u044F_\u0434\u0435_\u0421\u0443\u0434> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/anthem>	<http://wikidata.dbpedia.org/resource/Q193233> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://tt.dbpedia.org/resource/\u041A\u04E9\u043D\u044C\u044F\u043A_\u041A\u043E\u0440\u0435\u044F> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Corea del Sur"@es .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sv.dbpedia.org/resource/Sydkorea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://pap.dbpedia.org/resource/Sur_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://pa.dbpedia.org/resource/\u0A26\u0A71\u0A16\u0A23\u0A40_\u0A15\u0A4B\u0A30\u0A40\u0A06> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sl.dbpedia.org/resource/Ju\u017Ena_Koreja> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://szl.dbpedia.org/resource/Po\u0142ed\u0144owo_Koryjo> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://gl.dbpedia.org/resource/Corea_do_Sur> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://nap.dbpedia.org/resource/Corea_d\u0027\u0027o_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ie.dbpedia.org/resource/Sud-Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/wikiPageID>	"1206"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ee.dbpedia.org/resource/South_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ang.dbpedia.org/resource/S\u016B\u00FEcor\u0113a> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/giniCoefficient>	"0.311"^^<http://www.w3.org/2001/XMLSchema#float> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://hif.dbpedia.org/resource/South_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sn.dbpedia.org/resource/South_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\u0408\u0443\u0436\u043D\u0430 \u041A\u043E\u0440\u0435\u0458\u0430"@sr .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://an.dbpedia.org/resource/Coreya_d\u0027o_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\u0420\u0435\u0441\u043F\u0443\u0431\u043B\u0438\u043A\u0430 \u041A\u043E\u0440\u0435\u044F"@ru .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"G\u00FCney Kore"@tr .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://dbpedia.org/ontology/Country> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/wikiPageLength>	"80405"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://nov.dbpedia.org/resource/Sud_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://bug.dbpedia.org/resource/Korea_Selatan> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://mt.dbpedia.org/resource/Korea_t\u0027Isfel> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://udm.dbpedia.org/resource/\u0420\u0435\u0441\u043F\u0443\u0431\u043B\u0438\u043A\u0430_\u041A\u043E\u0440\u0435\u044F> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sr.dbpedia.org/resource/\u0408\u0443\u0436\u043D\u0430_\u041A\u043E\u0440\u0435\u0458\u0430> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/iso31661Code>	"KR"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Ju\u017Ena Koreja"@hr .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://gag.dbpedia.org/resource/\u00DC\u00FClen_Koreya> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ja.dbpedia.org/resource/\u5927\u97D3\u6C11\u56FD> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sws.geonames.org/1835841/> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://krc.dbpedia.org/resource/\u041A\u043E\u0440\u0435\u044F_\u0420\u0435\u0441\u043F\u0443\u0431\u043B\u0438\u043A\u0430> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://kk.dbpedia.org/resource/\u041A\u043E\u0440\u0435\u044F_\u0420\u0435\u0441\u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0441\u044B> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://new.dbpedia.org/resource/\u0926\u0915\u094D\u0937\u093F\u0923_\u0915\u094B\u0930\u093F\u092F\u093E> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://es.dbpedia.org/resource/Corea_del_Sur> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Coreea de Sud"@ro .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ce.dbpedia.org/resource/\u041A\u044A\u0438\u043B\u0431\u0430_\u041A\u043E\u0440\u0435\u0439> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://bo.dbpedia.org/resource/\u0F63\u0FB7\u0F7C\u0F0B\u0F40\u0F7C\u0F0B\u0F62\u0F72\u0F0B\u0F61\u0F0D> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/capital>	<http://wikidata.dbpedia.org/resource/Q8684> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://rw.dbpedia.org/resource/Koreya_y\u2019Amajyepfo> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://su.dbpedia.org/resource/Kor\u00E9a_Kidul> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sc.dbpedia.org/resource/Corea_de_su_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Korea Po\u0142udniowa"@pl .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Zuid-Korea"@nl .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://he.dbpedia.org/resource/\u05E7\u05D5\u05E8\u05D9\u05D0\u05D4_\u05D4\u05D3\u05E8\u05D5\u05DE\u05D9\u05EA> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://mi.dbpedia.org/resource/K\u014Drea-ki-te-tonga> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://is.dbpedia.org/resource/Su\u00F0ur-K\u00F3rea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://mhr.dbpedia.org/resource/\u041A\u0435\u0447\u044B\u0432\u0430\u043B\u0432\u0435\u043B_\u041A\u043E\u0440\u0435\u0439> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://kaa.dbpedia.org/resource/Qubla_Koreya> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\uB300\uD55C\uBBFC\uAD6D"@ko .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Sydkorea"@sv .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://wo.dbpedia.org/resource/Kore_gu_B\u00EBj-saalum> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://te.dbpedia.org/resource/\u0C26\u0C15\u0C4D\u0C37\u0C3F\u0C23_\u0C15\u0C4A\u0C30\u0C3F\u0C2F\u0C3E> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://af.dbpedia.org/resource/Suid-Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"De Corea"@cy .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://da.dbpedia.org/resource/Sydkorea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://chr.dbpedia.org/resource/\u13E7\u13A6\u13BE\u13EE_\u13AA\u13B5\u13A0> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://uz.dbpedia.org/resource/Koreya_Respublikasi> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://kv.dbpedia.org/resource/\u041A\u043E\u0440\u0435\u044F_\u0420\u0435\u0441\u043F\u0443\u0431\u043B\u0438\u043A\u0430> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ca.dbpedia.org/resource/Corea_del_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://or.dbpedia.org/resource/\u0B26\u0B15\u0B4D\u0B37\u0B3F\u0B23_\u0B15\u0B4B\u0B30\u0B3F\u0B06> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://se.dbpedia.org/resource/Lulli-Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/ns/prov#wasDerivedFrom>	<http://www.wikidata.org/wiki/Q884?oldid=207414084> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sah.dbpedia.org/resource/\u041A\u044D\u0440\u0438\u044D\u0439\u044D_\u04E8\u0440\u04E9\u0441\u043F\u04AF\u04AF\u0431\u04AF\u043B\u04AF\u043A\u044D\u0442\u044D> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\u5927\u97D3\u6C11\u56FD"@ja .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://www.idref.fr/026373548/id> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://fo.dbpedia.org/resource/Su\u00F0urkorea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://lad.dbpedia.org/resource/Korea_del_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://os.dbpedia.org/resource/\u0420\u0435\u0441\u043F\u0443\u0431\u043B\u0438\u043A\u00E6_\u041A\u043E\u0440\u0435\u0439> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://jv.dbpedia.org/resource/Kor\u00E9a_Kidul> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#seeAlso>	<https://commons.wikimedia.org/wiki/Category:South_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://uk.dbpedia.org/resource/\u041F\u0456\u0432\u0434\u0435\u043D\u043D\u0430_\u041A\u043E\u0440\u0435\u044F> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://dbpedia.org/resource/South_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\u039D\u03CC\u03C4\u03B9\u03B1 \u039A\u03BF\u03C1\u03AD\u03B1"@el .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://am.dbpedia.org/resource/\u12F0\u1261\u1265_\u12AE\u122D\u12EB> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"C\u0259nubi Koreya"@az .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://diq.dbpedia.org/resource/Koryay_Veroci> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://bn.dbpedia.org/resource/\u09A6\u0995\u09CD\u09B7\u09BF\u09A3_\u0995\u09CB\u09B0\u09BF\u09AF\u09BC\u09BE> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://bi.dbpedia.org/resource/Saot_Koria> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ha.dbpedia.org/resource/Koriya_ta_Kudu> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ki.dbpedia.org/resource/South_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/currency>	<http://wikidata.dbpedia.org/resource/Q202040> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://gu.dbpedia.org/resource/\u0AA6\u0A95\u0ACD\u0AB7\u0ABF\u0AA3_\u0A95\u0ACB\u0AB0\u0ABF\u0AAF\u0ABE> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/iso31661Code>	"410"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Coreia do Sul"@pt .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"An Ch\u00F3ir\u00E9 Theas"@ga .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://bcl.dbpedia.org/resource/Sur_nin_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#seeAlso>	<https://www.openstreetmap.org/relation/307756> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://bs.dbpedia.org/resource/Ju\u017Ena_Koreja> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://www.w3.org/2002/07/owl#Thing> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://dz.dbpedia.org/resource/\u0F63\u0FB7\u0F7C\u0F0B\u0F40\u0F7C\u0F0B\u0F62\u0F72\u0F0B\u0F61\u0F0B> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://tpi.dbpedia.org/resource/Saut_Koria> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://yi.dbpedia.org/resource/\u05D3\u05E8\u05D5\u05DD_\u05E7\u05D0\u05E8\u05E2\u05E2> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/primeMinister>	<http://wikidata.dbpedia.org/resource/Q4352214> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Korea Selatan"@id .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ht.dbpedia.org/resource/Kore_disid> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://tk.dbpedia.org/resource/Kore\u00FDa_Respublikasy> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://gn.dbpedia.org/resource/Yvykorea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://csb.dbpedia.org/resource/Rep\u00F9blika_K\u00F2reji> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#seeAlso>	<http://dewey.info/class/2--5195/about> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://simple.dbpedia.org/resource/South_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2003/01/geo/wgs84_pos#lat>	"36.0"^^<http://www.w3.org/2001/XMLSchema#float> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://dv.dbpedia.org/resource/\u078B\u07AC\u0786\u07AA\u0782\u07AA_\u0786\u07AE\u0783\u07AC\u0787\u07A7> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://no.dbpedia.org/resource/S\u00F8r-Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ps.dbpedia.org/resource/\u0633\u0648\u06D0\u0644\u064A_\u06A9\u0648\u0631\u064A\u0627> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ug.dbpedia.org/resource/\u062C\u06D5\u0646\u06C7\u0628\u0649\u064A_\u0686\u0627\u06CB\u0634\u064A\u06D5\u0646> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ro.dbpedia.org/resource/Coreea_de_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ace.dbpedia.org/resource/Kor\u00E8a_Seulatan> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://tl.dbpedia.org/resource/Timog_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://bar.dbpedia.org/resource/S\u00FCdkorea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://tyv.dbpedia.org/resource/\u041C\u0443\u0440\u043D\u0443\u0443_\u041A\u043E\u0440\u0435\u044F> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://lmo.dbpedia.org/resource/Curea_del_S\u00FCd> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://cs.dbpedia.org/resource/Ji\u017En\u00ED_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sh.dbpedia.org/resource/Ju\u017Ena_Koreja> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://be.dbpedia.org/resource/\u041F\u0430\u045E\u0434\u043D\u0451\u0432\u0430\u044F_\u041A\u0430\u0440\u044D\u044F> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://pih.dbpedia.org/resource/Sowth_Koriya> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"South Korea"@en .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\u042E\u0436\u043D\u0430 \u041A\u043E\u0440\u0435\u044F"@bg .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://io.dbpedia.org/resource/Sud-Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\u041F\u0456\u0432\u0434\u0435\u043D\u043D\u0430 \u041A\u043E\u0440\u0435\u044F"@uk .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://lo.dbpedia.org/resource/\u0E9B\u0EB0\u0EC0\u0E97\u0E94\u0EC0\u0E81\u0EBB\u0EB2\u0EAB\u0EBC\u0EB5\u0EC3\u0E95\u0EC9> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://www.wikidata.org/entity/Q486972> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://la.dbpedia.org/resource/Respublica_Coreana> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#seeAlso>	<http://www.dmoz.org/Regional/Asia/South_Korea/> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://nn.dbpedia.org/resource/S\u00F8r-Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://viaf.org/viaf/132441370> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ne.dbpedia.org/resource/\u0926\u0915\u094D\u0937\u093F\u0923_\u0915\u094B\u0930\u093F\u092F\u093E> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://vo.dbpedia.org/resource/Sul\u00FCda-Korey\u00E4n> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://eu.dbpedia.org/resource/Hego_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://mr.dbpedia.org/resource/\u0926\u0915\u094D\u0937\u093F\u0923_\u0915\u094B\u0930\u093F\u092F\u093E> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://schema.org/Place> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ku.dbpedia.org/resource/Komara_Kor\u00EAy\u00EA> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://vec.dbpedia.org/resource/Corea_del_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://commons.dbpedia.org/resource/\uB300\uD55C\uBBFC\uAD6D> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ts.dbpedia.org/resource/Korea_Dzonga> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://hi.dbpedia.org/resource/\u0926\u0915\u094D\u0937\u093F\u0923_\u0915\u094B\u0930\u093F\u092F\u093E> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://rue.dbpedia.org/resource/\u042E\u0436\u043D\u0430_\u041A\u043E\u0440\u0435\u044F> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://yo.dbpedia.org/resource/K\u00F2r\u00E9\u00E0_G\u00FA\u00FAs\u00F9> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://xmf.dbpedia.org/resource/\u10DD\u10D1\u10DF\u10D0\u10D7\u10D4_\u10D9\u10DD\u10E0\u10D4\u10D0> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://bg.dbpedia.org/resource/\u042E\u0436\u043D\u0430_\u041A\u043E\u0440\u0435\u044F> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://freebase.com//m/06qd3> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://gv.dbpedia.org/resource/Yn_Chorea_Yiass> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://www.wikidata.org/entity/Q6256> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.georss.org/georss/point>	"36.0 128.0"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\u0926\u0915\u094D\u0937\u093F\u0923 \u0915\u094B\u0930\u093F\u092F\u093E"@hi .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://d-nb.info/gnd/4078029-6/about/rdf> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://pam.dbpedia.org/resource/Mauling_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Ji\u017En\u00ED Korea"@cs .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/iso31661Code>	"KOR"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://dsb.dbpedia.org/resource/P\u00F3dpo\u0142dnjowa_Koreja> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"\u041F\u0430\u045E\u0434\u043D\u0451\u0432\u0430\u044F \u041A\u0430\u0440\u044D\u044F"@be .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://om.dbpedia.org/resource/Kooriyaa_Kibbaa> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://crh.dbpedia.org/resource/Cen\u00FCbiy_Koreya> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ceb.dbpedia.org/resource/Habagatang_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ext.dbpedia.org/resource/Corea_del_Sul> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://dbpedia.org/ontology/highestPoint>	<http://wikidata.dbpedia.org/resource/Q494645> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sco.dbpedia.org/resource/Sooth_Korea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://el.dbpedia.org/resource/\u039D\u03CC\u03C4\u03B9\u03B1_\u039A\u03BF\u03C1\u03AD\u03B1> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"S\u00FCdkorea"@de .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Sud-Koreio"@eo .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ast.dbpedia.org/resource/Corea_del_Sur> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ia.dbpedia.org/resource/Corea_del_Sud> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2003/01/geo/wgs84_pos#long>	"128.0"^^<http://www.w3.org/2001/XMLSchema#float> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://id.loc.gov/authorities/names/n79126802> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://mg.dbpedia.org/resource/Korea_Atsimo> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"D\u00E9l-Korea"@hu .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Corea del Sud"@ca .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ky.dbpedia.org/resource/\u041A\u043E\u0440\u0435\u044F> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sq.dbpedia.org/resource/Koreja_e_Jugut> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://my.dbpedia.org/resource/\u1000\u102D\u102F\u101B\u102E\u1038\u101A\u102C\u1038\u101E\u1019\u1039\u1019\u1010\u1014\u102D\u102F\u1004\u103A\u1004\u1036> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://id.dbpedia.org/resource/Korea_Selatan> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://hr.dbpedia.org/resource/Ju\u017Ena_Koreja> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://km.dbpedia.org/resource/\u1780\u17BC\u179A\u17C9\u17C1\u1781\u17B6\u1784\u178F\u17D2\u1794\u17BC\u1784> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://rmy.dbpedia.org/resource/Sudutni_Koreya> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ko.dbpedia.org/resource/\uB300\uD55C\uBBFC\uAD6D> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sk.dbpedia.org/resource/K\u00F3rejsk\u00E1_republika> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ta.dbpedia.org/resource/\u0BA4\u0BC6\u0BA9\u0BCD_\u0B95\u0BCA\u0BB0\u0BBF\u0BAF\u0BBE> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://schema.org/Country> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://lez.dbpedia.org/resource/\u0420\u0435\u0441\u043F\u0443\u0431\u043B\u0438\u043A\u0430_\u041A\u043E\u0440\u0435\u044F> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://cy.dbpedia.org/resource/De_Corea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://nv.dbpedia.org/resource/Kol\u00EDya_Bik\u00E9yah_Sh\u00E1di\u02BC\u00E1\u00E1hj\u00ED_Si\u02BC\u00E1n\u00EDg\u00ED\u00ED> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://sm.dbpedia.org/resource/Kolea_i_Saute> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://as.dbpedia.org/resource/\u09A6\u0995\u09CD\u09B7\u09BF\u09A3_\u0995\u09CB\u09F0\u09BF\u09AF\u09BC\u09BE> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ml.dbpedia.org/resource/\u0D26\u0D15\u0D4D\u0D37\u0D3F\u0D23_\u0D15\u0D4A\u0D31\u0D3F\u0D2F> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://de.dbpedia.org/resource/S\u00FCdkorea> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://bxr.dbpedia.org/resource/\u0423\u0440\u0434\u0430_\u0421\u043E\u043B\u043E\u043D\u0433\u043E\u0441> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#label>	"Cor\u00E9e du Sud"@fr .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2000/01/rdf-schema#seeAlso>	<http://catalogue.bnf.fr/ark:/12148/cb11863345f/PUBLIC> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://ur.dbpedia.org/resource/\u062C\u0646\u0648\u0628\u06CC_\u06A9\u0648\u0631\u06CC\u0627> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://zh.dbpedia.org/resource/\u5927\u97E9\u6C11\u56FD> .
+<http://wikidata.dbpedia.org/resource/Q884>	<http://www.w3.org/2002/07/owl#sameAs>	<http://nds.dbpedia.org/resource/S\u00FC\u00FCdkorea> .
