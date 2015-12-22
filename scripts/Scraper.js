@@ -4,24 +4,13 @@ import 'babel-polyfill';
 import _ from 'lodash';
 import xray from 'x-ray';
 
-// import superagent from 'superagent';
-// import superagentRetry from 'superagent-retry';
-// const request = superagentRetry(superagent);
-// superagentRetry.retries.push(function internalServerError(error, response) {
-//   return response && response.status === 500;
-// });
-
-import SparqlStore from 'rdf-store-sparql';
-
 import rdf from 'rdf-ext';
-import N3Parser from 'rdf-parser-n3';
 import RdfXmlParser from 'rdf-parser-rdfxml';
 rdf.parsers = new rdf.Parsers({
-  'text/n3': N3Parser,
-  'text/turtle': N3Parser,
-  'application/n-triples': N3Parser,
   'application/rdf+xml': RdfXmlParser,
 });
+
+import SparqlStore from 'rdf-store-sparql';
 
 class Scraper {
   constructor() {
@@ -137,36 +126,52 @@ class Scraper {
           }).catch((exception) => {
             reject(exception);
           });
-
-          // request.get(dbpediaUri)
-          //   .accept('text/turtle, text/n3, application/rdf+xml, application/n-triples')
-          //   .buffer(true)
-          //   .retry(5)
-          //   .end((error, response) => {
-          //     if (error) {
-          //       reject(error);
-          //     } else {
-          //       rdf.parsers.parse(response.type, response.text).then((graph) => {
-          //         const filtered = graph.filter((triple) => {
-          //           return triple.subject.equals(dbpediaUri) &&
-          //             triple.predicate.equals(rdf.resolve('owl:sameAs')) &&
-          //             triple.object.toString().match(/http:\/\/sws\.geonames\.org/i);
-          //         }).toArray();
-          //
-          //         if (!filtered.length) {
-          //           throw new Error(`Cannot find a GeoNames ID for this country: ${refCountry.englishShortName}`);
-          //         }
-          //
-          //         const geoNamesUrl = _.trimRight(filtered[0].object.toString(), '/');
-          //         refCountry.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
-          //
-          //         resolve(refCountry);
-          //       }).catch((exception) => {
-          //         reject(exception);
-          //       });
-          //     }
-          //   });
         }
+      }));
+    });
+
+    return Promise.all(promises);
+  }
+
+  /**
+  * _getGeoNamesData() scrapes the data of each country from GeoNames.
+  *
+  * @access private
+  * @param {Array} countries
+  * @return {Promise} a promise that waits for all promises for countries to be fulfilled
+  */
+  _getGeoNamesData(countries) {
+    const promises = [];
+
+    countries.map((country) => {
+      promises.push(new Promise((resolve, reject) => {
+        const refCountry = country;
+        const geoNamesUri = `http://sws.geonames.org/${refCountry.geoNamesId}/`;
+
+        rdf.defaultRequest('get', `${geoNamesUri}about.rdf`).then((response) => {
+          return rdf.parsers.parse('application/rdf+xml', response.content);
+        }).then((graph) => {
+          // TODO: Serialize the graph model in JSON
+          graph.forEach((triple) => {
+            if (triple.predicate.equals('http://www.geonames.org/ontology#name')) {
+              refCountry.name = triple.object.toString();
+            } else if (triple.predicate.equals('http://www.geonames.org/ontology#officialName')) {
+              refCountry[`officialName${_.capitalize(triple.object.language)}`] = triple.object.toString();
+            } else if (triple.predicate.equals('http://www.geonames.org/ontology#shortName')) {
+              refCountry[`shortName${_.capitalize(triple.object.language)}`] = triple.object.toString();
+            } else if (triple.predicate.equals('http://www.geonames.org/ontology#alternateName')) {
+              refCountry[`alternateName${_.capitalize(triple.object.language)}`] = triple.object.toString();
+            } else if (triple.predicate.equals('http://www.w3.org/2003/01/geo/wgs84_pos#lat')) {
+              refCountry.lat = parseFloat(triple.object.toString());
+            } else if (triple.predicate.equals('http://www.w3.org/2003/01/geo/wgs84_pos#long')) {
+              refCountry.long = parseFloat(triple.object.toString());
+            }
+          });
+
+          resolve(refCountry);
+        }).catch((exception) => {
+          reject(exception);
+        });
       }));
     });
 
@@ -187,6 +192,9 @@ class Scraper {
         })
         .then((countries) => {
           return this._getGeoNamesIds(countries);
+        })
+        .then((countries) => {
+          return this._getGeoNamesData(countries);
         })
         .then((countries) => {
           this.countries = countries;

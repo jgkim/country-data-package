@@ -54,21 +54,20 @@ Feature('Country Data Scraping',
           .replyWithFile(200, `${__dirname}/fixtures/Q30.ntriples`, {
             'Content-Type': 'text/plain',
           });
-          // .matchHeader('Accept', /text\/(n3|turtle)/)
-          // .get('/resource/Q31')
-          // .replyWithFile(200, `${__dirname}/fixtures/Q31.n3`, {
-          //   'Content-Type': 'text/n3',
-          // })
-          // .matchHeader('Accept', /application\/n\-triples/)
-          // .get('/resource/Q884')
-          // .replyWithFile(200, `${__dirname}/fixtures/Q884.ntriples`, {
-          //   'Content-Type': 'application/n-triples; qs=0.95',
-          // })
-          // .matchHeader('Accept', /application\/rdf\+xml/)
-          // .get('/resource/Q30')
-          // .replyWithFile(200, `${__dirname}/fixtures/Q30.rdf`, {
-          //   'Content-Type': 'application/rdf+xml',
-          // });
+
+        nock('http://sws.geonames.org')
+          .get('/2802361/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/2802361.rdf`, {
+            'Content-Type': 'application/rdf+xml',
+          })
+          .get('/1835841/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/1835841.rdf`, {
+            'Content-Type': 'application/rdf+xml',
+          })
+          .get('/6252001/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/6252001.rdf`, {
+            'Content-Type': 'application/rdf+xml',
+          });
       });
 
       When('the data consumer starts scraping', () => {
@@ -80,23 +79,18 @@ Feature('Country Data Scraping',
           expect(countries).to.have.length.of.at.least(3);
 
           const kr = _.find(countries, { isoTwoLetterCountryCode: 'KR' });
-          expect(kr.englishShortName).to.equal('Korea (Republic of)');
+          // expect(kr.englishShortName).to.equal('Korea (Republic of)');
           expect(kr.isoThreeLetterCountryCode).to.equal('KOR');
           expect(kr.isoThreeDigitCountryCode).to.equal('410');
           expect(kr.isoCountrySubdivisionCode).to.equal('ISO 3166-2:KR');
           expect(kr.wikipediaSlug).to.equal('South_Korea');
           expect(kr.wikidataId).to.equal('Q884');
-
-          // For parsing N-Triples with quality tag for content negotiation
           expect(kr.geoNamesId).to.equal('1835841');
-
-          // For parsing N3
-          const be = _.find(countries, { isoTwoLetterCountryCode: 'BE' });
-          expect(be.geoNamesId).to.equal('2802361');
-
-          // For parsing RDF/XML
-          const us = _.find(countries, { isoTwoLetterCountryCode: 'US' });
-          expect(us.geoNamesId).to.equal('6252001');
+          expect(kr.shortNameEn).to.equal('South Korea');
+          expect(kr.officialNameEn).to.equal('Republic of Korea');
+          expect(kr.officialNameKo).to.equal('대한민국');
+          expect(kr.lat).to.equal(36.5);
+          expect(kr.long).to.equal(127.75);
         });
       });
 
