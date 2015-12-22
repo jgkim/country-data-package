@@ -74,16 +74,16 @@ class Scraper {
           if (error) {
             reject(error);
           } else {
-            const newCountry = Object.assign({}, country);
-            delete newCountry._wikipediaUri;
+            const refCountry = country;
+            delete refCountry._wikipediaUri;
 
             const wikipediaSlug = _.trimRight(data.wikipediaSlug, '/');
-            newCountry.wikipediaSlug = wikipediaSlug.substring(wikipediaSlug.lastIndexOf('/') + 1);
+            refCountry.wikipediaSlug = wikipediaSlug.substring(wikipediaSlug.lastIndexOf('/') + 1);
 
             const wikidataId = _.trimRight(data.wikidataId, '/');
-            newCountry.wikidataId = wikidataId.substring(wikidataId.lastIndexOf('/') + 1);
+            refCountry.wikidataId = wikidataId.substring(wikidataId.lastIndexOf('/') + 1);
 
-            resolve(newCountry);
+            resolve(refCountry);
           }
         });
       }));
@@ -126,12 +126,12 @@ class Scraper {
                   throw new Error(`Cannot find a GeoNames ID for this country: ${country.englishShortName}`);
                 }
 
-                const newCountry = Object.assign({}, country);
+                const refCountry = country;
 
                 const geoNamesUrl = _.trimRight(filtered[0].object.toString(), '/');
-                newCountry.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
+                refCountry.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
 
-                resolve(newCountry);
+                resolve(refCountry);
               }).catch((exception) => {
                 reject(exception);
               });
