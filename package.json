@@ -27,6 +27,7 @@
     "rdf-parser-n3": "^0.3.0-rc1",
     "rdf-parser-rdfxml": "^0.3.0-rc1",
     "superagent": "^1.6.1",
+    "superagent-retry": "^0.5.1",
     "x-ray": "^2.0.2"
   },
   "devDependencies": {

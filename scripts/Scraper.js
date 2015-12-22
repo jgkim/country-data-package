@@ -1,13 +1,19 @@
 #!/usr/bin/env node
 
 import 'babel-polyfill';
+import _ from 'lodash';
 import xray from 'x-ray';
-import request from 'superagent';
+
+import superagent from 'superagent';
+import superagentRetry from 'superagent-retry';
+const request = superagentRetry(superagent);
+superagentRetry.retries.push(function internalServerError(error) {
+  return error && error.status === 500;
+});
+
 import rdf from 'rdf-ext';
 import N3Parser from 'rdf-parser-n3';
 import RdfXmlParser from 'rdf-parser-rdfxml';
-import _ from 'lodash';
-
 rdf.parsers = new rdf.Parsers({
   'text/n3': N3Parser,
   'text/turtle': N3Parser,
@@ -104,6 +110,7 @@ class Scraper {
         request.get(dbpediaUri)
           .accept('text/turtle, text/n3, application/rdf+xml, application/n-triples')
           .buffer(true)
+          .retry(5)
           .end((error, response) => {
             if (error) {
               reject(error);
