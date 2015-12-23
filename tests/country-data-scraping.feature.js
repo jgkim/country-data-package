@@ -15,7 +15,7 @@ Feature('Country Data Scraping',
     let scraper;
     let promise;
 
-    Scenario('Good Network Connection', () => {
+    Scenario('Connected Networks', () => {
       before(() => {
         scraper = new Scraper();
         if (!nock.isActive()) nock.activate();
@@ -100,7 +100,7 @@ Feature('Country Data Scraping',
       });
     });
 
-    Scenario('Bad Network Connection', () => {
+    Scenario('Disconnected Networks', () => {
       const previousNockOff = process.env.NOCK_OFF;
 
       before(() => {
