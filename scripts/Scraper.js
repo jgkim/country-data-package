@@ -65,16 +65,16 @@ class Scraper {
           if (error) {
             reject(error);
           } else {
-            const refCountry = country;
-            delete refCountry._wikipediaUri;
+            const newCountry = _.cloneDeep(country);
+            delete newCountry._wikipediaUri;
 
             const wikipediaSlug = _.trimRight(data.wikipediaSlug, '/');
-            refCountry.wikipediaSlug = wikipediaSlug.substring(wikipediaSlug.lastIndexOf('/') + 1);
+            newCountry.wikipediaSlug = wikipediaSlug.substring(wikipediaSlug.lastIndexOf('/') + 1);
 
             const wikidataId = _.trimRight(data.wikidataId, '/');
-            refCountry.wikidataId = wikidataId.substring(wikidataId.lastIndexOf('/') + 1);
+            newCountry.wikidataId = wikidataId.substring(wikidataId.lastIndexOf('/') + 1);
 
-            resolve(refCountry);
+            resolve(newCountry);
           }
         });
       }));
@@ -95,15 +95,15 @@ class Scraper {
 
     countries.map((country) => {
       promises.push(new Promise((resolve, reject) => {
-        const refCountry = country;
+        const newCountry = _.cloneDeep(country);
 
         // Exception handling for Taiwan (cf. https://en.wikipedia.org/wiki/ISO_3166-1#cite_note-18)
-        if (/TW/i.test(refCountry.isoTwoLetterCountryCode)) {
-          refCountry.geoNamesId = '1668284';
-          resolve(refCountry);
+        if (/TW/i.test(newCountry.isoTwoLetterCountryCode)) {
+          newCountry.geoNamesId = '1668284';
+          resolve(newCountry);
         } else {
           const dbpediaGraphUri = 'http://wikidata.dbpedia.org';
-          const dbpediaUri = `${dbpediaGraphUri}/resource/${refCountry.wikidataId}`;
+          const dbpediaUri = `${dbpediaGraphUri}/resource/${newCountry.wikidataId}`;
           const store = new SparqlStore({
             endpointUrl: 'http://wikidata.dbpedia.org/sparql',
             // The SPARQL endpoint of DBpedia cannot support "application/n-triples".
@@ -116,13 +116,13 @@ class Scraper {
             }).toArray();
 
             if (!filtered.length) {
-              throw new Error(`Cannot find a GeoNames ID for this country: ${refCountry.englishShortName}`);
+              throw new Error(`Cannot find a GeoNames ID for this country: ${newCountry.englishShortName}`);
             }
 
             const geoNamesUrl = _.trimRight(filtered[0].object.toString(), '/');
-            refCountry.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
+            newCountry.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
 
-            resolve(refCountry);
+            resolve(newCountry);
           }).catch((exception) => {
             reject(exception);
           });
@@ -145,8 +145,8 @@ class Scraper {
 
     countries.map((country) => {
       promises.push(new Promise((resolve, reject) => {
-        const refCountry = country;
-        const geoNamesUri = `http://sws.geonames.org/${refCountry.geoNamesId}/`;
+        const newCountry = _.cloneDeep(country);
+        const geoNamesUri = `http://sws.geonames.org/${newCountry.geoNamesId}/`;
 
         rdf.defaultRequest('get', `${geoNamesUri}about.rdf`).then((response) => {
           return rdf.parsers.parse('application/rdf+xml', response.content);
@@ -154,21 +154,21 @@ class Scraper {
           // TODO: Serialize the graph model in JSON
           graph.forEach((triple) => {
             if (triple.predicate.equals('http://www.geonames.org/ontology#name')) {
-              refCountry.name = triple.object.toString();
+              newCountry.name = triple.object.toString();
             } else if (triple.predicate.equals('http://www.geonames.org/ontology#officialName')) {
-              refCountry[`officialName${_.capitalize(triple.object.language)}`] = triple.object.toString();
+              newCountry[`officialName${_.capitalize(triple.object.language)}`] = triple.object.toString();
             } else if (triple.predicate.equals('http://www.geonames.org/ontology#shortName')) {
-              refCountry[`shortName${_.capitalize(triple.object.language)}`] = triple.object.toString();
+              newCountry[`shortName${_.capitalize(triple.object.language)}`] = triple.object.toString();
             } else if (triple.predicate.equals('http://www.geonames.org/ontology#alternateName')) {
-              refCountry[`alternateName${_.capitalize(triple.object.language)}`] = triple.object.toString();
+              newCountry[`alternateName${_.capitalize(triple.object.language)}`] = triple.object.toString();
             } else if (triple.predicate.equals('http://www.w3.org/2003/01/geo/wgs84_pos#lat')) {
-              refCountry.lat = parseFloat(triple.object.toString());
+              newCountry.lat = parseFloat(triple.object.toString());
             } else if (triple.predicate.equals('http://www.w3.org/2003/01/geo/wgs84_pos#long')) {
-              refCountry.long = parseFloat(triple.object.toString());
+              newCountry.long = parseFloat(triple.object.toString());
             }
           });
 
-          resolve(refCountry);
+          resolve(newCountry);
         }).catch((exception) => {
           reject(exception);
         });
