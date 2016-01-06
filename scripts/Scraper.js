@@ -29,7 +29,6 @@ class Scraper {
       this.scraper('https://en.wikipedia.org/wiki/ISO_3166-1',
         'h3:has(#Officially_assigned_code_elements) ~ table.wikitable:first-of-type > tr',
         [{
-          englishShortName: 'td:nth-child(1)',
           isoTwoLetterCountryCode: 'td:nth-child(2)',
           isoThreeLetterCountryCode: 'td:nth-child(3)',
           isoThreeDigitCountryCode: 'td:nth-child(4)',
@@ -116,7 +115,7 @@ class Scraper {
             }).toArray();
 
             if (!filtered.length) {
-              throw new Error(`Cannot find a GeoNames ID for this country: ${newCountry.englishShortName}`);
+              throw new Error(`Cannot find a GeoNames ID for this country: ${newCountry.isoThreeLetterCountryCode}`);
             }
 
             const geoNamesUrl = _.trimRight(filtered[0].object.toString(), '/');
@@ -151,21 +150,33 @@ class Scraper {
         rdf.defaultRequest('get', `${geoNamesUri}about.rdf`).then((response) => {
           return rdf.parsers.parse('application/rdf+xml', response.content);
         }).then((graph) => {
-          // TODO: Serialize the graph model in JSON
           graph.forEach((triple) => {
-            if (triple.predicate.equals('http://www.geonames.org/ontology#name')) {
+            const gn = (name) => { return `http://www.geonames.org/ontology#${name}`; };
+            const wgs84 = (name) => { return `http://www.w3.org/2003/01/geo/wgs84_pos#${name}`; };
+
+            if (triple.predicate.equals(gn('name'))) {
               newCountry.name = triple.object.toString();
-            } else if (triple.predicate.equals('http://www.geonames.org/ontology#officialName')) {
-              newCountry[`officialName${_.capitalize(triple.object.language)}`] = triple.object.toString();
-            } else if (triple.predicate.equals('http://www.geonames.org/ontology#shortName')) {
-              newCountry[`shortName${_.capitalize(triple.object.language)}`] = triple.object.toString();
-            } else if (triple.predicate.equals('http://www.geonames.org/ontology#alternateName')) {
-              newCountry[`alternateName${_.capitalize(triple.object.language)}`] = triple.object.toString();
-            } else if (triple.predicate.equals('http://www.w3.org/2003/01/geo/wgs84_pos#lat')) {
-              newCountry.lat = parseFloat(triple.object.toString());
-            } else if (triple.predicate.equals('http://www.w3.org/2003/01/geo/wgs84_pos#long')) {
-              newCountry.long = parseFloat(triple.object.toString());
+            } else if (triple.predicate.equals(wgs84('lat'))) {
+              newCountry.latitude = parseFloat(triple.object.toString());
+            } else if (triple.predicate.equals(wgs84('long'))) {
+              newCountry.longitude = parseFloat(triple.object.toString());
             }
+
+            ['officialName', 'alternateName', 'shortName'].forEach((name) => {
+              if (triple.predicate.equals(gn(name))) {
+                if (triple.object.language) {
+                  newCountry[triple.object.language] = newCountry[triple.object.language] || {};
+                  if (!newCountry[triple.object.language][name]) {
+                    newCountry[triple.object.language][name] = triple.object.toString();
+                  } else {
+                    if (_.isString(newCountry[triple.object.language][name])) {
+                      newCountry[triple.object.language][name] = newCountry[triple.object.language][name].split();
+                    }
+                    newCountry[triple.object.language][name].push(triple.object.toString());
+                  }
+                }
+              }
+            });
           });
 
           resolve(newCountry);

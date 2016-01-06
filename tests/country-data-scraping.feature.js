@@ -79,18 +79,18 @@ Feature('Country Data Scraping',
           expect(countries).to.have.length.of.at.least(3);
 
           const kr = _.find(countries, { isoTwoLetterCountryCode: 'KR' });
-          // expect(kr.englishShortName).to.equal('Korea (Republic of)');
           expect(kr.isoThreeLetterCountryCode).to.equal('KOR');
           expect(kr.isoThreeDigitCountryCode).to.equal('410');
           expect(kr.isoCountrySubdivisionCode).to.equal('ISO 3166-2:KR');
           expect(kr.wikipediaSlug).to.equal('South_Korea');
           expect(kr.wikidataId).to.equal('Q884');
           expect(kr.geoNamesId).to.equal('1835841');
-          expect(kr.shortNameEn).to.equal('South Korea');
-          expect(kr.officialNameEn).to.equal('Republic of Korea');
-          expect(kr.officialNameKo).to.equal('대한민국');
-          expect(kr.lat).to.equal(36.5);
-          expect(kr.long).to.equal(127.75);
+          expect(kr.en.officialName).to.equal('Republic of Korea');
+          expect(kr.ko.officialName).to.equal('대한민국');
+          expect(kr.ko.alternateName).to.include('한국');
+          expect(kr.en.shortName).to.equal('South Korea');
+          expect(kr.latitude).to.equal(36.5);
+          expect(kr.longitude).to.equal(127.75);
         });
       });
 
