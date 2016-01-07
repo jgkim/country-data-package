@@ -12,8 +12,12 @@ rdf.parsers = new rdf.Parsers({
 
 import SparqlStore from 'rdf-store-sparql';
 
+import request from 'superagent';
+import cheerio from 'cheerio';
+
 class Scraper {
   constructor() {
+    this.regions = [];
     this.countries = [];
     this.scraper = xray();
   }
@@ -64,7 +68,7 @@ class Scraper {
           if (error) {
             reject(error);
           } else {
-            const newCountry = _.cloneDeep(country);
+            const newCountry = _.clone(country);
             delete newCountry._wikipediaUri;
 
             const wikipediaSlug = _.trimRight(data.wikipediaSlug, '/');
@@ -94,7 +98,7 @@ class Scraper {
 
     countries.map((country) => {
       promises.push(new Promise((resolve, reject) => {
-        const newCountry = _.cloneDeep(country);
+        const newCountry = _.clone(country);
 
         // Exception handling for Taiwan (cf. https://en.wikipedia.org/wiki/ISO_3166-1#cite_note-18)
         if (/TW/i.test(newCountry.isoTwoLetterCountryCode)) {
@@ -144,7 +148,7 @@ class Scraper {
 
     countries.map((country) => {
       promises.push(new Promise((resolve, reject) => {
-        const newCountry = _.cloneDeep(country);
+        const newCountry = _.clone(country);
         const geoNamesUri = `http://sws.geonames.org/${newCountry.geoNamesId}/`;
 
         rdf.defaultRequest('get', `${geoNamesUri}about.rdf`).then((response) => {
@@ -190,6 +194,83 @@ class Scraper {
   }
 
   /**
+  * _getRegionList() scrapes names and codes of continental regions and sub-regions from UNSD.
+  *
+  * @access public
+  * @return {Promise}
+  */
+  _getRegionList(countries) {
+    // return Promise.resolve(countries);
+
+    return new Promise((resolve, reject) => {
+      request
+        .get('http://unstats.un.org/unsd/methods/m49/m49regin.htm')
+        .end((error, response) => {
+          if (error) {
+            reject(error);
+          } else {
+            // Fix the borken HTML of the UNSD page.
+            const text = response.text.replace(/(Saint\-Barth[\s\S]+?<\/tr>)/m, '$1<tr>');
+            const html = cheerio.load(text);
+            const table = html('td.content[width="100%"]>table:nth-of-type(4)');
+
+            let regionCode;
+            let regionName;
+            let subRegionCode;
+            let subRegionName;
+
+            table.find('tr').each((index, element) => {
+              const tr = cheerio(element);
+
+              // Break the loop if it's not the first header.
+              if (tr.find('td.cheader2').length) {
+                return (index) ? false : true;
+              }
+
+              const tds = tr.find('td');
+              const code = _.trim(tds.eq(0).text());
+              // Skip the row if it's empty.
+              if (!code) return true;
+
+              // Find a region.
+              let region = tds.eq(1).find('h3 b');
+              if (region.length) {
+                const span = region.find('span.content');
+                if (span.length) {
+                  region = span;
+                }
+
+                regionCode = code;
+                regionName = _.trim(region.text());
+
+                return true;
+              }
+
+              // Find a sub-region.
+              const subRegion = tds.eq(1).find('b');
+              if (subRegion.length) {
+                subRegionCode = code;
+                subRegionName = _.trim(subRegion.text());
+
+                return true;
+              }
+
+              const country = _.find(countries, { isoThreeDigitCountryCode: code });
+              if (country) {
+                country.regionCode = regionCode;
+                country.regionName = regionName;
+                country.subRegionCode = subRegionCode;
+                country.subRegionName = subRegionName;
+              }
+            });
+
+            resolve(countries);
+          }
+        });
+    });
+  }
+
+  /**
   * getCountries() scrapes data about countries in ISO 3166-1.
   *
   * @access public
@@ -206,6 +287,9 @@ class Scraper {
         })
         .then((countries) => {
           return this._getGeoNamesData(countries);
+        })
+        .then((countries) => {
+          return this._getRegionList(countries);
         })
         .then((countries) => {
           this.countries = countries;

@@ -68,6 +68,10 @@ Feature('Country Data Scraping',
           .replyWithFile(200, `${__dirname}/fixtures/6252001.rdf`, {
             'Content-Type': 'application/rdf+xml',
           });
+
+        nock('http://unstats.un.org')
+          .get('/unsd/methods/m49/m49regin.htm')
+          .replyWithFile(200, `${__dirname}/fixtures/UNSD.html`);
       });
 
       When('the data consumer starts scraping', () => {
@@ -91,6 +95,10 @@ Feature('Country Data Scraping',
           expect(kr.en.shortName).to.equal('South Korea');
           expect(kr.latitude).to.equal(36.5);
           expect(kr.longitude).to.equal(127.75);
+          expect(kr.regionCode).to.equal('142');
+          expect(kr.regionName).to.equal('Asia');
+          expect(kr.subRegionCode).to.equal('030');
+          expect(kr.subRegionName).to.equal('Eastern Asia');
         });
       });
 
