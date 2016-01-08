@@ -2,21 +2,27 @@
   "name": "country-data-package",
   "version": "0.0.1",
   "title": "Country Data Package",
-  "description": "A Data Package for names and codes for countries and their subdivisions",
+  "description": "A Data Package for names and codes of countries, and their continents, regions, and principal subdivisions",
   "keywords": [
     "data package",
+    "continent",
+    "region",
     "country",
     "subdivision",
     "iso 3166",
     "iso 3166-1",
-    "iso 3166-2"
+    "iso 3166-2",
+    "un m.49"
   ],
   "author": "James G. Kim <jgkim@jayg.org> (http://jayg.org/)",
   "license": "ODC-PDDL-1.0",
-  "format": "csv",
+  "format": "json",
   "sources": [{
     "name": "Wikipedia",
     "web": "https://en.wikipedia.org/wiki/ISO_3166-1"
+  }, {
+    "name": "UNSD",
+    "http://unstats.un.org/unsd/methods/m49/m49regin.htm"
   }],
   "resources": []
 }

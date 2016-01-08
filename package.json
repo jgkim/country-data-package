@@ -1,14 +1,17 @@
 {
   "name": "country-data-package",
   "version": "0.0.1",
-  "description": "A Data Package for names and codes for countries and their subdivisions",
+  "description": "A Data Package for names and codes of countries, and their continents, regions, and principal subdivisions",
   "keywords": [
     "data package",
+    "continent",
+    "region",
     "country",
     "subdivision",
     "iso 3166",
     "iso 3166-1",
-    "iso 3166-2"
+    "iso 3166-2",
+    "un m.49"
   ],
   "author": "James G. Kim <jgkim@jayg.org> (http://jayg.org/)",
   "license": "MIT",

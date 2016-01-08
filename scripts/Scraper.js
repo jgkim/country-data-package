@@ -17,8 +17,7 @@ import cheerio from 'cheerio';
 
 class Scraper {
   constructor() {
-    this.regions = [];
-    this.countries = [];
+    this.data = {};
     this.scraper = xray();
   }
 
@@ -49,35 +48,35 @@ class Scraper {
   }
 
   /**
-  * _getWikiIds() scrapes the Wikipedia canonical slug and the Wikidata ID of each country.
+  * _getWikiIds() scrapes the Wikipedia canonical slug and the Wikidata ID of each entity.
   *
   * @access private
-  * @param {Array} countries
-  * @return {Promise} a promise that waits for all promises for countries to be fulfilled
+  * @param {Array} entities
+  * @return {Promise} a promise that waits for all promises for entities to be fulfilled
   */
-  _getWikiIds(countries) {
+  _getWikiIds(entities) {
     const promises = [];
 
-    countries.map((country) => {
+    entities.map((entity) => {
       promises.push(new Promise((resolve, reject) => {
         const scraper = xray();
-        scraper(country._wikipediaUri, {
+        scraper(entity._wikipediaUri, {
           wikipediaSlug: 'link[rel="canonical"]@href',
           wikidataId: '#t-wikibase > a@href',
         })((error, data) => {
           if (error) {
             reject(error);
           } else {
-            const newCountry = _.clone(country);
-            delete newCountry._wikipediaUri;
+            const newEntity = _.clone(entity);
+            delete newEntity._wikipediaUri;
 
             const wikipediaSlug = _.trimRight(data.wikipediaSlug, '/');
-            newCountry.wikipediaSlug = wikipediaSlug.substring(wikipediaSlug.lastIndexOf('/') + 1);
+            newEntity.wikipediaSlug = wikipediaSlug.substring(wikipediaSlug.lastIndexOf('/') + 1);
 
             const wikidataId = _.trimRight(data.wikidataId, '/');
-            newCountry.wikidataId = wikidataId.substring(wikidataId.lastIndexOf('/') + 1);
+            newEntity.wikidataId = wikidataId.substring(wikidataId.lastIndexOf('/') + 1);
 
-            resolve(newCountry);
+            resolve(newEntity);
           }
         });
       }));
@@ -87,26 +86,26 @@ class Scraper {
   }
 
   /**
-  * _getGeoNamesIds() scrapes the GeoNames ID of each country.
+  * _getGeoNamesIds() scrapes the GeoNames ID of each entity.
   *
   * @access private
-  * @param {Array} countries
-  * @return {Promise} a promise that waits for all promises for countries to be fulfilled
+  * @param {Array} entities
+  * @return {Promise} a promise that waits for all promises for entities to be fulfilled
   */
-  _getGeoNamesIds(countries) {
+  _getGeoNamesIds(entities) {
     const promises = [];
 
-    countries.map((country) => {
+    entities.map((entity) => {
       promises.push(new Promise((resolve, reject) => {
-        const newCountry = _.clone(country);
+        const newEntity = _.clone(entity);
 
         // Exception handling for Taiwan (cf. https://en.wikipedia.org/wiki/ISO_3166-1#cite_note-18)
-        if (/TW/i.test(newCountry.isoTwoLetterCountryCode)) {
-          newCountry.geoNamesId = '1668284';
-          resolve(newCountry);
+        if ('isoTwoLetterCountryCode' in newEntity && /TW/i.test(newEntity.isoTwoLetterCountryCode)) {
+          newEntity.geoNamesId = '1668284';
+          resolve(newEntity);
         } else {
           const dbpediaGraphUri = 'http://wikidata.dbpedia.org';
-          const dbpediaUri = `${dbpediaGraphUri}/resource/${newCountry.wikidataId}`;
+          const dbpediaUri = `${dbpediaGraphUri}/resource/${newEntity.wikidataId}`;
           const store = new SparqlStore({
             endpointUrl: 'http://wikidata.dbpedia.org/sparql',
             // The SPARQL endpoint of DBpedia cannot support "application/n-triples".
@@ -119,13 +118,13 @@ class Scraper {
             }).toArray();
 
             if (!filtered.length) {
-              throw new Error(`Cannot find a GeoNames ID for this country: ${newCountry.isoThreeLetterCountryCode}`);
+              throw new Error(`Cannot find a GeoNames ID for this Wikidata entity: ${newEntity.wikidataId}`);
             }
 
             const geoNamesUrl = _.trimRight(filtered[0].object.toString(), '/');
-            newCountry.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
+            newEntity.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
 
-            resolve(newCountry);
+            resolve(newEntity);
           }).catch((exception) => {
             reject(exception);
           });
@@ -137,19 +136,19 @@ class Scraper {
   }
 
   /**
-  * _getGeoNamesData() scrapes the data of each country from GeoNames.
+  * _getGeoNamesData() scrapes the data of each entity from GeoNames.
   *
   * @access private
-  * @param {Array} countries
-  * @return {Promise} a promise that waits for all promises for countries to be fulfilled
+  * @param {Array} entities
+  * @return {Promise} a promise that waits for all promises for entities to be fulfilled
   */
-  _getGeoNamesData(countries) {
+  _getGeoNamesData(entities) {
     const promises = [];
 
-    countries.map((country) => {
+    entities.map((entity) => {
       promises.push(new Promise((resolve, reject) => {
-        const newCountry = _.clone(country);
-        const geoNamesUri = `http://sws.geonames.org/${newCountry.geoNamesId}/`;
+        const newEntity = _.clone(entity);
+        const geoNamesUri = `http://sws.geonames.org/${newEntity.geoNamesId}/`;
 
         rdf.defaultRequest('get', `${geoNamesUri}about.rdf`).then((response) => {
           return rdf.parsers.parse('application/rdf+xml', response.content);
@@ -159,31 +158,31 @@ class Scraper {
             const wgs84 = (name) => { return `http://www.w3.org/2003/01/geo/wgs84_pos#${name}`; };
 
             if (triple.predicate.equals(gn('name'))) {
-              newCountry.name = triple.object.toString();
+              newEntity.name = triple.object.toString();
             } else if (triple.predicate.equals(wgs84('lat'))) {
-              newCountry.latitude = parseFloat(triple.object.toString());
+              newEntity.latitude = parseFloat(triple.object.toString());
             } else if (triple.predicate.equals(wgs84('long'))) {
-              newCountry.longitude = parseFloat(triple.object.toString());
+              newEntity.longitude = parseFloat(triple.object.toString());
             }
 
             ['officialName', 'alternateName', 'shortName'].forEach((name) => {
               if (triple.predicate.equals(gn(name))) {
                 if (triple.object.language) {
-                  newCountry[triple.object.language] = newCountry[triple.object.language] || {};
-                  if (!newCountry[triple.object.language][name]) {
-                    newCountry[triple.object.language][name] = triple.object.toString();
+                  newEntity[triple.object.language] = newEntity[triple.object.language] || {};
+                  if (!newEntity[triple.object.language][name]) {
+                    newEntity[triple.object.language][name] = triple.object.toString();
                   } else {
-                    if (_.isString(newCountry[triple.object.language][name])) {
-                      newCountry[triple.object.language][name] = newCountry[triple.object.language][name].split();
+                    if (_.isString(newEntity[triple.object.language][name])) {
+                      newEntity[triple.object.language][name] = newEntity[triple.object.language][name].split();
                     }
-                    newCountry[triple.object.language][name].push(triple.object.toString());
+                    newEntity[triple.object.language][name].push(triple.object.toString());
                   }
                 }
               }
             });
           });
 
-          resolve(newCountry);
+          resolve(newEntity);
         }).catch((exception) => {
           reject(exception);
         });
@@ -194,14 +193,12 @@ class Scraper {
   }
 
   /**
-  * _getRegionList() scrapes names and codes of continental regions and sub-regions from UNSD.
+  * _getRegionList() scrapes names and codes of continental and sub-continental regions from UNSD.
   *
   * @access public
   * @return {Promise}
   */
   _getRegionList(countries) {
-    // return Promise.resolve(countries);
-
     return new Promise((resolve, reject) => {
       request
         .get('http://unstats.un.org/unsd/methods/m49/m49regin.htm')
@@ -214,6 +211,9 @@ class Scraper {
             const html = cheerio.load(text);
             const table = html('td.content[width="100%"]>table:nth-of-type(4)');
 
+            const continents = [];
+
+            // TODO: Delete variables below.
             let regionCode;
             let regionName;
             let subRegionCode;
@@ -232,16 +232,24 @@ class Scraper {
               // Skip the row if it's empty.
               if (!code) return true;
 
-              // Find a region.
-              let region = tds.eq(1).find('h3 b');
-              if (region.length) {
-                const span = region.find('span.content');
+              // Find a continental region.
+              let continent = tds.eq(1).find('h3 b');
+              if (continent.length) {
+                const span = continent.find('span.content');
                 if (span.length) {
-                  region = span;
+                  continent = span;
                 }
+                continent = _.trim(continent.text());
 
+                const newContinent = {
+                  unM49Code: code,
+                  _wikipediaUri: `https://en.wikipedia.org/wiki/${continent}`,
+                };
+                continents.push(newContinent);
+
+                // TODO: Delete below.
                 regionCode = code;
-                regionName = _.trim(region.text());
+                regionName = continent;
 
                 return true;
               }
@@ -249,14 +257,21 @@ class Scraper {
               // Find a sub-region.
               const subRegion = tds.eq(1).find('b');
               if (subRegion.length) {
+                // TODO: Delete below.
                 subRegionCode = code;
                 subRegionName = _.trim(subRegion.text());
 
                 return true;
               }
 
+              /*
+               * ISO 3166-1 numeric codes are similar to the three-digit country codes
+               * developed and maintained by the United Nations Statistics Division,
+               * from which they originate in its UN M.49 standard.
+               */
               const country = _.find(countries, { isoThreeDigitCountryCode: code });
               if (country) {
+                // TODO: Make links to its continent and region.
                 country.regionCode = regionCode;
                 country.regionName = regionName;
                 country.subRegionCode = subRegionCode;
@@ -264,20 +279,20 @@ class Scraper {
               }
             });
 
-            resolve(countries);
+            resolve({ continents, countries });
           }
         });
     });
   }
 
   /**
-  * getCountries() scrapes data about countries in ISO 3166-1.
+  * getData() scrapes data about countries, and their continents, regions, and principal subdivisions.
   *
   * @access public
   * @return {Promise}
   */
-  getCountries() {
-    if (!this.countries.length) {
+  getData() {
+    if (_.isEmpty(this.data)) {
       return this._getCountryList()
         .then((countries) => {
           return this._getWikiIds(countries);
@@ -291,13 +306,13 @@ class Scraper {
         .then((countries) => {
           return this._getRegionList(countries);
         })
-        .then((countries) => {
-          this.countries = countries;
-          return this.countries;
+        .then((data) => {
+          this.data = data;
+          return this.data;
         });
     }
 
-    return Promise.resolve(this.countries);
+    return Promise.resolve(this.data);
   }
 }
 
