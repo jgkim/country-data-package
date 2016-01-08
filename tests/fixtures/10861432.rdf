@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<rdf:RDF xmlns:cc="http://creativecommons.org/ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:gn="http://www.geonames.org/ontology#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#">
+<gn:Feature rdf:about="http://sws.geonames.org/10861432/">
+<rdfs:isDefinedBy rdf:resource="http://sws.geonames.org/10861432/about.rdf"/>
+<gn:name>Americas</gn:name>
+<gn:alternateName xml:lang="en">Americas</gn:alternateName>
+<gn:featureClass rdf:resource="http://www.geonames.org/ontology#L"/>
+<gn:featureCode rdf:resource="http://www.geonames.org/ontology#L.RGN"/>
+<wgs84_pos:lat>26.0173</wgs84_pos:lat>
+<wgs84_pos:long>-104.41406</wgs84_pos:long>
+<gn:parentFeature rdf:resource="http://sws.geonames.org/6295630/"/>
+<gn:nearbyFeatures rdf:resource="http://sws.geonames.org/10861432/nearby.rdf"/>
+<gn:locationMap rdf:resource="http://www.geonames.org/10861432/america.html"/>
+<gn:wikipediaArticle rdf:resource="http://en.wikipedia.org/wiki/Americas"/>
+<rdfs:seeAlso rdf:resource="http://dbpedia.org/resource/Americas"/>
+</gn:Feature>
+<foaf:Document rdf:about="http://sws.geonames.org/10861432/about.rdf">
+<foaf:primaryTopic rdf:resource="http://sws.geonames.org/10861432/"/>
+<cc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
+<cc:attributionURL rdf:resource="http://sws.geonames.org/10861432/"/>
+<cc:attributionName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GeoNames</cc:attributionName>
+<dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-11-09</dcterms:created>
+<dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-11-09</dcterms:modified>
+</foaf:Document>
+</rdf:RDF>

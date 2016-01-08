@@ -67,16 +67,16 @@ class Scraper {
           if (error) {
             reject(error);
           } else {
-            const newEntity = _.clone(entity);
-            delete newEntity._wikipediaUri;
+            const entityReference = entity;
+            delete entityReference._wikipediaUri;
 
             const wikipediaSlug = _.trimRight(data.wikipediaSlug, '/');
-            newEntity.wikipediaSlug = wikipediaSlug.substring(wikipediaSlug.lastIndexOf('/') + 1);
+            entityReference.wikipediaSlug = wikipediaSlug.substring(wikipediaSlug.lastIndexOf('/') + 1);
 
             const wikidataId = _.trimRight(data.wikidataId, '/');
-            newEntity.wikidataId = wikidataId.substring(wikidataId.lastIndexOf('/') + 1);
+            entityReference.wikidataId = wikidataId.substring(wikidataId.lastIndexOf('/') + 1);
 
-            resolve(newEntity);
+            resolve(entityReference);
           }
         });
       }));
@@ -97,15 +97,19 @@ class Scraper {
 
     entities.map((entity) => {
       promises.push(new Promise((resolve, reject) => {
-        const newEntity = _.clone(entity);
+        const entityReference = entity;
 
         // Exception handling for Taiwan (cf. https://en.wikipedia.org/wiki/ISO_3166-1#cite_note-18)
-        if ('isoTwoLetterCountryCode' in newEntity && /TW/i.test(newEntity.isoTwoLetterCountryCode)) {
-          newEntity.geoNamesId = '1668284';
-          resolve(newEntity);
+        if (entityReference.wikidataId === 'Q7676514') {
+          entityReference.geoNamesId = '1668284';
+          resolve(entityReference);
+        // Exception handling for Americas (cf. https://www.wikidata.org/w/index.php?title=Q828&oldid=289568892)
+        } else if (entityReference.wikidataId === 'Q828') {
+          entityReference.geoNamesId = '10861432';
+          resolve(entityReference);
         } else {
           const dbpediaGraphUri = 'http://wikidata.dbpedia.org';
-          const dbpediaUri = `${dbpediaGraphUri}/resource/${newEntity.wikidataId}`;
+          const dbpediaUri = `${dbpediaGraphUri}/resource/${entityReference.wikidataId}`;
           const store = new SparqlStore({
             endpointUrl: 'http://wikidata.dbpedia.org/sparql',
             // The SPARQL endpoint of DBpedia cannot support "application/n-triples".
@@ -118,13 +122,13 @@ class Scraper {
             }).toArray();
 
             if (!filtered.length) {
-              throw new Error(`Cannot find a GeoNames ID for this Wikidata entity: ${newEntity.wikidataId}`);
+              throw new Error(`Cannot find a GeoNames ID for this Wikidata entity: ${entityReference.wikidataId}`);
             }
 
             const geoNamesUrl = _.trimRight(filtered[0].object.toString(), '/');
-            newEntity.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
+            entityReference.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
 
-            resolve(newEntity);
+            resolve(entityReference);
           }).catch((exception) => {
             reject(exception);
           });
@@ -147,8 +151,8 @@ class Scraper {
 
     entities.map((entity) => {
       promises.push(new Promise((resolve, reject) => {
-        const newEntity = _.clone(entity);
-        const geoNamesUri = `http://sws.geonames.org/${newEntity.geoNamesId}/`;
+        const entityReference = entity;
+        const geoNamesUri = `http://sws.geonames.org/${entityReference.geoNamesId}/`;
 
         rdf.defaultRequest('get', `${geoNamesUri}about.rdf`).then((response) => {
           return rdf.parsers.parse('application/rdf+xml', response.content);
@@ -158,31 +162,31 @@ class Scraper {
             const wgs84 = (name) => { return `http://www.w3.org/2003/01/geo/wgs84_pos#${name}`; };
 
             if (triple.predicate.equals(gn('name'))) {
-              newEntity.name = triple.object.toString();
+              entityReference.name = triple.object.toString();
             } else if (triple.predicate.equals(wgs84('lat'))) {
-              newEntity.latitude = parseFloat(triple.object.toString());
+              entityReference.latitude = parseFloat(triple.object.toString());
             } else if (triple.predicate.equals(wgs84('long'))) {
-              newEntity.longitude = parseFloat(triple.object.toString());
+              entityReference.longitude = parseFloat(triple.object.toString());
             }
 
             ['officialName', 'alternateName', 'shortName'].forEach((name) => {
               if (triple.predicate.equals(gn(name))) {
                 if (triple.object.language) {
-                  newEntity[triple.object.language] = newEntity[triple.object.language] || {};
-                  if (!newEntity[triple.object.language][name]) {
-                    newEntity[triple.object.language][name] = triple.object.toString();
+                  entityReference[triple.object.language] = entityReference[triple.object.language] || {};
+                  if (!entityReference[triple.object.language][name]) {
+                    entityReference[triple.object.language][name] = triple.object.toString();
                   } else {
-                    if (_.isString(newEntity[triple.object.language][name])) {
-                      newEntity[triple.object.language][name] = newEntity[triple.object.language][name].split();
+                    if (_.isString(entityReference[triple.object.language][name])) {
+                      entityReference[triple.object.language][name] = entityReference[triple.object.language][name].split();
                     }
-                    newEntity[triple.object.language][name].push(triple.object.toString());
+                    entityReference[triple.object.language][name].push(triple.object.toString());
                   }
                 }
               }
             });
           });
 
-          resolve(newEntity);
+          resolve(entityReference);
         }).catch((exception) => {
           reject(exception);
         });
@@ -214,8 +218,8 @@ class Scraper {
             const continents = [];
 
             // TODO: Delete variables below.
-            let regionCode;
-            let regionName;
+            // let regionCode;
+            // let regionName;
             let subRegionCode;
             let subRegionName;
 
@@ -247,10 +251,6 @@ class Scraper {
                 };
                 continents.push(newContinent);
 
-                // TODO: Delete below.
-                regionCode = code;
-                regionName = continent;
-
                 return true;
               }
 
@@ -271,9 +271,10 @@ class Scraper {
                */
               const country = _.find(countries, { isoThreeDigitCountryCode: code });
               if (country) {
+                country.continent = _.last(continents);
                 // TODO: Make links to its continent and region.
-                country.regionCode = regionCode;
-                country.regionName = regionName;
+                // country.regionCode = regionCode;
+                // country.regionName = regionName;
                 country.subRegionCode = subRegionCode;
                 country.subRegionName = subRegionName;
               }
@@ -307,7 +308,19 @@ class Scraper {
           return this._getRegionList(countries);
         })
         .then((data) => {
-          this.data = data;
+          this.data.countries = data.countries;
+
+          return this._getWikiIds(data.continents);
+        })
+        .then((continents) => {
+          return this._getGeoNamesIds(continents);
+        })
+        .then((continents) => {
+          return this._getGeoNamesData(continents);
+        })
+        .then((continents) => {
+          this.data.continents = continents;
+
           return this.data;
         });
     }

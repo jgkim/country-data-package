@@ -72,6 +72,44 @@ Feature('Country Data Scraping',
         nock('http://unstats.un.org')
           .get('/unsd/methods/m49/m49regin.htm')
           .replyWithFile(200, `${__dirname}/fixtures/UNSD.html`);
+
+        nock('https://en.wikipedia.org')
+          .get('/wiki/Europe')
+          .replyWithFile(200, `${__dirname}/fixtures/Europe.html`)
+          .get('/wiki/Asia')
+          .replyWithFile(200, `${__dirname}/fixtures/Asia.html`)
+          .get('/wiki/Americas')
+          .replyWithFile(200, `${__dirname}/fixtures/Americas.html`);
+
+        nock('http://wikidata.dbpedia.org')
+          .get('/sparql')
+          .query({
+            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q46><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q46><http://www.w3.org/2002/07/owl#sameAs>?o}}',
+          })
+          .replyWithFile(200, `${__dirname}/fixtures/Q46.ntriples`, {
+            'Content-Type': 'text/plain',
+          })
+          .get('/sparql')
+          .query({
+            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q48><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q48><http://www.w3.org/2002/07/owl#sameAs>?o}}',
+          })
+          .replyWithFile(200, `${__dirname}/fixtures/Q48.ntriples`, {
+            'Content-Type': 'text/plain',
+          });
+
+        nock('http://sws.geonames.org')
+          .get('/6255148/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/6255148.rdf`, {
+            'Content-Type': 'application/rdf+xml',
+          })
+          .get('/6255147/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/6255147.rdf`, {
+            'Content-Type': 'application/rdf+xml',
+          })
+          .get('/10861432/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/10861432.rdf`, {
+            'Content-Type': 'application/rdf+xml',
+          });
       });
 
       When('the data consumer starts scraping', () => {
@@ -97,15 +135,23 @@ Feature('Country Data Scraping',
           expect(kr.longitude).to.equal(127.75);
 
           // TODO: Make links to its continent and region.
-          expect(kr.regionCode).to.equal('142');
-          expect(kr.regionName).to.equal('Asia');
+          // expect(kr.regionCode).to.equal('142');
+          // expect(kr.regionName).to.equal('Asia');
           expect(kr.subRegionCode).to.equal('030');
           expect(kr.subRegionName).to.equal('Eastern Asia');
 
-          expect(data.continents).to.have.length(5);
+          expect(data.continents).to.have.length.of.at.least(3);
 
           const asia = _.find(data.continents, { unM49Code: '142' });
-          expect(asia._wikipediaUri).to.equal('https://en.wikipedia.org/wiki/Asia');
+          expect(asia.wikipediaSlug).to.equal('Asia');
+          expect(asia.wikidataId).to.equal('Q48');
+          expect(asia.geoNamesId).to.equal('6255147');
+          expect(asia.en.officialName).to.equal('Asia');
+          expect(asia.ko.officialName).to.equal('아시아');
+          expect(asia.latitude).to.equal(29.84064);
+          expect(asia.longitude).to.equal(89.29688);
+
+          expect(kr.continent).to.equal(asia);
         });
       });
 
