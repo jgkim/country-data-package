@@ -134,12 +134,6 @@ Feature('Country Data Scraping',
           expect(kr.latitude).to.equal(36.5);
           expect(kr.longitude).to.equal(127.75);
 
-          // TODO: Make links to its continent and region.
-          // expect(kr.regionCode).to.equal('142');
-          // expect(kr.regionName).to.equal('Asia');
-          expect(kr.subRegionCode).to.equal('030');
-          expect(kr.subRegionName).to.equal('Eastern Asia');
-
           expect(data.continents).to.have.length.of.at.least(3);
 
           const asia = _.find(data.continents, { unM49Code: '142' });
@@ -151,7 +145,10 @@ Feature('Country Data Scraping',
           expect(asia.latitude).to.equal(29.84064);
           expect(asia.longitude).to.equal(89.29688);
 
+          const easternAsia = _.find(data.regions, { unM49Code: '030' });
+
           expect(kr.continent).to.equal(asia);
+          expect(kr.region).to.equal(easternAsia);
         });
       });
 

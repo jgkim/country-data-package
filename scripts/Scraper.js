@@ -216,12 +216,7 @@ class Scraper {
             const table = html('td.content[width="100%"]>table:nth-of-type(4)');
 
             const continents = [];
-
-            // TODO: Delete variables below.
-            // let regionCode;
-            // let regionName;
-            let subRegionCode;
-            let subRegionName;
+            const regions = [];
 
             table.find('tr').each((index, element) => {
               const tr = cheerio(element);
@@ -254,12 +249,16 @@ class Scraper {
                 return true;
               }
 
-              // Find a sub-region.
-              const subRegion = tds.eq(1).find('b');
-              if (subRegion.length) {
-                // TODO: Delete below.
-                subRegionCode = code;
-                subRegionName = _.trim(subRegion.text());
+              // Find a sub-continental region.
+              let region = tds.eq(1).find('b');
+              if (region.length) {
+                region = _.trim(region.text());
+
+                const newRegion = {
+                  unM49Code: code,
+                  _wikipediaUri: `https://en.wikipedia.org/wiki/${region}`,
+                };
+                regions.push(newRegion);
 
                 return true;
               }
@@ -272,15 +271,11 @@ class Scraper {
               const country = _.find(countries, { isoThreeDigitCountryCode: code });
               if (country) {
                 country.continent = _.last(continents);
-                // TODO: Make links to its continent and region.
-                // country.regionCode = regionCode;
-                // country.regionName = regionName;
-                country.subRegionCode = subRegionCode;
-                country.subRegionName = subRegionName;
+                country.region = _.last(regions);
               }
             });
 
-            resolve({ continents, countries });
+            resolve({ continents, regions, countries });
           }
         });
     });
@@ -309,6 +304,8 @@ class Scraper {
         })
         .then((data) => {
           this.data.countries = data.countries;
+          // TODO: Move to another part.
+          this.data.regions = data.regions;
 
           return this._getWikiIds(data.continents);
         })
