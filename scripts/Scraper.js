@@ -99,41 +99,45 @@ class Scraper {
       promises.push(new Promise((resolve, reject) => {
         const entityReference = entity;
 
-        // Exception handling for Taiwan (cf. https://en.wikipedia.org/wiki/ISO_3166-1#cite_note-18)
-        if (entityReference.wikidataId === 'Q7676514') {
-          entityReference.geoNamesId = '1668284';
-          resolve(entityReference);
-        // Exception handling for Americas (cf. https://www.wikidata.org/w/index.php?title=Q828&oldid=289568892)
-        } else if (entityReference.wikidataId === 'Q828') {
-          entityReference.geoNamesId = '10861432';
-          resolve(entityReference);
-        } else {
-          // TODO: Need to use Wikidata.org to get Wikipedia labels easily.
-          const dbpediaGraphUri = 'http://wikidata.dbpedia.org';
-          const dbpediaUri = `${dbpediaGraphUri}/resource/${entityReference.wikidataId}`;
-          const store = new SparqlStore({
-            endpointUrl: 'http://wikidata.dbpedia.org/sparql',
-            // The SPARQL endpoint of DBpedia cannot support "application/n-triples".
-            mimeType: 'text/plain',
-          });
+        request
+          .get(`https://www.wikidata.org/wiki/Special:EntityData/${entityReference.wikidataId}.json`)
+          .end((error, response) => {
+            if (error) {
+              reject(error);
+            } else {
+              const wikidata = response.body.entities[entityReference.wikidataId];
 
-          store.match(dbpediaUri, rdf.resolve('owl:sameAs'), undefined, dbpediaGraphUri).then((graph) => {
-            const filtered = graph.filter((triple) => {
-              return triple.object.toString().match(/http:\/\/sws\.geonames\.org/i);
-            }).toArray();
+              switch (entityReference.wikidataId) {
+                // Exception handling for Taiwan (cf. https://en.wikipedia.org/wiki/ISO_3166-1#cite_note-18)
+                case 'Q7676514':
+                  entityReference.geoNamesId = '1668284';
+                  break;
+                // Exception handling for Americas (cf. https://www.wikidata.org/w/index.php?title=Q828&oldid=289568892)
+                case 'Q828':
+                  entityReference.geoNamesId = '10861432';
+                  break;
+                default:
+                  entityReference.geoNamesId = wikidata.claims.P1566[0].mainsnak.datavalue.value;
+              }
 
-            if (!filtered.length) {
-              throw new Error(`Cannot find a GeoNames ID for this Wikidata entity: ${entityReference.wikidataId}`);
+              // TODO: Refactor the below
+              _.forEach(wikidata.labels, (label) => {
+                if (label.language) {
+                  entityReference[label.language] = entityReference[label.language] || {};
+                  if (!entityReference[label.language].wikipediaLabel) {
+                    entityReference[label.language].wikipediaLabel = label.value;
+                  } else {
+                    if (_.isString(entityReference[label.language].wikipediaLabel)) {
+                      entityReference[label.language].wikipediaLabel = entityReference[label.language].wikipediaLabel.split();
+                    }
+                    entityReference[label.language].wikipediaLabel.push(label.value);
+                  }
+                }
+              });
+
+              resolve(entityReference);
             }
-
-            const geoNamesUrl = _.trimRight(filtered[0].object.toString(), '/');
-            entityReference.geoNamesId = geoNamesUrl.substring(geoNamesUrl.lastIndexOf('/') + 1);
-
-            resolve(entityReference);
-          }).catch((exception) => {
-            reject(exception);
           });
-        }
       }));
     });
 
@@ -171,6 +175,7 @@ class Scraper {
             }
 
             ['officialName', 'alternateName', 'shortName'].forEach((name) => {
+              // TODO: Refactor the below
               if (triple.predicate.equals(gn(name))) {
                 if (triple.object.language) {
                   entityReference[triple.object.language] = entityReference[triple.object.language] || {};
@@ -292,6 +297,7 @@ class Scraper {
   * @return {Promise}
   */
   getData() {
+    // TODO: Refactor the below
     if (_.isEmpty(this.data)) {
       return this._getCountryList()
         .then((countries) => {

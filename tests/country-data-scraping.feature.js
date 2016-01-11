@@ -32,42 +32,27 @@ Feature('Country Data Scraping',
           .get('/wiki/United_States_of_America')
           .replyWithFile(200, `${__dirname}/fixtures/US.html`);
 
-        nock('http://wikidata.dbpedia.org')
-          .get('/sparql')
-          .query({
-            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q31><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q31><http://www.w3.org/2002/07/owl#sameAs>?o}}',
+        nock('https://www.wikidata.org')
+          .defaultReplyHeaders({
+            'Content-Type': 'application/json',
           })
-          .replyWithFile(200, `${__dirname}/fixtures/Q31.ntriples`, {
-            'Content-Type': 'text/plain',
-          })
-          .get('/sparql')
-          .query({
-            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q884><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q884><http://www.w3.org/2002/07/owl#sameAs>?o}}',
-          })
-          .replyWithFile(200, `${__dirname}/fixtures/Q884.ntriples`, {
-            'Content-Type': 'text/plain',
-          })
-          .get('/sparql')
-          .query({
-            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q30><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q30><http://www.w3.org/2002/07/owl#sameAs>?o}}',
-          })
-          .replyWithFile(200, `${__dirname}/fixtures/Q30.ntriples`, {
-            'Content-Type': 'text/plain',
-          });
+          .get('/wiki/Special:EntityData/Q30.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q30.json`)
+          .get('/wiki/Special:EntityData/Q884.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q884.json`)
+          .get('/wiki/Special:EntityData/Q31.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q31.json`);
 
         nock('http://sws.geonames.org')
+          .defaultReplyHeaders({
+            'Content-Type': 'application/rdf+xml',
+          })
           .get('/2802361/about.rdf')
-          .replyWithFile(200, `${__dirname}/fixtures/2802361.rdf`, {
-            'Content-Type': 'application/rdf+xml',
-          })
+          .replyWithFile(200, `${__dirname}/fixtures/2802361.rdf`)
           .get('/1835841/about.rdf')
-          .replyWithFile(200, `${__dirname}/fixtures/1835841.rdf`, {
-            'Content-Type': 'application/rdf+xml',
-          })
+          .replyWithFile(200, `${__dirname}/fixtures/1835841.rdf`)
           .get('/6252001/about.rdf')
-          .replyWithFile(200, `${__dirname}/fixtures/6252001.rdf`, {
-            'Content-Type': 'application/rdf+xml',
-          });
+          .replyWithFile(200, `${__dirname}/fixtures/6252001.rdf`);
 
         nock('http://unstats.un.org')
           .get('/unsd/methods/m49/m49regin.htm')
@@ -87,68 +72,39 @@ Feature('Country Data Scraping',
           .get('/wiki/Northern_America')
           .replyWithFile(200, `${__dirname}/fixtures/Northern_America.html`);
 
-        nock('http://wikidata.dbpedia.org')
-          .get('/sparql')
-          .query({
-            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q46><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q46><http://www.w3.org/2002/07/owl#sameAs>?o}}',
+        nock('https://www.wikidata.org')
+          .defaultReplyHeaders({
+            'Content-Type': 'application/json',
           })
-          .replyWithFile(200, `${__dirname}/fixtures/Q46.ntriples`, {
-            'Content-Type': 'text/plain',
-          })
-          .get('/sparql')
-          .query({
-            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q48><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q48><http://www.w3.org/2002/07/owl#sameAs>?o}}',
-          })
-          .replyWithFile(200, `${__dirname}/fixtures/Q48.ntriples`, {
-            'Content-Type': 'text/plain',
-          })
-          .get('/sparql')
-          .query({
-            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q2017699><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q2017699><http://www.w3.org/2002/07/owl#sameAs>?o}}',
-          })
-          .replyWithFile(200, `${__dirname}/fixtures/Q2017699.ntriples`, {
-            'Content-Type': 'text/plain',
-          })
-          .get('/sparql')
-          .query({
-            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q27231><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q27231><http://www.w3.org/2002/07/owl#sameAs>?o}}',
-          })
-          .replyWithFile(200, `${__dirname}/fixtures/Q27231.ntriples`, {
-            'Content-Type': 'text/plain',
-          })
-          .get('/sparql')
-          .query({
-            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q27496><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q27496><http://www.w3.org/2002/07/owl#sameAs>?o}}',
-          })
-          .replyWithFile(200, `${__dirname}/fixtures/Q27496.ntriples`, {
-            'Content-Type': 'text/plain',
-          });
+          .get('/wiki/Special:EntityData/Q46.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q46.json`)
+          .get('/wiki/Special:EntityData/Q48.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q48.json`)
+          .get('/wiki/Special:EntityData/Q828.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q828.json`)
+          .get('/wiki/Special:EntityData/Q2017699.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q2017699.json`)
+          .get('/wiki/Special:EntityData/Q27231.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q27231.json`)
+          .get('/wiki/Special:EntityData/Q27496.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q27496.json`);
 
         nock('http://sws.geonames.org')
+          .defaultReplyHeaders({
+            'Content-Type': 'application/rdf+xml',
+          })
           .get('/6255148/about.rdf')
-          .replyWithFile(200, `${__dirname}/fixtures/6255148.rdf`, {
-            'Content-Type': 'application/rdf+xml',
-          })
+          .replyWithFile(200, `${__dirname}/fixtures/6255148.rdf`)
           .get('/6255147/about.rdf')
-          .replyWithFile(200, `${__dirname}/fixtures/6255147.rdf`, {
-            'Content-Type': 'application/rdf+xml',
-          })
+          .replyWithFile(200, `${__dirname}/fixtures/6255147.rdf`)
           .get('/10861432/about.rdf')
-          .replyWithFile(200, `${__dirname}/fixtures/10861432.rdf`, {
-            'Content-Type': 'application/rdf+xml',
-          })
+          .replyWithFile(200, `${__dirname}/fixtures/10861432.rdf`)
           .get('/7729890/about.rdf')
-          .replyWithFile(200, `${__dirname}/fixtures/7729890.rdf`, {
-            'Content-Type': 'application/rdf+xml',
-          })
+          .replyWithFile(200, `${__dirname}/fixtures/7729890.rdf`)
           .get('/7729894/about.rdf')
-          .replyWithFile(200, `${__dirname}/fixtures/7729894.rdf`, {
-            'Content-Type': 'application/rdf+xml',
-          })
+          .replyWithFile(200, `${__dirname}/fixtures/7729894.rdf`)
           .get('/9408659/about.rdf')
-          .replyWithFile(200, `${__dirname}/fixtures/9408659.rdf`, {
-            'Content-Type': 'application/rdf+xml',
-          });
+          .replyWithFile(200, `${__dirname}/fixtures/9408659.rdf`);
       });
 
       When('the data consumer starts scraping', () => {
