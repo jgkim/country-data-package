@@ -57,8 +57,7 @@ class Scraper {
 
     entities.map((entity) => {
       promises.push(new Promise((resolve, reject) => {
-        const scraper = xray();
-        scraper(entity._wikipediaUri, {
+        this.scraper(entity._wikipediaUri, {
           wikipediaSlug: 'link[rel="canonical"]@href',
           wikidataId: '#t-wikibase > a@href',
         })((error, data) => {
@@ -135,16 +134,24 @@ class Scraper {
               const wikidata = response.body.entities[entityReference.wikidataId];
 
               switch (entityReference.wikidataId) {
-                // Exception handling for Taiwan (cf. https://en.wikipedia.org/wiki/ISO_3166-1#cite_note-18)
+                // TODO: Exception handling for Taiwan (cf. https://en.wikipedia.org/wiki/ISO_3166-1#cite_note-18)
                 case 'Q7676514':
                   entityReference.geoNamesId = '1668284';
                   break;
-                // Exception handling for Americas (cf. https://www.wikidata.org/w/index.php?title=Q828&oldid=289568892)
+                // TODO: Exception handling for Americas (cf. https://www.wikidata.org/w/index.php?title=Q828&oldid=289568892)
                 case 'Q828':
                   entityReference.geoNamesId = '10861432';
                   break;
+                // TODO: Exception handling for Western Asia (cf. https://www.wikidata.org/w/index.php?title=Q27293&oldid=290943509)
+                case 'Q27293':
+                  entityReference.geoNamesId = '7729897';
+                  break;
                 default:
-                  entityReference.geoNamesId = wikidata.claims.P1566[0].mainsnak.datavalue.value;
+                  try {
+                    entityReference.geoNamesId = wikidata.claims.P1566[0].mainsnak.datavalue.value;
+                  } catch (exception) {
+                    reject(`Cannot find a GeoNames ID for this Wikidata entity: ${entityReference.wikidataId}`);
+                  }
               }
 
               _.forEach(wikidata.labels, (label) => {
@@ -173,9 +180,8 @@ class Scraper {
     entities.map((entity) => {
       promises.push(new Promise((resolve, reject) => {
         const entityReference = entity;
-        const geoNamesUri = `http://sws.geonames.org/${entityReference.geoNamesId}/`;
 
-        rdf.defaultRequest('get', `${geoNamesUri}about.rdf`).then((response) => {
+        rdf.defaultRequest('get', `http://sws.geonames.org/${entityReference.geoNamesId}/about.rdf`).then((response) => {
           return rdf.parsers.parse('application/rdf+xml', response.content);
         }).then((graph) => {
           graph.forEach((triple) => {
@@ -254,7 +260,7 @@ class Scraper {
                 const newContinent = {
                   unM49Code: code,
                   // Rough mapping of names to Wikipedia URIs
-                  _wikipediaUri: `https://en.wikipedia.org/wiki/${continent.replace(' ', '_')}`,
+                  _wikipediaUri: `https://en.wikipedia.org/wiki/${continent.replace(/\s/g, '_')}`,
                 };
                 continents.push(newContinent);
 
@@ -266,10 +272,15 @@ class Scraper {
               if (region.length) {
                 region = _.trim(region.text());
 
+                // TODO: Exception handling for Latin America and the Caribbean
+                if (code === '419') {
+                  region = 'Community of Latin American and Caribbean States';
+                }
+
                 const newRegion = {
                   unM49Code: code,
                   // Rough mapping of names to Wikipedia URIs
-                  _wikipediaUri: `https://en.wikipedia.org/wiki/${region.replace(' ', '_')}`,
+                  _wikipediaUri: `https://en.wikipedia.org/wiki/${region.replace(/\s/g, '_')}`,
                   continent: _.last(continents),
                 };
                 regions.push(newRegion);
