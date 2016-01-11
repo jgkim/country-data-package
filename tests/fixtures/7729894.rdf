@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<rdf:RDF xmlns:cc="http://creativecommons.org/ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:gn="http://www.geonames.org/ontology#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#">
+<gn:Feature rdf:about="http://sws.geonames.org/7729894/">
+<rdfs:isDefinedBy rdf:resource="http://sws.geonames.org/7729894/about.rdf"/>
+<gn:name>Eastern Asia</gn:name>
+<gn:alternateName xml:lang="lt">Rytų Azija</gn:alternateName>
+<gn:featureClass rdf:resource="http://www.geonames.org/ontology#L"/>
+<gn:featureCode rdf:resource="http://www.geonames.org/ontology#L.RGN"/>
+<gn:population>1575784500</gn:population>
+<wgs84_pos:lat>32.24997</wgs84_pos:lat>
+<wgs84_pos:long>114.60938</wgs84_pos:long>
+<gn:parentFeature rdf:resource="http://sws.geonames.org/6295630/"/>
+<gn:nearbyFeatures rdf:resource="http://sws.geonames.org/7729894/nearby.rdf"/>
+<gn:locationMap rdf:resource="http://www.geonames.org/7729894/eastern-asia.html"/>
+<gn:wikipediaArticle rdf:resource="http://en.wikipedia.org/wiki/Eastern_Asia"/>
+<rdfs:seeAlso rdf:resource="http://dbpedia.org/resource/Eastern_Asia"/>
+</gn:Feature>
+<foaf:Document rdf:about="http://sws.geonames.org/7729894/about.rdf">
+<foaf:primaryTopic rdf:resource="http://sws.geonames.org/7729894/"/>
+<cc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
+<cc:attributionURL rdf:resource="http://sws.geonames.org/7729894/"/>
+<cc:attributionName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GeoNames</cc:attributionName>
+<dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2011-03-16</dcterms:created>
+<dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-01-15</dcterms:modified>
+</foaf:Document>
+</rdf:RDF>

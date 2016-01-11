@@ -79,7 +79,13 @@ Feature('Country Data Scraping',
           .get('/wiki/Asia')
           .replyWithFile(200, `${__dirname}/fixtures/Asia.html`)
           .get('/wiki/Americas')
-          .replyWithFile(200, `${__dirname}/fixtures/Americas.html`);
+          .replyWithFile(200, `${__dirname}/fixtures/Americas.html`)
+          .get('/wiki/Western_Europe')
+          .replyWithFile(200, `${__dirname}/fixtures/Western_Europe.html`)
+          .get('/wiki/Eastern_Asia')
+          .replyWithFile(200, `${__dirname}/fixtures/Eastern_Asia.html`)
+          .get('/wiki/Northern_America')
+          .replyWithFile(200, `${__dirname}/fixtures/Northern_America.html`);
 
         nock('http://wikidata.dbpedia.org')
           .get('/sparql')
@@ -95,6 +101,27 @@ Feature('Country Data Scraping',
           })
           .replyWithFile(200, `${__dirname}/fixtures/Q48.ntriples`, {
             'Content-Type': 'text/plain',
+          })
+          .get('/sparql')
+          .query({
+            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q2017699><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q2017699><http://www.w3.org/2002/07/owl#sameAs>?o}}',
+          })
+          .replyWithFile(200, `${__dirname}/fixtures/Q2017699.ntriples`, {
+            'Content-Type': 'text/plain',
+          })
+          .get('/sparql')
+          .query({
+            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q27231><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q27231><http://www.w3.org/2002/07/owl#sameAs>?o}}',
+          })
+          .replyWithFile(200, `${__dirname}/fixtures/Q27231.ntriples`, {
+            'Content-Type': 'text/plain',
+          })
+          .get('/sparql')
+          .query({
+            query: 'CONSTRUCT{<http://wikidata.dbpedia.org/resource/Q27496><http://www.w3.org/2002/07/owl#sameAs>?o}{GRAPH<http://wikidata.dbpedia.org>{<http://wikidata.dbpedia.org/resource/Q27496><http://www.w3.org/2002/07/owl#sameAs>?o}}',
+          })
+          .replyWithFile(200, `${__dirname}/fixtures/Q27496.ntriples`, {
+            'Content-Type': 'text/plain',
           });
 
         nock('http://sws.geonames.org')
@@ -108,6 +135,18 @@ Feature('Country Data Scraping',
           })
           .get('/10861432/about.rdf')
           .replyWithFile(200, `${__dirname}/fixtures/10861432.rdf`, {
+            'Content-Type': 'application/rdf+xml',
+          })
+          .get('/7729890/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/7729890.rdf`, {
+            'Content-Type': 'application/rdf+xml',
+          })
+          .get('/7729894/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/7729894.rdf`, {
+            'Content-Type': 'application/rdf+xml',
+          })
+          .get('/9408659/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/9408659.rdf`, {
             'Content-Type': 'application/rdf+xml',
           });
       });
@@ -146,6 +185,13 @@ Feature('Country Data Scraping',
           expect(asia.longitude).to.equal(89.29688);
 
           const easternAsia = _.find(data.regions, { unM49Code: '030' });
+          expect(easternAsia.continent).to.equal(asia);
+          expect(easternAsia.wikipediaSlug).to.equal('East_Asia');
+          expect(easternAsia.wikidataId).to.equal('Q27231');
+          expect(easternAsia.geoNamesId).to.equal('7729894');
+          expect(easternAsia.name).to.equal('Eastern Asia');
+          expect(easternAsia.latitude).to.equal(32.24997);
+          expect(easternAsia.longitude).to.equal(114.60938);
 
           expect(kr.continent).to.equal(asia);
           expect(kr.region).to.equal(easternAsia);

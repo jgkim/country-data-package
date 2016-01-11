@@ -108,6 +108,7 @@ class Scraper {
           entityReference.geoNamesId = '10861432';
           resolve(entityReference);
         } else {
+          // TODO: Need to use Wikidata.org to get Wikipedia labels easily.
           const dbpediaGraphUri = 'http://wikidata.dbpedia.org';
           const dbpediaUri = `${dbpediaGraphUri}/resource/${entityReference.wikidataId}`;
           const store = new SparqlStore({
@@ -242,7 +243,8 @@ class Scraper {
 
                 const newContinent = {
                   unM49Code: code,
-                  _wikipediaUri: `https://en.wikipedia.org/wiki/${continent}`,
+                  // Rough mapping of names to Wikipedia URIs
+                  _wikipediaUri: `https://en.wikipedia.org/wiki/${continent.replace(' ', '_')}`,
                 };
                 continents.push(newContinent);
 
@@ -256,7 +258,9 @@ class Scraper {
 
                 const newRegion = {
                   unM49Code: code,
-                  _wikipediaUri: `https://en.wikipedia.org/wiki/${region}`,
+                  // Rough mapping of names to Wikipedia URIs
+                  _wikipediaUri: `https://en.wikipedia.org/wiki/${region.replace(' ', '_')}`,
+                  continent: _.last(continents),
                 };
                 regions.push(newRegion);
 
@@ -304,19 +308,27 @@ class Scraper {
         })
         .then((data) => {
           this.data.countries = data.countries;
-          // TODO: Move to another part.
-          this.data.regions = data.regions;
 
-          return this._getWikiIds(data.continents);
+          return Promise.all([
+            this._getWikiIds(data.continents),
+            this._getWikiIds(data.regions),
+          ]);
         })
-        .then((continents) => {
-          return this._getGeoNamesIds(continents);
+        .then((data) => {
+          return Promise.all([
+            this._getGeoNamesIds(data[0]),
+            this._getGeoNamesIds(data[1]),
+          ]);
         })
-        .then((continents) => {
-          return this._getGeoNamesData(continents);
+        .then((data) => {
+          return Promise.all([
+            this._getGeoNamesData(data[0]),
+            this._getGeoNamesData(data[1]),
+          ]);
         })
-        .then((continents) => {
-          this.data.continents = continents;
+        .then((data) => {
+          this.data.continents = data[0];
+          this.data.regions = data[1];
 
           return this.data;
         });

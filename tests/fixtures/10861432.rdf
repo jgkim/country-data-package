@@ -3,6 +3,7 @@
 <gn:Feature rdf:about="http://sws.geonames.org/10861432/">
 <rdfs:isDefinedBy rdf:resource="http://sws.geonames.org/10861432/about.rdf"/>
 <gn:name>Americas</gn:name>
+<gn:officialName xml:lang="ko">아메리카</gn:officialName>
 <gn:alternateName xml:lang="en">Americas</gn:alternateName>
 <gn:featureClass rdf:resource="http://www.geonames.org/ontology#L"/>
 <gn:featureCode rdf:resource="http://www.geonames.org/ontology#L.RGN"/>
