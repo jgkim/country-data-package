@@ -10,8 +10,6 @@ rdf.parsers = new rdf.Parsers({
   'application/rdf+xml': RdfXmlParser,
 });
 
-import SparqlStore from 'rdf-store-sparql';
-
 import request from 'superagent';
 import cheerio from 'cheerio';
 
@@ -86,6 +84,35 @@ class Scraper {
   }
 
   /**
+  * _setValueWithLanguage() sets the property value with the language of the key on the object.
+  *
+  * @access public
+  * @param {Object} the object to augment
+  * @param {string} the language of the property value
+  * @param {string} the key of the property to set
+  * @param {string} the value to set
+  * @return {Object} the reference of the augmented object
+  */
+  _setValueWithLanguage(object, language, key, value) {
+    const objectReference = object;
+
+    if (language) {
+      objectReference[language] = objectReference[language] || {};
+
+      if (!objectReference[language][key]) {
+        objectReference[language][key] = value;
+      } else {
+        if (_.isString(objectReference[language][key])) {
+          objectReference[language][key] = objectReference[language][key].split();
+        }
+        objectReference[language][key].push(value);
+      }
+    }
+
+    return objectReference;
+  }
+
+  /**
   * _getGeoNamesIds() scrapes the GeoNames ID of each entity.
   *
   * @access private
@@ -120,19 +147,8 @@ class Scraper {
                   entityReference.geoNamesId = wikidata.claims.P1566[0].mainsnak.datavalue.value;
               }
 
-              // TODO: Refactor the below
               _.forEach(wikidata.labels, (label) => {
-                if (label.language) {
-                  entityReference[label.language] = entityReference[label.language] || {};
-                  if (!entityReference[label.language].wikipediaLabel) {
-                    entityReference[label.language].wikipediaLabel = label.value;
-                  } else {
-                    if (_.isString(entityReference[label.language].wikipediaLabel)) {
-                      entityReference[label.language].wikipediaLabel = entityReference[label.language].wikipediaLabel.split();
-                    }
-                    entityReference[label.language].wikipediaLabel.push(label.value);
-                  }
-                }
+                this._setValueWithLanguage(entityReference, label.language, 'wikipediaLabel', label.value);
               });
 
               resolve(entityReference);
@@ -175,19 +191,8 @@ class Scraper {
             }
 
             ['officialName', 'alternateName', 'shortName'].forEach((name) => {
-              // TODO: Refactor the below
               if (triple.predicate.equals(gn(name))) {
-                if (triple.object.language) {
-                  entityReference[triple.object.language] = entityReference[triple.object.language] || {};
-                  if (!entityReference[triple.object.language][name]) {
-                    entityReference[triple.object.language][name] = triple.object.toString();
-                  } else {
-                    if (_.isString(entityReference[triple.object.language][name])) {
-                      entityReference[triple.object.language][name] = entityReference[triple.object.language][name].split();
-                    }
-                    entityReference[triple.object.language][name].push(triple.object.toString());
-                  }
-                }
+                this._setValueWithLanguage(entityReference, triple.object.language, name, triple.object.toString());
               }
             });
           });
@@ -284,7 +289,7 @@ class Scraper {
               }
             });
 
-            resolve({ continents, regions, countries });
+            resolve([continents, regions, countries]);
           }
         });
     });
@@ -297,44 +302,36 @@ class Scraper {
   * @return {Promise}
   */
   getData() {
-    // TODO: Refactor the below
     if (_.isEmpty(this.data)) {
       return this._getCountryList()
-        .then((countries) => {
-          return this._getWikiIds(countries);
-        })
-        .then((countries) => {
-          return this._getGeoNamesIds(countries);
-        })
-        .then((countries) => {
-          return this._getGeoNamesData(countries);
-        })
         .then((countries) => {
           return this._getRegionList(countries);
         })
         .then((data) => {
-          this.data.countries = data.countries;
-
           return Promise.all([
-            this._getWikiIds(data.continents),
-            this._getWikiIds(data.regions),
+            this._getWikiIds(data[0]),
+            this._getWikiIds(data[1]),
+            this._getWikiIds(data[2]),
           ]);
         })
         .then((data) => {
           return Promise.all([
             this._getGeoNamesIds(data[0]),
             this._getGeoNamesIds(data[1]),
+            this._getGeoNamesIds(data[2]),
           ]);
         })
         .then((data) => {
           return Promise.all([
             this._getGeoNamesData(data[0]),
             this._getGeoNamesData(data[1]),
+            this._getGeoNamesData(data[2]),
           ]);
         })
         .then((data) => {
           this.data.continents = data[0];
           this.data.regions = data[1];
+          this.data.countries = data[2];
 
           return this.data;
         });

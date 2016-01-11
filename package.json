@@ -29,7 +29,6 @@
     "eslint-config-tipplr": "^0.2.2",
     "rdf-ext": "^0.3.0-rc6",
     "rdf-parser-rdfxml": "^0.3.0-rc1",
-    "rdf-store-sparql": "^0.3.0-rc1",
     "source-map-support": "^0.4.0",
     "superagent": "^1.6.1",
     "x-ray": "^2.0.2"
