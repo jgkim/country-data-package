@@ -24,7 +24,13 @@ Feature('Country Data Scraping',
       Given('the network connection is okay', () => {
         nock('https://en.wikipedia.org')
           .get('/wiki/ISO_3166-1')
-          .replyWithFile(200, `${__dirname}/fixtures/ISO_3166-1.html`);
+          .replyWithFile(200, `${__dirname}/fixtures/ISO_3166-1.html`)
+          .get('/wiki/ISO_3166-2:BE')
+          .replyWithFile(200, `${__dirname}/fixtures/ISO_3166-2_BE.html`)
+          .get('/wiki/ISO_3166-2:KR')
+          .replyWithFile(200, `${__dirname}/fixtures/ISO_3166-2_KR.html`)
+          .get('/wiki/ISO_3166-2:US')
+          .replyWithFile(200, `${__dirname}/fixtures/ISO_3166-2_US.html`);
 
         nock('http://unstats.un.org')
           .get('/unsd/methods/m49/m49regin.htm')

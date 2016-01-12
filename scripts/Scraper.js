@@ -13,6 +13,8 @@ rdf.parsers = new rdf.Parsers({
 import request from 'superagent';
 import cheerio from 'cheerio';
 
+import DefaultCategoryMappings from './DefaultCategoryMappings';
+
 class Scraper {
   constructor() {
     this.data = {};
@@ -57,25 +59,29 @@ class Scraper {
 
     entities.map((entity) => {
       promises.push(new Promise((resolve, reject) => {
-        this.scraper(entity._wikipediaUri, {
-          wikipediaSlug: 'link[rel="canonical"]@href',
-          wikidataId: '#t-wikibase > a@href',
-        })((error, data) => {
-          if (error) {
-            reject(error);
-          } else {
-            const entityReference = entity;
-            delete entityReference._wikipediaUri;
+        if (entity._wikipediaUri) {
+          this.scraper(entity._wikipediaUri, {
+            wikipediaSlug: 'link[rel="canonical"]@href',
+            wikidataId: '#t-wikibase > a@href',
+          })((error, data) => {
+            if (error) {
+              reject(error);
+            } else {
+              const entityReference = entity;
+              delete entityReference._wikipediaUri;
 
-            const wikipediaSlug = _.trimRight(data.wikipediaSlug, '/');
-            entityReference.wikipediaSlug = wikipediaSlug.substring(wikipediaSlug.lastIndexOf('/') + 1);
+              const wikipediaSlug = _.trimRight(data.wikipediaSlug, '/');
+              entityReference.wikipediaSlug = wikipediaSlug.substring(wikipediaSlug.lastIndexOf('/') + 1);
 
-            const wikidataId = _.trimRight(data.wikidataId, '/');
-            entityReference.wikidataId = wikidataId.substring(wikidataId.lastIndexOf('/') + 1);
+              const wikidataId = _.trimRight(data.wikidataId, '/');
+              entityReference.wikidataId = wikidataId.substring(wikidataId.lastIndexOf('/') + 1);
 
-            resolve(entityReference);
-          }
-        });
+              resolve(entityReference);
+            }
+          });
+        } else {
+          resolve(entity);
+        }
       }));
     });
 
@@ -217,6 +223,7 @@ class Scraper {
   * _getRegionList() scrapes codes and links of continental and sub-continental regions from UNSD.
   *
   * @access public
+  * @param {Array} countries
   * @return {Promise}
   */
   _getRegionList(countries) {
@@ -261,6 +268,7 @@ class Scraper {
                   unM49Code: code,
                   // Rough mapping of names to Wikipedia URIs
                   _wikipediaUri: `https://en.wikipedia.org/wiki/${continent.replace(/\s/g, '_')}`,
+                  // TODO: regions: [],
                 };
                 continents.push(newContinent);
 
@@ -282,7 +290,9 @@ class Scraper {
                   // Rough mapping of names to Wikipedia URIs
                   _wikipediaUri: `https://en.wikipedia.org/wiki/${region.replace(/\s/g, '_')}`,
                   continent: _.last(continents),
+                  countries: [],
                 };
+                // TODO: newRegion.continent.regions.push(newRegion);
                 regions.push(newRegion);
 
                 return true;
@@ -297,6 +307,7 @@ class Scraper {
               if (country) {
                 country.continent = _.last(continents);
                 country.region = _.last(regions);
+                // TODO: country.region.countries.push(country);
               }
             });
 
@@ -304,6 +315,153 @@ class Scraper {
           }
         });
     });
+  }
+
+  /**
+  * _getSubdivisionList() scrapes codes and links of subdivisions of each country in ISO 3166-2 from Wikipedia.
+  *
+  * @access private
+  * @param {Array} countries
+  * @return {Promise}
+  */
+  _getSubdivisionList(countries) {
+    const promises = [];
+
+    countries.map((country) => {
+      const countryReference = country;
+
+      promises.push(new Promise((resolve, reject) => {
+        request
+          .get(`https://en.wikipedia.org/wiki/ISO_3166-2:${country.isoTwoLetterCountryCode.toUpperCase()}`)
+          .end((error, response) => {
+            if (error) {
+              reject(error);
+            } else {
+              const html = cheerio.load(response.text);
+              const siblings = html('h2:has(#Current_codes)').nextAll();
+
+              const subdivisions = [];
+
+              // For countries without category headings
+              let defaultCategory = DefaultCategoryMappings[countryReference.isoTwoLetterCountryCode.toUpperCase()];
+              let tableIndex = 0;
+
+              siblings.each((index, sibling) => {
+                const element = cheerio(sibling);
+
+                // Break the loop if the element is <h2>.
+                if (element.is('h2')) {
+                  return false;
+                }
+
+                // Get a default category from the heading.
+                if (!defaultCategory && element.is('h3')) {
+                  const heading = element.find('.mw-headline').text();
+
+                  switch (heading) {
+                    case 'Chains (of islands)':
+                      defaultCategory = 'Chain';
+                      break;
+                    case 'Municipalities':
+                      defaultCategory = 'Municipality';
+                      break;
+                    case 'Parishes':
+                      defaultCategory = 'Parish';
+                      break;
+                    case 'Counties':
+                    // Exception handling for Kenya
+                    case '47 counties':
+                      defaultCategory = 'County';
+                      break;
+                    case 'Autonomous republic':
+                      defaultCategory = 'Autonomous republic';
+                      break;
+                    default:
+                      if (_.endsWith(heading, 's')) {
+                        defaultCategory = heading.slice(0, -1);
+                      }
+                  }
+
+                // Get data from a table.
+                } else if (element.is('table')) {
+                  let codeIndex;
+                  let categoryIndex;
+                  let subdivisionIndex;
+
+                  element.find('th').each((headerIndex, th) => {
+                    const header = cheerio(th).text();
+
+                    if (header.match(/Code/i)) {
+                      codeIndex = headerIndex + 1;
+                    } else if (header.match(/category/i)) {
+                      categoryIndex = headerIndex + 1;
+                    } else if (header.match(/^(in|parent)/mi)) {
+                      subdivisionIndex = headerIndex + 1;
+                    }
+
+                    return true;
+                  });
+
+                  element.find('tr').each((rowIndex, tr) => {
+                    const row = cheerio(tr);
+
+                    const code = _.trim(row.find(`td:nth-child(${codeIndex})`).text()).toUpperCase();
+
+                    if (code.length && !_.find(subdivisions, 'isoCountrySubdivisionCode', code)) {
+                      const newSubdivision = {};
+                      newSubdivision.isoCountrySubdivisionCode = code;
+                      newSubdivision.isoSubdivisionCode = newSubdivision.isoCountrySubdivisionCode.split('-').pop();
+
+                      const wikipediaUri = row.find(`td a`).attr('href');
+
+                      switch (code) {
+                        // Exception handling for Capital Region, Island
+                        case 'IS-1':
+                          newSubdivision._wikipediaUri = 'https://en.wikipedia.org/wiki/Capital_Region_(Iceland)';
+                          break;
+                        // Exception handling for Aakkâr, Lebanon
+                        case 'LB-AK':
+                          newSubdivision._wikipediaUri = 'https://en.wikipedia.org/wiki/Akkar_District';
+                          break;
+                        // Exception handling for Baalbek-Hermel, Lebanon
+                        case 'LB-BH':
+                          newSubdivision._wikipediaUri = 'https://en.wikipedia.org/wiki/Baalbek_District';
+                          break;
+                        default:
+                          if (wikipediaUri) {
+                            newSubdivision._wikipediaUri = wikipediaUri;
+                          }
+                      }
+
+                      newSubdivision.isoSubdivisionCategory = (categoryIndex) ? _.capitalize(_.trim(row.find(`td:nth-child(${categoryIndex})`).text())) : defaultCategory;
+
+                      if (tableIndex > 0 && subdivisionIndex) {
+                        let parentSubdivision = row.find(`td:nth-child(${subdivisionIndex}) a`) || row.find(`td:nth-child(${subdivisionIndex})`);
+                        parentSubdivision = _.trim(parentSubdivision.first().text());
+                        if (parentSubdivision && !parentSubdivision.match(/(&#x2014;|—)/)) {
+                          if (parentSubdivision.match(/\-/)) {
+                            parentSubdivision = parentSubdivision.split('-').pop();
+                          }
+                          newSubdivision.parentSubdivision = _.find(subdivisions, 'isoSubdivisionCode', parentSubdivision);
+                        }
+                      }
+
+                      subdivisions.push(newSubdivision);
+                    }
+                  });
+
+                  tableIndex++;
+                }
+              });
+              countryReference.subdivisions = subdivisions;
+
+              resolve(countryReference);
+            }
+          });
+      }));
+    });
+
+    return Promise.all(promises);
   }
 
   /**
@@ -316,6 +474,10 @@ class Scraper {
     if (_.isEmpty(this.data)) {
       return this._getCountryList()
         .then((countries) => {
+          return this._getSubdivisionList(countries);
+        })
+        .then((countries) => {
+          // TODO: _.flatten(_.pluck(countries, 'subdivisions'))
           return this._getRegionList(countries);
         })
         .then((data) => {
