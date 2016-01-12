@@ -103,26 +103,9 @@ Feature('Country Data Scraping',
 
       Then('data about countries will eventually be returned', () => {
         return promise.then((data) => {
-          expect(data.countries).to.have.length.of.at.least(3);
-
-          const kr = _.find(data.countries, { isoTwoLetterCountryCode: 'KR' });
-          expect(kr.isoThreeLetterCountryCode).to.equal('KOR');
-          expect(kr.isoThreeDigitCountryCode).to.equal('410');
-          expect(kr.isoCountrySubdivisionCode).to.equal('ISO 3166-2:KR');
-          expect(kr.wikipediaSlug).to.equal('South_Korea');
-          expect(kr.wikidataId).to.equal('Q884');
-          expect(kr.geoNamesId).to.equal('1835841');
-          expect(kr.name).to.equal('South Korea');
-          expect(kr.en.officialName).to.equal('Republic of Korea');
-          expect(kr.ko.officialName).to.equal('대한민국');
-          expect(kr.ko.alternateName).to.include('한국');
-          expect(kr.en.shortName).to.equal('South Korea');
-          expect(kr.en.wikipediaLabel).to.equal('South Korea');
-          expect(kr.ko.wikipediaLabel).to.equal('대한민국');
-          expect(kr.latitude).to.equal(36.5);
-          expect(kr.longitude).to.equal(127.75);
-
           expect(data.continents).to.have.length.of.at.least(3);
+          expect(data.regions).to.have.length.of.at.least(3);
+          expect(data.countries).to.have.length.of.at.least(3);
 
           const asia = _.find(data.continents, { unM49Code: '142' });
           expect(asia.wikipediaSlug).to.equal('Asia');
@@ -147,8 +130,24 @@ Feature('Country Data Scraping',
           expect(easternAsia.latitude).to.equal(32.24997);
           expect(easternAsia.longitude).to.equal(114.60938);
 
+          const kr = _.find(data.countries, { isoTwoLetterCountryCode: 'KR' });
           expect(kr.continent).to.equal(asia);
           expect(kr.region).to.equal(easternAsia);
+          expect(kr.isoThreeLetterCountryCode).to.equal('KOR');
+          expect(kr.isoThreeDigitCountryCode).to.equal('410');
+          expect(kr.isoCountrySubdivisionCode).to.equal('ISO 3166-2:KR');
+          expect(kr.wikipediaSlug).to.equal('South_Korea');
+          expect(kr.wikidataId).to.equal('Q884');
+          expect(kr.geoNamesId).to.equal('1835841');
+          expect(kr.name).to.equal('South Korea');
+          expect(kr.en.officialName).to.equal('Republic of Korea');
+          expect(kr.ko.officialName).to.equal('대한민국');
+          expect(kr.ko.alternateName).to.include('한국');
+          expect(kr.en.shortName).to.equal('South Korea');
+          expect(kr.en.wikipediaLabel).to.equal('South Korea');
+          expect(kr.ko.wikipediaLabel).to.equal('대한민국');
+          expect(kr.latitude).to.equal(36.5);
+          expect(kr.longitude).to.equal(127.75);
         });
       });
 

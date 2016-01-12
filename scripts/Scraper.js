@@ -20,7 +20,7 @@ class Scraper {
   }
 
   /**
-  * _getCountryList() scrapes names and codes of countries in ISO 3166-1 from Wikipedia.
+  * _getCountryList() scrapes codes and links of countries in ISO 3166-1 from Wikipedia.
   *
   * @access private
   * @return {Promise}
@@ -214,7 +214,7 @@ class Scraper {
   }
 
   /**
-  * _getRegionList() scrapes names and codes of continental and sub-continental regions from UNSD.
+  * _getRegionList() scrapes codes and links of continental and sub-continental regions from UNSD.
   *
   * @access public
   * @return {Promise}
