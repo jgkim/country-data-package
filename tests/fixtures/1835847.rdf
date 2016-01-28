@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<rdf:RDF xmlns:cc="http://creativecommons.org/ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:gn="http://www.geonames.org/ontology#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#">
+<gn:Feature rdf:about="http://sws.geonames.org/1835847/">
+<rdfs:isDefinedBy rdf:resource="http://sws.geonames.org/1835847/about.rdf"/>
+<gn:name>Seoul</gn:name>
+<gn:alternateName xml:lang="ko">서울</gn:alternateName>
+<gn:alternateName xml:lang="ja">ソウル</gn:alternateName>
+<gn:alternateName xml:lang="ko">서울시</gn:alternateName>
+<gn:officialName xml:lang="ko">서울특별시</gn:officialName>
+<gn:officialName xml:lang="en">Seoul</gn:officialName>
+<gn:alternateName xml:lang="en">Seoul-si</gn:alternateName>
+<gn:alternateName xml:lang="it">Seul</gn:alternateName>
+<gn:alternateName xml:lang="ja">ソウル市</gn:alternateName>
+<gn:officialName xml:lang="ja">ソウル特別市</gn:officialName>
+<gn:alternateName xml:lang="zh">首尔</gn:alternateName>
+<gn:alternateName xml:lang="ja">首尔市</gn:alternateName>
+<gn:officialName xml:lang="zh">首尔特别市</gn:officialName>
+<gn:featureClass rdf:resource="http://www.geonames.org/ontology#A"/>
+<gn:featureCode rdf:resource="http://www.geonames.org/ontology#A.ADM1"/>
+<gn:countryCode>KR</gn:countryCode>
+<gn:population>10349312</gn:population>
+<wgs84_pos:lat>37.58333</wgs84_pos:lat>
+<wgs84_pos:long>127</wgs84_pos:long>
+<gn:parentFeature rdf:resource="http://sws.geonames.org/1835841/"/>
+<gn:parentCountry rdf:resource="http://sws.geonames.org/1835841/"/>
+<gn:childrenFeatures rdf:resource="http://sws.geonames.org/1835847/contains.rdf"/>
+<gn:locationMap rdf:resource="http://www.geonames.org/1835847/seoul.html"/>
+<gn:wikipediaArticle rdf:resource="http://en.wikipedia.org/wiki/Seoul"/>
+<rdfs:seeAlso rdf:resource="http://dbpedia.org/resource/Seoul"/>
+</gn:Feature>
+<foaf:Document rdf:about="http://sws.geonames.org/1835847/about.rdf">
+<foaf:primaryTopic rdf:resource="http://sws.geonames.org/1835847/"/>
+<cc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
+<cc:attributionURL rdf:resource="http://sws.geonames.org/1835847/"/>
+<cc:attributionName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GeoNames</cc:attributionName>
+<dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2006-01-15</dcterms:created>
+<dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2014-03-08</dcterms:modified>
+</foaf:Document>
+</rdf:RDF>

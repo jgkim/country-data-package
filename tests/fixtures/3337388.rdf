@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<rdf:RDF xmlns:cc="http://creativecommons.org/ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:gn="http://www.geonames.org/ontology#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#">
+<gn:Feature rdf:about="http://sws.geonames.org/3337388/">
+<rdfs:isDefinedBy rdf:resource="http://sws.geonames.org/3337388/about.rdf"/>
+<gn:name>Flanders</gn:name>
+<gn:alternateName xml:lang="de">Flämische Region</gn:alternateName>
+<gn:officialName xml:lang="de">Flandern</gn:officialName>
+<gn:shortName xml:lang="en">Flanders</gn:shortName>
+<gn:alternateName xml:lang="ca">Flandes</gn:alternateName>
+<gn:alternateName xml:lang="es">Flandes</gn:alternateName>
+<gn:alternateName xml:lang="fr">Flandre</gn:alternateName>
+<gn:alternateName>Flandre</gn:alternateName>
+<gn:alternateName xml:lang="pt">Flandres</gn:alternateName>
+<gn:alternateName xml:lang="en">Flemish Region</gn:alternateName>
+<gn:alternateName xml:lang="fr">Région Flamande</gn:alternateName>
+<gn:officialName xml:lang="nl">Vlaams Gewest</gn:officialName>
+<gn:alternateName xml:lang="nl">Vlaanderen</gn:alternateName>
+<gn:alternateName>Vlaanderen</gn:alternateName>
+<gn:featureClass rdf:resource="http://www.geonames.org/ontology#A"/>
+<gn:featureCode rdf:resource="http://www.geonames.org/ontology#A.ADM1"/>
+<gn:countryCode>BE</gn:countryCode>
+<gn:population>6350765</gn:population>
+<wgs84_pos:lat>51</wgs84_pos:lat>
+<wgs84_pos:long>4.5</wgs84_pos:long>
+<gn:parentFeature rdf:resource="http://sws.geonames.org/2802361/"/>
+<gn:parentCountry rdf:resource="http://sws.geonames.org/2802361/"/>
+<gn:childrenFeatures rdf:resource="http://sws.geonames.org/3337388/contains.rdf"/>
+<gn:locationMap rdf:resource="http://www.geonames.org/3337388/flanders.html"/>
+<gn:wikipediaArticle rdf:resource="http://en.wikipedia.org/wiki/Flanders"/>
+<rdfs:seeAlso rdf:resource="http://dbpedia.org/resource/Flanders"/>
+</gn:Feature>
+<foaf:Document rdf:about="http://sws.geonames.org/3337388/about.rdf">
+<foaf:primaryTopic rdf:resource="http://sws.geonames.org/3337388/"/>
+<cc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
+<cc:attributionURL rdf:resource="http://sws.geonames.org/3337388/"/>
+<cc:attributionName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GeoNames</cc:attributionName>
+<dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2006-01-15</dcterms:created>
+<dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-06-11</dcterms:modified>
+</foaf:Document>
+</rdf:RDF>

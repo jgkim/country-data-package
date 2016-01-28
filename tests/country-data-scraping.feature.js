@@ -30,7 +30,11 @@ Feature('Country Data Scraping',
           .get('/wiki/ISO_3166-2:KR')
           .replyWithFile(200, `${__dirname}/fixtures/ISO_3166-2_KR.html`)
           .get('/wiki/ISO_3166-2:US')
-          .replyWithFile(200, `${__dirname}/fixtures/ISO_3166-2_US.html`);
+          .replyWithFile(200, `${__dirname}/fixtures/ISO_3166-2_US.html`)
+          .get('/wiki/ISO_3166-2:LI')
+          .replyWithFile(200, `${__dirname}/fixtures/ISO_3166-2_LI.html`)
+          .get('/wiki/ISO_3166-2:MC')
+          .replyWithFile(200, `${__dirname}/fixtures/ISO_3166-2_MC.html`);
 
         nock('http://unstats.un.org')
           .get('/unsd/methods/m49/m49regin.htm')
@@ -43,6 +47,10 @@ Feature('Country Data Scraping',
           .replyWithFile(200, `${__dirname}/fixtures/KR.html`)
           .get('/wiki/United_States_of_America')
           .replyWithFile(200, `${__dirname}/fixtures/US.html`)
+          .get('/wiki/Liechtenstein')
+          .replyWithFile(200, `${__dirname}/fixtures/LI.html`)
+          .get('/wiki/Monaco')
+          .replyWithFile(200, `${__dirname}/fixtures/MC.html`)
           .get('/wiki/Europe')
           .replyWithFile(200, `${__dirname}/fixtures/Europe.html`)
           .get('/wiki/Asia')
@@ -54,7 +62,17 @@ Feature('Country Data Scraping',
           .get('/wiki/Eastern_Asia')
           .replyWithFile(200, `${__dirname}/fixtures/Eastern_Asia.html`)
           .get('/wiki/Northern_America')
-          .replyWithFile(200, `${__dirname}/fixtures/Northern_America.html`);
+          .replyWithFile(200, `${__dirname}/fixtures/Northern_America.html`)
+          .get('/wiki/Flemish_Region')
+          .replyWithFile(200, `${__dirname}/fixtures/BE-VLG.html`)
+          .get('/wiki/Antwerp_(province)')
+          .replyWithFile(200, `${__dirname}/fixtures/BE-VAN.html`)
+          .get('/wiki/Seoul')
+          .replyWithFile(200, `${__dirname}/fixtures/KR-11.html`)
+          .get('/wiki/California')
+          .replyWithFile(200, `${__dirname}/fixtures/US-CA.html`)
+          .get('/wiki/Balzers')
+          .replyWithFile(200, `${__dirname}/fixtures/LI-01.html`);
 
         nock('https://www.wikidata.org')
           .defaultReplyHeaders({
@@ -66,6 +84,10 @@ Feature('Country Data Scraping',
           .replyWithFile(200, `${__dirname}/fixtures/Q884.json`)
           .get('/wiki/Special:EntityData/Q31.json')
           .replyWithFile(200, `${__dirname}/fixtures/Q31.json`)
+          .get('/wiki/Special:EntityData/Q347.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q347.json`)
+          .get('/wiki/Special:EntityData/Q235.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q235.json`)
           .get('/wiki/Special:EntityData/Q46.json')
           .replyWithFile(200, `${__dirname}/fixtures/Q46.json`)
           .get('/wiki/Special:EntityData/Q48.json')
@@ -77,7 +99,17 @@ Feature('Country Data Scraping',
           .get('/wiki/Special:EntityData/Q27231.json')
           .replyWithFile(200, `${__dirname}/fixtures/Q27231.json`)
           .get('/wiki/Special:EntityData/Q27496.json')
-          .replyWithFile(200, `${__dirname}/fixtures/Q27496.json`);
+          .replyWithFile(200, `${__dirname}/fixtures/Q27496.json`)
+          .get('/wiki/Special:EntityData/Q9337.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q9337.json`)
+          .get('/wiki/Special:EntityData/Q1116.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q1116.json`)
+          .get('/wiki/Special:EntityData/Q8684.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q8684.json`)
+          .get('/wiki/Special:EntityData/Q99.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q99.json`)
+          .get('/wiki/Special:EntityData/Q49663.json')
+          .replyWithFile(200, `${__dirname}/fixtures/Q49663.json`);
 
         nock('http://sws.geonames.org')
           .defaultReplyHeaders({
@@ -89,6 +121,10 @@ Feature('Country Data Scraping',
           .replyWithFile(200, `${__dirname}/fixtures/1835841.rdf`)
           .get('/6252001/about.rdf')
           .replyWithFile(200, `${__dirname}/fixtures/6252001.rdf`)
+          .get('/3042058/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/3042058.rdf`)
+          .get('/2993457/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/2993457.rdf`)
           .get('/6255148/about.rdf')
           .replyWithFile(200, `${__dirname}/fixtures/6255148.rdf`)
           .get('/6255147/about.rdf')
@@ -100,7 +136,17 @@ Feature('Country Data Scraping',
           .get('/7729894/about.rdf')
           .replyWithFile(200, `${__dirname}/fixtures/7729894.rdf`)
           .get('/9408659/about.rdf')
-          .replyWithFile(200, `${__dirname}/fixtures/9408659.rdf`);
+          .replyWithFile(200, `${__dirname}/fixtures/9408659.rdf`)
+          .get('/3337388/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/3337388.rdf`)
+          .get('/2803136/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/2803136.rdf`)
+          .get('/1835847/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/1835847.rdf`)
+          .get('/3042073/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/3042073.rdf`)
+          .get('/5332921/about.rdf')
+          .replyWithFile(200, `${__dirname}/fixtures/5332921.rdf`);
       });
 
       When('the data consumer starts scraping', () => {
@@ -111,7 +157,8 @@ Feature('Country Data Scraping',
         return promise.then((data) => {
           expect(data.continents).to.have.length.of.at.least(3);
           expect(data.regions).to.have.length.of.at.least(3);
-          expect(data.countries).to.have.length.of.at.least(3);
+          expect(data.countries).to.have.length.of.at.least(4);
+          expect(data.subdivisions).to.have.length.of.at.least(10);
 
           const asia = _.find(data.continents, { unM49Code: '142' });
           expect(asia.wikipediaSlug).to.equal('Asia');
@@ -125,7 +172,7 @@ Feature('Country Data Scraping',
           expect(asia.latitude).to.equal(29.84064);
           expect(asia.longitude).to.equal(89.29688);
 
-          const easternAsia = _.find(data.regions, { unM49Code: '030' });
+          const easternAsia = _.find(asia.regions, { unM49Code: '030' });
           expect(easternAsia.continent).to.equal(asia);
           expect(easternAsia.wikipediaSlug).to.equal('East_Asia');
           expect(easternAsia.wikidataId).to.equal('Q27231');
@@ -136,12 +183,10 @@ Feature('Country Data Scraping',
           expect(easternAsia.latitude).to.equal(32.24997);
           expect(easternAsia.longitude).to.equal(114.60938);
 
-          const kr = _.find(data.countries, { isoTwoLetterCountryCode: 'KR' });
-          expect(kr.continent).to.equal(asia);
+          const kr = _.find(easternAsia.countries, { isoTwoLetterCountryCode: 'KR' });
           expect(kr.region).to.equal(easternAsia);
           expect(kr.isoThreeLetterCountryCode).to.equal('KOR');
           expect(kr.isoThreeDigitCountryCode).to.equal('410');
-          expect(kr.isoCountrySubdivisionCode).to.equal('ISO 3166-2:KR');
           expect(kr.wikipediaSlug).to.equal('South_Korea');
           expect(kr.wikidataId).to.equal('Q884');
           expect(kr.geoNamesId).to.equal('1835841');
@@ -154,6 +199,25 @@ Feature('Country Data Scraping',
           expect(kr.ko.wikipediaLabel).to.equal('대한민국');
           expect(kr.latitude).to.equal(36.5);
           expect(kr.longitude).to.equal(127.75);
+
+          const seoul = _.find(kr.subdivisions, { isoCountrySubdivisionCode: 'KR-11' });
+          expect(seoul.country).to.equal(kr);
+          expect(seoul.isoSubdivisionCode).to.equal('11');
+          expect(seoul.wikipediaSlug).to.equal('Seoul');
+          expect(seoul.wikidataId).to.equal('Q8684');
+          expect(seoul.geoNamesId).to.equal('1835847');
+          expect(seoul.name).to.equal('Seoul');
+          expect(seoul.en.officialName).to.equal('Seoul');
+          expect(seoul.ko.officialName).to.equal('서울특별시');
+          expect(seoul.ko.alternateName).to.contain('서울');
+          expect(seoul.en.wikipediaLabel).to.equal('Seoul');
+          expect(seoul.ko.wikipediaLabel).to.equal('서울특별시');
+          expect(seoul.latitude).to.equal(37.58333);
+          expect(seoul.longitude).to.equal(127);
+
+          const flanders = _.find(data.subdivisions, { isoCountrySubdivisionCode: 'BE-VLG' });
+          const antwerp = _.find(flanders.subSubdivions, { isoCountrySubdivisionCode: 'BE-VAN' });
+          expect(antwerp.parentSubdivision).to.equal(flanders);
         });
       });
 
