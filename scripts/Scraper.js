@@ -51,7 +51,7 @@ class Scraper {
   }
 
   /**
-  * _getWikiIds() scrapes the Wikipedia canonical slug and the Wikidata ID of each entity.
+  * _getWikiIds() scrapes the Wikipedia canonical slug of each entity.
   *
   * @access private
   * @param {Array} entities
@@ -64,56 +64,38 @@ class Scraper {
       promises.push(new Promise((resolve, reject) => {
         if (entity._wikipediaUri) {
           setTimeout(() => {
-            const scraper = xray();
+            const entityReference = entity;
+            let slug = _.trimRight(entityReference._wikipediaUri, '/');
+            delete entityReference._wikipediaUri;
+            slug = slug.substring(slug.lastIndexOf('/') + 1);
 
-            // TODO: https://en.wikipedia.org/w/api.php?action=query&titles=United%20Kingdom%20of%20Great%20Britain%20and%20Northern%20Ireland&prop=info&inprop=url&redirects
-            scraper(entity._wikipediaUri, {
-              wikipediaSlug: 'link[rel="canonical"]@href',
-              wikidataId: '#t-wikibase > a@href',
-            })((error, data) => {
-              if (error) {
-                reject(error);
-              } else {
-                const entityReference = entity;
-                delete entityReference._wikipediaUri;
-
-                const wikipediaSlug = _.trimRight(data.wikipediaSlug, '/');
-                entityReference.wikipediaSlug = wikipediaSlug.substring(wikipediaSlug.lastIndexOf('/') + 1);
-
-                switch (entityReference.isoCountrySubdivisionCode) {
-                  // Exception handling for Hainan, People's Republic of China
-                  case 'CN-46':
-                    entityReference.wikidataId = 'Q42200';
-                    break;
-                  // Exception handling for Tharaka District, Kenya
-                  case 'KE-41':
-                    entityReference.wikidataId = 'Q2189432';
-                    break;
-                  // Exception handling for Balzers, Liechtenstein
-                  case 'LI-01':
-                    entityReference.wikidataId = 'Q49663';
-                    break;
-                  // Exception handling for Mislinja, Slovenia
-                  case 'SI-076':
-                    entityReference.wikidataId = 'Q1917707';
-                    break;
-                  // Exception handling for Morogoro, Tanzania
-                  case 'TZ-16':
-                    entityReference.wikidataId = 'Q458388';
-                    break;
-                  default:
-                    // Exception handling for the United Kingdom
-                    if (entityReference.isoTwoLetterCountryCode === 'GB') {
-                      entityReference.wikidataId = 'Q145';
-                    } else {
-                      const wikidataId = _.trimRight(data.wikidataId, '/');
-                      entityReference.wikidataId = wikidataId.substring(wikidataId.lastIndexOf('/') + 1);
+            request
+              .get('https://en.wikipedia.org/w/api.php')
+              .query({
+                action: 'query',
+                prop: 'info',
+                inprop: 'url',
+                redirects: true,
+                format: 'json',
+                titles: decodeURIComponent(slug),
+              })
+              .end((error, response) => {
+                if (error) {
+                  reject(error);
+                } else {
+                  // Get the first page of the results.
+                  _.forEach(response.body.query.pages, (page, id) => {
+                    if (id !== '-1') {
+                      const canonicalSlug = _.trimRight(page.canonicalurl, '/');
+                      entityReference.wikipediaSlug = canonicalSlug.substring(canonicalSlug.lastIndexOf('/') + 1);
                     }
-                }
 
-                resolve(entityReference);
-              }
-            });
+                    return false;
+                  });
+
+                  resolve(entityReference);
+                }
+              });
           }, this.throttleTime * index);
         } else {
           resolve(entity);
@@ -163,34 +145,48 @@ class Scraper {
   _getGeoNamesIds(entities) {
     const promises = [];
 
-    // TODO: https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Berlin&props=labels|claims
     entities.map((entity, index) => {
       promises.push(new Promise((resolve, reject) => {
-        if (entity.wikidataId) {
+        if (entity.wikipediaSlug) {
           setTimeout(() => {
             request
-              .get(`https://www.wikidata.org/wiki/Special:EntityData/${entity.wikidataId}.json`)
+              .get('https://www.wikidata.org/w/api.php')
+              .query({
+                action: 'wbgetentities',
+                sites: 'enwiki',
+                props: 'labels|claims',
+                format: 'json',
+                titles: decodeURIComponent(entity.wikipediaSlug),
+              })
               .end((error, response) => {
                 if (error) {
                   reject(error);
                 } else {
                   const entityReference = entity;
-                  const wikidata = response.body.entities[entityReference.wikidataId];
 
-                  if (entityReference.wikidataId in WikidataGeoNamesMappings) {
-                    if (WikidataGeoNamesMappings[entityReference.wikidataId]) {
-                      entityReference.geoNamesId = WikidataGeoNamesMappings[entityReference.wikidataId];
-                    }
-                  } else {
-                    try {
-                      entityReference.geoNamesId = wikidata.claims.P1566[0].mainsnak.datavalue.value;
-                    } catch (exception) {
-                      reject(`Cannot find a GeoNames ID for this Wikidata entity: ${entityReference.wikidataId}`);
-                    }
-                  }
+                  // Get the first entity of the results.
+                  _.forEach(response.body.entities, (wikidata, id) => {
+                    if (id !== '-1') {
+                      entityReference.wikidataId = id;
 
-                  _.forEach(wikidata.labels, (label) => {
-                    this._setValueWithLanguage(entityReference, label.language, 'wikipediaLabel', label.value);
+                      if (entityReference.wikidataId in WikidataGeoNamesMappings) {
+                        if (WikidataGeoNamesMappings[entityReference.wikidataId]) {
+                          entityReference.geoNamesId = WikidataGeoNamesMappings[entityReference.wikidataId];
+                        }
+                      } else {
+                        try {
+                          entityReference.geoNamesId = wikidata.claims.P1566[0].mainsnak.datavalue.value;
+                        } catch (exception) {
+                          reject(`Cannot find a GeoNames ID for this Wikidata entity: ${entityReference.wikidataId}`);
+                        }
+                      }
+
+                      _.forEach(wikidata.labels, (label) => {
+                        this._setValueWithLanguage(entityReference, label.language, 'wikipediaLabel', label.value);
+                      });
+                    }
+
+                    return false;
                   });
 
                   resolve(entityReference);
