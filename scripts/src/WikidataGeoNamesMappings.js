@@ -23,6 +23,8 @@ const WikidataGeoNamesMappings = {
   'Q233659': '2493455',
   // TODO: Exception handling for São Vicente of Cape Verde (cf. https://www.wikidata.org/w/index.php?title=Q648842&oldid=293270561)
   'Q648842': '3374198',
+  // TODO: Exception handling for Tbong Khmum Province of Cambodia (cf. https://www.wikidata.org/w/index.php?title=Q15623578&oldid=325163766)
+  'Q15623578': '7647525',
   // TODO: Exception handling for Stung Treng Province of Cambodia (cf. https://www.wikidata.org/w/index.php?title=Q837889&oldid=293271898)
   'Q837889': '1822028',
   // TODO: Exception handling for Ennedi-Ouest Region of Chad (cf. https://www.wikidata.org/w/index.php?title=Q16632172&oldid=293272185)
@@ -281,12 +283,8 @@ const WikidataGeoNamesMappings = {
   'Q13365880': '3191221',
   // TODO: Exception handling for Tivat Municipality of Montenegro (cf. https://www.wikidata.org/w/index.php?title=Q3738564&oldid=293985547)
   'Q3738564': '3189071',
-  // Exception handling for Taourirt Province of Morocco
-  'Q2165392': null,
   // TODO: Exception handling for Manica Province of Mozambique (cf. https://www.wikidata.org/w/index.php?title=Q622792&oldid=293986338)
   'Q622792': '1040947',
-  // Exception handling for Naypyidaw Union Territory of Myanmar
-  'Q4796': null,
   // TODO: Exception handling for Chontales Department of Nicaragua (cf. https://www.wikidata.org/w/index.php?title=Q498443&oldid=293986782)
   'Q498443': '3620368',
   // TODO: Exception handling for Ash Sharqiyah Region of Oman (cf. https://www.wikidata.org/w/index.php?title=Q1106416&oldid=293987077)
@@ -643,10 +641,14 @@ const WikidataGeoNamesMappings = {
   'Q55089': null,
   // Exception handling for Sainte-Dévote Chapel of Monaco
   'Q584191': null,
+  // Exception handling for Taourirt Province of Morocco
+  'Q2165392': null,
   // Exception handling for Gusinje Municipality of Montenegro
   'Q16085370': null,
   // Exception handling for Petnjica Municipality of Montenegro
   'Q15630696': null,
+  // Exception handling for Naypyidaw Union Territory of Myanmar
+  'Q4796': null,
   // Exception handling for Gaza Governorate of Palestine
   'Q762573': null,
   // Exception handling for Jenin Governorate of Palestine
