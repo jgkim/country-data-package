@@ -1,3 +1,4 @@
+--require env-test
 --require mocha-clean
 --ui mocha-gherkin
 --reporter mocha-gherkin/build/spec

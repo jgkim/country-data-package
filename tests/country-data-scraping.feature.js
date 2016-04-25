@@ -2,8 +2,10 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import dirtyChai from 'dirty-chai';
 import nock from 'nock';
+import fs from 'fs';
+import rimraf from 'rimraf';
 import _ from 'lodash';
-import Scraper from '../scripts/Scraper';
+import Scraper from '../scripts/src/Scraper';
 
 chai.use(chaiAsPromised);
 chai.use(dirtyChai);
@@ -227,6 +229,20 @@ Feature('Country Data Scraping',
           const flanders = _.find(data.subdivisions, { isoCountrySubdivisionCode: 'BE-VLG' });
           const antwerp = _.find(flanders.subSubdivions, { isoCountrySubdivisionCode: 'BE-VAN' });
           expect(antwerp.parentSubdivision).to.equal(flanders);
+        });
+      });
+
+      And('the returned data will be stored in JSON files', () => {
+        return scraper.saveData().then(() => {
+          const continents = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/continents.json`));
+          expect(JSON.parse(fs.readFileSync(`${__dirname}/data/continents.json`))).to.deep.equal(continents);
+          const regions = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/regions.json`));
+          expect(JSON.parse(fs.readFileSync(`${__dirname}/data/regions.json`))).to.deep.equal(regions);
+          const countries = JSON.parse(fs.readFileSync(`${__dirname}/data/countries.json`));
+          expect(JSON.parse(fs.readFileSync(`${__dirname}/data/countries.json`))).to.deep.equal(countries);
+          const subdivisions = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/subdivisions.json`));
+          expect(JSON.parse(fs.readFileSync(`${__dirname}/data/subdivisions.json`))).to.deep.equal(subdivisions);
+          rimraf.sync(`${__dirname}/data`);
         });
       });
 
