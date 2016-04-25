@@ -71,6 +71,8 @@ const WikidataGeoNamesMappings = {
   'Q200127': '444187',
   // TODO: Exception handling for Aquitaine of France (cf. https://www.wikidata.org/w/index.php?title=Q1179&oldid=293275722)
   'Q1179': '3037350',
+  // TODO: Exception handling for Brittany of France (cf. https://www.wikidata.org/w/index.php?title=Q327&oldid=325185236)
+  'Q327': '3030293',
   // TODO: Exception handling for Meurthe-et-Moselle of France (cf. https://www.wikidata.org/w/index.php?title=Q12626&oldid=293275879)
   'Q12626': '2994111',
   // TODO: Exception handling for Somme of France (cf. https://www.wikidata.org/w/index.php?title=Q12770&oldid=293275963)
