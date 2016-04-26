@@ -22,10 +22,12 @@ import fs from 'fs';
 import path from 'path';
 
 import debug from 'debug';
+import Progress from 'progress';
 
 class Scraper {
   constructor(data = {}) {
     this.throttleTime = 250;
+    this.progressBar = null;
     this.data = data;
   }
 
@@ -99,11 +101,19 @@ class Scraper {
                     return false;
                   });
 
+                  if (process.env.NODE_ENV !== 'test') {
+                    this.progressBar.tick();
+                  }
+
                   resolve(entityReference);
                 }
               });
           }, this.throttleTime * index);
         } else {
+          if (process.env.NODE_ENV !== 'test') {
+            this.progressBar.tick();
+          }
+
           resolve(entity);
         }
       }));
@@ -195,11 +205,19 @@ class Scraper {
                     return false;
                   });
 
+                  if (process.env.NODE_ENV !== 'test') {
+                    this.progressBar.tick();
+                  }
+
                   resolve(entityReference);
                 }
               });
           }, this.throttleTime * index);
         } else {
+          if (process.env.NODE_ENV !== 'test') {
+            this.progressBar.tick();
+          }
+
           resolve(entity);
         }
       }));
@@ -245,12 +263,21 @@ class Scraper {
                   }
                 });
               });
+
+              if (process.env.NODE_ENV !== 'test') {
+                this.progressBar.tick();
+              }
+
               resolve(entityReference);
             }).catch((exception) => {
               reject(exception);
             });
           }, this.throttleTime * index + (3600000 * Math.floor(index / 1700)));
         } else {
+          if (process.env.NODE_ENV !== 'test') {
+            this.progressBar.tick();
+          }
+
           resolve(entity);
         }
       }));
@@ -495,6 +522,10 @@ class Scraper {
                 });
                 countryReference.subdivisions = subdivisions;
 
+                if (process.env.NODE_ENV !== 'test') {
+                  this.progressBar.tick();
+                }
+
                 resolve(countryReference);
               }
             });
@@ -556,12 +587,23 @@ class Scraper {
     if (_.isEmpty(this.data)) {
       return this._getCountryList()
         .then((countries) => {
+          if (process.env.NODE_ENV !== 'test') {
+            this.progressBar = new Progress('Subdivisions:  [:bar] :percent :etas', { total: countries.length });
+          }
+
           return this._getSubdivisionList(countries);
         })
         .then((countries) => {
           return this._getRegionList(countries);
         })
         .then((data) => {
+          if (process.env.NODE_ENV !== 'test') {
+            const length = data.reduce((previous, current) => {
+              return previous + current.length;
+            }, 0);
+            this.progressBar = new Progress('Wiki IDs:      [:bar] :percent :etas', { total: length });
+          }
+
           return Promise.all([
             this._getWikiIds(data[0]),
             this._getWikiIds(data[1]),
@@ -570,6 +612,13 @@ class Scraper {
           ]);
         })
         .then((data) => {
+          if (process.env.NODE_ENV !== 'test') {
+            const length = data.reduce((previous, current) => {
+              return previous + current.length;
+            }, 0);
+            this.progressBar = new Progress('GeoNames IDs:  [:bar] :percent :etas', { total: length });
+          }
+
           return Promise.all([
             this._getGeoNamesIds(data[0]),
             this._getGeoNamesIds(data[1]),
@@ -578,6 +627,13 @@ class Scraper {
           ]);
         })
         .then((data) => {
+          if (process.env.NODE_ENV !== 'test') {
+            const length = data.reduce((previous, current) => {
+              return previous + current.length;
+            }, 0);
+            this.progressBar = new Progress('GeoNames Data: [:bar] :percent :etas', { total: length });
+          }
+
           return Promise.all([
             this._getGeoNamesData(data[0]),
             this._getGeoNamesData(data[1]),
@@ -592,7 +648,7 @@ class Scraper {
           this.data.subdivisions = data[3];
 
           if (process.env.NODE_ENV !== 'test') {
-            const log = debug('app:log');
+            const log = debug('scraper:log');
 
             this.data.continents.forEach((continent) => {
               log(continent.name);
@@ -661,7 +717,7 @@ class Scraper {
 
 if (!module.parent) {
   process.on('unhandledRejection', (error) => {
-    debug('app:error')(error);
+    debug('scraper:error')(error);
   });
 
   const scraper = new Scraper();
