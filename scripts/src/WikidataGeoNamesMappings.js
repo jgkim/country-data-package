@@ -103,6 +103,8 @@ const WikidataGeoNamesMappings = {
   'Q214219': '258465',
   // TODO: Exception handling for Pieria Regional Unit of Greece (cf. https://www.wikidata.org/w/index.php?title=Q19896675&oldid=293683573)
   'Q19896675': '734649',
+  // TODO: Exception handling for Pieria Regional Unit of Greece (cf. https://www.wikidata.org/w/index.php?title=Q23015083&oldid=325407570)
+  'Q23015083': '734649',
   // TODO: Exception handling for Preveza Regional Unit of Greece (cf. https://www.wikidata.org/w/index.php?title=Q19897185&oldid=293684102)
   'Q19897185': '254695',
   // TODO: Exception handling for Rhodope Regional Unit of Greece (cf. https://www.wikidata.org/w/index.php?title=Q19896603&oldid=293684841)
@@ -135,6 +137,8 @@ const WikidataGeoNamesMappings = {
   'Q190522': '3045226',
   // TODO: Exception handling for West Papua of Indonesia (cf. https://www.wikidata.org/w/index.php?title=Q3845&oldid=293696410)
   'Q3845': '1996549',
+  // TODO: Exception handling for Greater Jakarta of Indonesia (cf. https://www.wikidata.org/w/index.php?title=Q15222082&oldid=325409950)
+  'Q15222082': '1642907',
   // TODO: Exception handling for Golestan Province of Iran (cf. https://www.wikidata.org/w/index.php?title=Q170041&oldid=293696794)
   'Q170041': '443792',
   // TODO: Exception handling for County Kilkenny of Ireland (cf. https://www.wikidata.org/w/index.php?title=Q180231&oldid=293697204)
@@ -143,6 +147,8 @@ const WikidataGeoNamesMappings = {
   'Q1263': '3177401',
   // TODO: Exception handling for Apulia of Italy (cf. https://www.wikidata.org/w/index.php?title=Q1447&oldid=293698320)
   'Q1447': '3169778',
+  // TODO: Exception handling for Metropolitan City of Catania of Italy (cf. https://www.wikidata.org/w/index.php?title=Q20991246&oldid=325410896)
+  'Q20991246': '2525065',
   // TODO: Exception handling for Province of Agrigento of Italy (cf. https://www.wikidata.org/w/index.php?title=Q16112&oldid=293698721)
   'Q16112': '2525763',
   // TODO: Exception handling for Metropolitan City of Bari of Italy (cf. https://www.wikidata.org/w/index.php?title=Q18241854&oldid=293698919)
@@ -155,6 +161,8 @@ const WikidataGeoNamesMappings = {
   'Q15124': '3181912',
   // TODO: Exception handling for Metropolitan City of Florence of Italy (cf. https://www.wikidata.org/w/index.php?title=Q18288148&oldid=293699930)
   'Q18288148': '3176958',
+  // TODO: Exception handling for Metropolitan City of Messina of Italy (cf. https://www.wikidata.org/w/index.php?title=Q20991250&oldid=325412752)
+  'Q20991250': '2524169',
   // TODO: Exception handling for Metropolitan City of Milan of Italy (cf. https://www.wikidata.org/w/index.php?title=Q18288155&oldid=293700046)
   'Q18288155': '3173434',
   // TODO: Exception handling for Province of Modena of Italy (cf. https://www.wikidata.org/w/index.php?title=Q16209&oldid=293700160)
@@ -293,6 +301,8 @@ const WikidataGeoNamesMappings = {
   'Q1106416': '411738',
   // TODO: Exception handling for Dhofar Governorate of Oman (cf. https://www.wikidata.org/w/index.php?title=Q1207752&oldid=293987493)
   'Q1207752': '411742',
+  // TODO: Exception handling for Al Batinah South Governorate of Oman (cf. https://www.wikidata.org/w/index.php?title=Q4703565&oldid=325418336)
+  'Q4703565': '411742',
   // TODO: Exception handling for Balochistan of Pakistan (cf. https://www.wikidata.org/w/index.php?title=Q163239&oldid=293987771)
   'Q163239': '1183606',
   // TODO: Exception handling for Punjab of Pakistan (cf. https://www.wikidata.org/w/index.php?title=Q4478&oldid=293987952)
@@ -499,6 +509,8 @@ const WikidataGeoNamesMappings = {
   'Q15932': '3239093',
   // TODO: Exception handling for Žiri Municipality of Slovenia (cf. https://www.wikidata.org/w/index.php?title=Q394087&oldid=294014616)
   'Q394087': '3239087',
+  // TODO: Exception handling for West Kurdufan of Sudan (cf. https://www.wikidata.org/w/index.php?title=Q536396&oldid=325420682)
+  'Q536396': '408659',
   // TODO: Exception handling for North Central Province of Sri Lanka (cf. https://www.wikidata.org/w/index.php?title=Q1057124&oldid=294334200)
   'Q1057124': '1232870',
   // TODO: Exception handling for Niuas of Tonga (cf. https://www.wikidata.org/w/index.php?title=Q1200954&oldid=294334410)
@@ -567,6 +579,8 @@ const WikidataGeoNamesMappings = {
   'Q81581': null,
   // Exception handling for Kalimantan of Indonesia
   'Q3795': null,
+  // Exception handling for Java of Indonesia (cf. https://www.wikidata.org/w/index.php?title=Q3757&oldid=325424552)
+  'Q3757': null,
   // Exception handling for Xaisomboun of Laos
   'Q846580': null,
   // Exception handling for Birštonas municipality of Lithuania
@@ -623,6 +637,8 @@ const WikidataGeoNamesMappings = {
   'Q2558824': null,
   // Exception handling for Zarasai District Municipality of Lithuania
   'Q664415': null,
+  // Exception handling for Canton of Clervaux of Luxembourg
+  'Q691793': null,
   // Exception handling for Antananarivo Province of Madagascar
   'Q489821': null,
   // Exception handling for Antsiranana Province of Madagascar
@@ -635,6 +651,12 @@ const WikidataGeoNamesMappings = {
   'Q669259': null,
   // Exception handling for Toliara Province of Madagascar
   'Q162020': null,
+  // Exception handling for Nouakchott-Nord Region of Mauritania
+  'Q20669647': null,
+  // Exception handling for Nouakchott-Ouest Region of Mauritania
+  'Q20669651': null,
+  // Exception handling for Nouakchott-Sud Region of Mauritania
+  'Q20669653': null,
   // Exception handling for Jardin Exotique of Monaco
   'Q1384208': null,
   // Exception handling for Port Hercules of Monaco
@@ -673,6 +695,8 @@ const WikidataGeoNamesMappings = {
   'Q1093157': null,
   // Exception handling for Panamá Oeste Province of Panama
   'Q16250688': null,
+  // Exception handling for Davao Occidental of Philippines
+  'Q3656379': null,
   // Exception handling for Autonomous Province of Kosovo and Metohija of Serbia
   'Q1255': null,
   // Exception handling for Braničevo District of Serbia
@@ -751,6 +775,8 @@ const WikidataGeoNamesMappings = {
   'Q6558667': null,
   // Exception handling for Newry, Mourne and Down of the United Kingdom
   'Q15262186': null,
+  // Exception handling for Oued Ed-Dahab-Lagouira of Western Sahara
+  'Q21235104': null,
   // Exception handling for Muchinga Province of Zambia
   'Q6714242': null,
 };
