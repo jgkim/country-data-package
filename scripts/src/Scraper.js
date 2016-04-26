@@ -70,7 +70,7 @@ class Scraper {
 
     entities.map((entity, index) => {
       promises.push(new Promise((resolve, reject) => {
-        if (entity._wikipediaUri) {
+        if (entity && entity._wikipediaUri) {
           setTimeout(() => {
             const entityReference = entity;
             let slug = _.trimRight(entityReference._wikipediaUri, '/');
