@@ -233,7 +233,7 @@ Feature('Country Data Scraping',
       });
 
       And('the returned data will be stored in JSON files', () => {
-        return scraper.saveData().then(() => {
+        return scraper.saveData(`${__dirname}/data`).then(() => {
           const continents = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/continents.json`));
           expect(JSON.parse(fs.readFileSync(`${__dirname}/data/continents.json`))).to.deep.equal(continents);
           const regions = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/regions.json`));

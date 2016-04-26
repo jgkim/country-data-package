@@ -21,6 +21,8 @@ import stringify from 'streaming-json-stringify';
 import fs from 'fs';
 import path from 'path';
 
+import debug from 'debug';
+
 class Scraper {
   constructor(data = {}) {
     this.throttleTime = 250;
@@ -507,32 +509,31 @@ class Scraper {
    * _saveData() saves data into a file under the data directory.
    *
    * @access private
+   * @param {String} directory name
+   * @param {String} filename
+   * @param {Array} data
+   * @param {Object} options
    */
-  _saveData(filename, data, options) {
-    const stringifyReplacer = stringify({
-      replacer: (key, value) => {
-        if (_.has(options, key)) {
-          if (options[key]) {
-            return value[options[key]];
-          }
-
-          return undefined;
-        }
-
-        return value;
-      },
-    });
-
-    let directoryName = './data';
-    if (process.env.NODE_ENV === 'test') {
-      directoryName = './tests/data';
-    }
-
+  _saveData(directoryName, filename, data, options) {
     return new Promise((resolve, reject) => {
       fs.mkdir(directoryName, (error) => {
         if (error && (error.code !== 'EEXIST')) {
           reject(error);
         } else {
+          const stringifyReplacer = stringify({
+            replacer: (key, value) => {
+              if (_.has(options, key)) {
+                if (options[key]) {
+                  return value[options[key]];
+                }
+
+                return undefined;
+              }
+
+              return value;
+            },
+          });
+
           stringifyReplacer.pipe(fs.createWriteStream(path.join(directoryName, filename)));
           data.forEach((item) => {
             stringifyReplacer.write(item);
@@ -591,12 +592,14 @@ class Scraper {
           this.data.subdivisions = data[3];
 
           if (process.env.NODE_ENV !== 'test') {
+            const log = debug('app:log');
+
             this.data.continents.forEach((continent) => {
-              console.log(continent.name);
+              log(continent.name);
               continent.regions.forEach((region) => {
-                console.log(`=> ${region.name}`);
+                log(`=> ${region.name}`);
                 region.countries.forEach((country) => {
-                  console.log(`  => ${country.name}`);
+                  log(`  => ${country.name}`);
 
                   country.subdivisions.forEach((subdivision) => {
                     let subdivisionName = subdivision.name;
@@ -608,10 +611,10 @@ class Scraper {
                       if (!parentName && subdivision.parentSubdivision.en) {
                         parentName = subdivision.parentSubdivision.en.wikipediaLabel;
                       }
-                      console.log(`    => ${parentName} / ${subdivisionName}`);
+                      log(`    => ${parentName} / ${subdivisionName}`);
                     } else {
-                      if (!_.isString(subdivisionName) || !subdivisionName || subdivisionName === 'undefined') console.log(subdivisionName);
-                      else console.log(`    => ${subdivisionName}`);
+                      if (!_.isString(subdivisionName) || !subdivisionName || subdivisionName === 'undefined') log(subdivisionName);
+                      else log(`    => ${subdivisionName}`);
                     }
                   });
                 });
@@ -630,23 +633,24 @@ class Scraper {
   * saveData() saves scraped data about countries, and their continents, regions, and principal subdivisions into respective files.
   *
   * @access public
+  * @param {String} directory name
   * @return {Promise}
   */
-  saveData() {
+  saveData(directoryName) {
     return this.getData().then(() => {
       return Promise.all([
-        this._saveData('continents.json', this.data.continents, {
+        this._saveData(directoryName, 'continents.json', this.data.continents, {
           'regions': undefined,
         }),
-        this._saveData('regions.json', this.data.regions, {
+        this._saveData(directoryName, 'regions.json', this.data.regions, {
           'continent': 'unM49Code',
           'countries': undefined,
         }),
-        this._saveData('countries.json', this.data.countries, {
+        this._saveData(directoryName, 'countries.json', this.data.countries, {
           'region': 'unM49Code',
           'subdivisions': undefined,
         }),
-        this._saveData('subdivisions.json', this.data.subdivisions, {
+        this._saveData(directoryName, 'subdivisions.json', this.data.subdivisions, {
           'country': 'isoTwoLetterCountryCode',
           'parentSubdivision': 'isoCountrySubdivisionCode',
         }),
@@ -656,8 +660,12 @@ class Scraper {
 }
 
 if (!module.parent) {
+  process.on('unhandledRejection', (error) => {
+    debug('app:error')(error);
+  });
+
   const scraper = new Scraper();
-  scraper.saveData();
+  scraper.saveData('./data');
 }
 
 export default Scraper;
