@@ -578,6 +578,41 @@ class Scraper {
   }
 
   /**
+  * logData() logs data via debug('scraper:log').
+  *
+  * @access public
+  */
+  logData() {
+    const log = debug('scraper:log');
+
+    this.data.continents.forEach((continent) => {
+      log(continent.name);
+      continent.regions.forEach((region) => {
+        log(`=> ${region.name}`);
+        region.countries.forEach((country) => {
+          log(`  => ${country.name}`);
+
+          country.subdivisions.forEach((subdivision) => {
+            let subdivisionName = subdivision.name;
+            if (!subdivisionName && subdivision.en) {
+              subdivisionName = subdivision.en.wikipediaLabel;
+            }
+            if (subdivision.parentSubdivision) {
+              let parentName = subdivision.parentSubdivision.name;
+              if (!parentName && subdivision.parentSubdivision.en) {
+                parentName = subdivision.parentSubdivision.en.wikipediaLabel;
+              }
+              log(`    => ${parentName} / ${subdivisionName}`);
+            } else {
+              log(`    => ${subdivisionName}`);
+            }
+          });
+        });
+      });
+    });
+  }
+
+  /**
   * getData() scrapes data about countries, and their continents, regions, and principal subdivisions.
   *
   * @access public
@@ -647,36 +682,7 @@ class Scraper {
           this.data.countries = data[2];
           this.data.subdivisions = data[3];
 
-          if (process.env.NODE_ENV !== 'test') {
-            const log = debug('scraper:log');
-
-            this.data.continents.forEach((continent) => {
-              log(continent.name);
-              continent.regions.forEach((region) => {
-                log(`=> ${region.name}`);
-                region.countries.forEach((country) => {
-                  log(`  => ${country.name}`);
-
-                  country.subdivisions.forEach((subdivision) => {
-                    let subdivisionName = subdivision.name;
-                    if (!subdivisionName && subdivision.en) {
-                      subdivisionName = subdivision.en.wikipediaLabel;
-                    }
-                    if (subdivision.parentSubdivision) {
-                      let parentName = subdivision.parentSubdivision.name;
-                      if (!parentName && subdivision.parentSubdivision.en) {
-                        parentName = subdivision.parentSubdivision.en.wikipediaLabel;
-                      }
-                      log(`    => ${parentName} / ${subdivisionName}`);
-                    } else {
-                      if (!_.isString(subdivisionName) || !subdivisionName || subdivisionName === 'undefined') log(subdivisionName);
-                      else log(`    => ${subdivisionName}`);
-                    }
-                  });
-                });
-              });
-            });
-          }
+          this.logData();
 
           return this.data;
         });
