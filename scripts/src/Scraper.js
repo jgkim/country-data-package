@@ -272,6 +272,8 @@ class Scraper {
             }).catch((exception) => {
               reject(exception);
             });
+
+            // The hourly limit of GeoNames is 2000 credits.
           }, this.throttleTime * index + (3600000 * Math.floor(index / 1700)));
         } else {
           if (process.env.NODE_ENV !== 'test') {
@@ -578,14 +580,41 @@ class Scraper {
   }
 
   /**
+   * _loadData() loads data from a file under the data directory.
+   *
+   * @access private
+   * @param {String} directory name
+   * @param {String} filename
+   */
+  _loadData(directoryName, filename) {
+    return new Promise((resolve, reject) => {
+      const filePath = path.join(directoryName, filename);
+
+      fs.access(filePath, fs.R_OK, (accessError) => {
+        if (accessError) {
+          reject(accessError);
+        } else {
+          fs.readFile(filePath, 'utf8', (readError, data) => {
+            if (readError) {
+              reject(readError);
+            } else {
+              resolve(JSON.parse(data));
+            }
+          });
+        }
+      });
+    });
+  }
+
+  /**
   * logData() logs data via debug('scraper:log').
   *
   * @access public
   */
-  logData() {
+  logData(data) {
     const log = debug('scraper:log');
 
-    this.data.continents.forEach((continent) => {
+    data.continents.forEach((continent) => {
       log(continent.name);
       continent.regions.forEach((region) => {
         log(`=> ${region.name}`);
@@ -619,76 +648,70 @@ class Scraper {
   * @return {Promise}
   */
   getData() {
-    if (_.isEmpty(this.data)) {
-      return this._getCountryList()
-        .then((countries) => {
-          if (process.env.NODE_ENV !== 'test') {
-            this.progressBar = new Progress('Subdivisions:  [:bar] :percent :etas', { total: countries.length });
-          }
+    return this._getCountryList()
+      .then((countries) => {
+        if (process.env.NODE_ENV !== 'test') {
+          this.progressBar = new Progress('Subdivisions:  [:bar] :percent :etas', { total: countries.length });
+        }
 
-          return this._getSubdivisionList(countries);
-        })
-        .then((countries) => {
-          return this._getRegionList(countries);
-        })
-        .then((data) => {
-          if (process.env.NODE_ENV !== 'test') {
-            const length = data.reduce((previous, current) => {
-              return previous + current.length;
-            }, 0);
-            this.progressBar = new Progress('Wiki IDs:      [:bar] :percent :etas', { total: length });
-          }
+        return this._getSubdivisionList(countries);
+      })
+      .then((countries) => {
+        return this._getRegionList(countries);
+      })
+      .then((data) => {
+        if (process.env.NODE_ENV !== 'test') {
+          const length = data.reduce((previous, current) => {
+            return previous + current.length;
+          }, 0);
+          this.progressBar = new Progress('Wiki IDs:      [:bar] :percent :etas', { total: length });
+        }
 
-          return Promise.all([
-            this._getWikiIds(data[0]),
-            this._getWikiIds(data[1]),
-            this._getWikiIds(data[2]),
-            this._getWikiIds(data[3]),
-          ]);
-        })
-        .then((data) => {
-          if (process.env.NODE_ENV !== 'test') {
-            const length = data.reduce((previous, current) => {
-              return previous + current.length;
-            }, 0);
-            this.progressBar = new Progress('GeoNames IDs:  [:bar] :percent :etas', { total: length });
-          }
+        return Promise.all([
+          this._getWikiIds(data[0]),
+          this._getWikiIds(data[1]),
+          this._getWikiIds(data[2]),
+          this._getWikiIds(data[3]),
+        ]);
+      })
+      .then((data) => {
+        if (process.env.NODE_ENV !== 'test') {
+          const length = data.reduce((previous, current) => {
+            return previous + current.length;
+          }, 0);
+          this.progressBar = new Progress('GeoNames IDs:  [:bar] :percent :etas', { total: length });
+        }
 
-          return Promise.all([
-            this._getGeoNamesIds(data[0]),
-            this._getGeoNamesIds(data[1]),
-            this._getGeoNamesIds(data[2]),
-            this._getGeoNamesIds(data[3]),
-          ]);
-        })
-        .then((data) => {
-          if (process.env.NODE_ENV !== 'test') {
-            const length = data.reduce((previous, current) => {
-              return previous + current.length;
-            }, 0);
-            this.progressBar = new Progress('GeoNames Data: [:bar] :percent :etas', { total: length });
-          }
+        return Promise.all([
+          this._getGeoNamesIds(data[0]),
+          this._getGeoNamesIds(data[1]),
+          this._getGeoNamesIds(data[2]),
+          this._getGeoNamesIds(data[3]),
+        ]);
+      })
+      .then((data) => {
+        if (process.env.NODE_ENV !== 'test') {
+          const length = data.reduce((previous, current) => {
+            return previous + current.length;
+          }, 0);
+          this.progressBar = new Progress('GeoNames Data: [:bar] :percent :etas', { total: length });
+        }
 
-          return Promise.all([
-            this._getGeoNamesData(data[0]),
-            this._getGeoNamesData(data[1]),
-            this._getGeoNamesData(data[2]),
-            this._getGeoNamesData(data[3]),
-          ]);
-        })
-        .then((data) => {
-          this.data.continents = data[0];
-          this.data.regions = data[1];
-          this.data.countries = data[2];
-          this.data.subdivisions = data[3];
+        return Promise.all([
+          this._getGeoNamesData(data[0]),
+          this._getGeoNamesData(data[1]),
+          this._getGeoNamesData(data[2]),
+          this._getGeoNamesData(data[3]),
+        ]);
+      })
+      .then((data) => {
+        this.data.continents = data[0];
+        this.data.regions = data[1];
+        this.data.countries = data[2];
+        this.data.subdivisions = data[3];
 
-          this.logData();
-
-          return this.data;
-        });
-    }
-
-    return Promise.resolve(this.data);
+        return this.data;
+      });
   }
 
   /**
@@ -699,24 +722,93 @@ class Scraper {
   * @return {Promise}
   */
   saveData(directoryName) {
-    return this.getData().then(() => {
+    return new Promise((resolve, reject) => {
+      if (_.isEmpty(this.data)) {
+        this.getData().then((data) => {
+          resolve(data);
+        }, (error) => {
+          reject(error);
+        });
+      } else {
+        resolve(this.data);
+      }
+    }).then((data) => {
       return Promise.all([
-        this._saveData(directoryName, 'continents.json', this.data.continents, {
+        this._saveData(directoryName, 'continents.json', data.continents, {
           'regions': undefined,
         }),
-        this._saveData(directoryName, 'regions.json', this.data.regions, {
+        this._saveData(directoryName, 'regions.json', data.regions, {
           'continent': 'unM49Code',
           'countries': undefined,
         }),
-        this._saveData(directoryName, 'countries.json', this.data.countries, {
+        this._saveData(directoryName, 'countries.json', data.countries, {
           'region': 'unM49Code',
           'subdivisions': undefined,
         }),
-        this._saveData(directoryName, 'subdivisions.json', this.data.subdivisions, {
+        this._saveData(directoryName, 'subdivisions.json', data.subdivisions, {
           'country': 'isoTwoLetterCountryCode',
           'parentSubdivision': 'isoCountrySubdivisionCode',
+          'subSubdivions': undefined,
         }),
       ]);
+    });
+  }
+
+  /**
+  * loadData() loads the scraped data from the files.
+  *
+  * @access public
+  * @param {String} directory name
+  * @return {Promise}
+  */
+  loadData(directoryName) {
+    return Promise.all([
+      this._loadData(directoryName, 'continents.json'),
+      this._loadData(directoryName, 'regions.json'),
+      this._loadData(directoryName, 'countries.json'),
+      this._loadData(directoryName, 'subdivisions.json'),
+    ]).then((data) => {
+      this.data.continents = data[0];
+      this.data.regions = data[1];
+      this.data.countries = data[2];
+      this.data.subdivisions = data[3];
+
+      this.data.continents.forEach((continent) => {
+        const continentReference = continent;
+
+        continentReference.regions = [];
+      });
+
+      this.data.regions.forEach((region) => {
+        const regionReference = region;
+
+        regionReference.continent = _.find(this.data.continents, { unM49Code: region.continent });
+        regionReference.continent.regions.push(regionReference);
+        regionReference.countries = [];
+      });
+
+      this.data.countries.forEach((country) => {
+        const countryReference = country;
+
+        countryReference.region = _.find(this.data.regions, { unM49Code: country.region });
+        countryReference.region.countries.push(countryReference);
+        countryReference.subdivisions = [];
+      });
+
+      this.data.subdivisions.forEach((subdivision) => {
+        const subdivisionReference = subdivision;
+
+        subdivisionReference.country = _.find(this.data.countries, { isoTwoLetterCountryCode: subdivision.country });
+        subdivisionReference.country.subdivisions.push(subdivisionReference);
+
+        if (subdivision.parentSubdivision) {
+          subdivisionReference.parentSubdivision = _.find(this.data.subdivisions, { isoCountrySubdivisionCode: subdivision.parentSubdivision });
+          subdivisionReference.parentSubdivision.subSubdivions = subdivisionReference.parentSubdivision.subSubdivions || [];
+          subdivisionReference.parentSubdivision.subSubdivions.push(subdivisionReference);
+        }
+      });
+
+      return this.data;
     });
   }
 }
@@ -727,7 +819,9 @@ if (!module.parent) {
   });
 
   const scraper = new Scraper();
-  scraper.saveData('./data');
+  scraper.saveData('./data').then((data) => {
+    scraper.logData(data);
+  });
 }
 
 export default Scraper;

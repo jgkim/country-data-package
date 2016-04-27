@@ -10,6 +10,72 @@ import Scraper from '../scripts/src/Scraper';
 chai.use(chaiAsPromised);
 chai.use(dirtyChai);
 
+function expectData(data) {
+  expect(data.continents).to.have.length.of.at.least(3);
+  expect(data.regions).to.have.length.of.at.least(3);
+  expect(data.countries).to.have.length.of.at.least(5);
+  expect(data.subdivisions).to.have.length.of.at.least(11);
+
+  const asia = _.find(data.continents, { unM49Code: '142' });
+  expect(asia.wikipediaSlug).to.equal('Asia');
+  expect(asia.wikidataId).to.equal('Q48');
+  expect(asia.geoNamesId).to.equal('6255147');
+  expect(asia.name).to.equal('Asia');
+  expect(asia.en.officialName).to.equal('Asia');
+  expect(asia.ko.officialName).to.equal('아시아');
+  expect(asia.en.wikipediaLabel).to.equal('Asia');
+  expect(asia.ko.wikipediaLabel).to.equal('아시아');
+  expect(asia.latitude).to.equal(29.84064);
+  expect(asia.longitude).to.equal(89.29688);
+
+  const easternAsia = _.find(asia.regions, { unM49Code: '030' });
+  expect(easternAsia.continent).to.equal(asia);
+  expect(easternAsia.wikipediaSlug).to.equal('East_Asia');
+  expect(easternAsia.wikidataId).to.equal('Q27231');
+  expect(easternAsia.geoNamesId).to.equal('7729894');
+  expect(easternAsia.name).to.equal('Eastern Asia');
+  expect(easternAsia.en.wikipediaLabel).to.equal('East Asia');
+  expect(easternAsia.ko.wikipediaLabel).to.equal('동아시아');
+  expect(easternAsia.latitude).to.equal(32.24997);
+  expect(easternAsia.longitude).to.equal(114.60938);
+
+  const kr = _.find(easternAsia.countries, { isoTwoLetterCountryCode: 'KR' });
+  expect(kr.region).to.equal(easternAsia);
+  expect(kr.isoThreeLetterCountryCode).to.equal('KOR');
+  expect(kr.isoThreeDigitCountryCode).to.equal('410');
+  expect(kr.wikipediaSlug).to.equal('South_Korea');
+  expect(kr.wikidataId).to.equal('Q884');
+  expect(kr.geoNamesId).to.equal('1835841');
+  expect(kr.name).to.equal('South Korea');
+  expect(kr.en.officialName).to.equal('Republic of Korea');
+  expect(kr.ko.officialName).to.equal('대한민국');
+  expect(kr.ko.alternateName).to.include('한국');
+  expect(kr.en.shortName).to.equal('South Korea');
+  expect(kr.en.wikipediaLabel).to.equal('South Korea');
+  expect(kr.ko.wikipediaLabel).to.equal('대한민국');
+  expect(kr.latitude).to.equal(36.5);
+  expect(kr.longitude).to.equal(127.75);
+
+  const seoul = _.find(kr.subdivisions, { isoCountrySubdivisionCode: 'KR-11' });
+  expect(seoul.country).to.equal(kr);
+  expect(seoul.isoSubdivisionCode).to.equal('11');
+  expect(seoul.wikipediaSlug).to.equal('Seoul');
+  expect(seoul.wikidataId).to.equal('Q8684');
+  expect(seoul.geoNamesId).to.equal('1835847');
+  expect(seoul.name).to.equal('Seoul');
+  expect(seoul.en.officialName).to.equal('Seoul');
+  expect(seoul.ko.officialName).to.equal('서울특별시');
+  expect(seoul.ko.alternateName).to.contain('서울');
+  expect(seoul.en.wikipediaLabel).to.equal('Seoul');
+  expect(seoul.ko.wikipediaLabel).to.equal('서울특별시');
+  expect(seoul.latitude).to.equal(37.58333);
+  expect(seoul.longitude).to.equal(127);
+
+  const flanders = _.find(data.subdivisions, { isoCountrySubdivisionCode: 'BE-VLG' });
+  const antwerp = _.find(flanders.subSubdivions, { isoCountrySubdivisionCode: 'BE-VAN' });
+  expect(antwerp.parentSubdivision).to.equal(flanders);
+}
+
 Feature('Country Data Scraping',
   'As a data consumer',
   'I want to scrape data about countries from the Web',
@@ -165,71 +231,7 @@ Feature('Country Data Scraping',
       });
 
       Then('data about countries will eventually be returned', () => {
-        return promise.then((data) => {
-          expect(data.continents).to.have.length.of.at.least(3);
-          expect(data.regions).to.have.length.of.at.least(3);
-          expect(data.countries).to.have.length.of.at.least(5);
-          expect(data.subdivisions).to.have.length.of.at.least(11);
-
-          const asia = _.find(data.continents, { unM49Code: '142' });
-          expect(asia.wikipediaSlug).to.equal('Asia');
-          expect(asia.wikidataId).to.equal('Q48');
-          expect(asia.geoNamesId).to.equal('6255147');
-          expect(asia.name).to.equal('Asia');
-          expect(asia.en.officialName).to.equal('Asia');
-          expect(asia.ko.officialName).to.equal('아시아');
-          expect(asia.en.wikipediaLabel).to.equal('Asia');
-          expect(asia.ko.wikipediaLabel).to.equal('아시아');
-          expect(asia.latitude).to.equal(29.84064);
-          expect(asia.longitude).to.equal(89.29688);
-
-          const easternAsia = _.find(asia.regions, { unM49Code: '030' });
-          expect(easternAsia.continent).to.equal(asia);
-          expect(easternAsia.wikipediaSlug).to.equal('East_Asia');
-          expect(easternAsia.wikidataId).to.equal('Q27231');
-          expect(easternAsia.geoNamesId).to.equal('7729894');
-          expect(easternAsia.name).to.equal('Eastern Asia');
-          expect(easternAsia.en.wikipediaLabel).to.equal('East Asia');
-          expect(easternAsia.ko.wikipediaLabel).to.equal('동아시아');
-          expect(easternAsia.latitude).to.equal(32.24997);
-          expect(easternAsia.longitude).to.equal(114.60938);
-
-          const kr = _.find(easternAsia.countries, { isoTwoLetterCountryCode: 'KR' });
-          expect(kr.region).to.equal(easternAsia);
-          expect(kr.isoThreeLetterCountryCode).to.equal('KOR');
-          expect(kr.isoThreeDigitCountryCode).to.equal('410');
-          expect(kr.wikipediaSlug).to.equal('South_Korea');
-          expect(kr.wikidataId).to.equal('Q884');
-          expect(kr.geoNamesId).to.equal('1835841');
-          expect(kr.name).to.equal('South Korea');
-          expect(kr.en.officialName).to.equal('Republic of Korea');
-          expect(kr.ko.officialName).to.equal('대한민국');
-          expect(kr.ko.alternateName).to.include('한국');
-          expect(kr.en.shortName).to.equal('South Korea');
-          expect(kr.en.wikipediaLabel).to.equal('South Korea');
-          expect(kr.ko.wikipediaLabel).to.equal('대한민국');
-          expect(kr.latitude).to.equal(36.5);
-          expect(kr.longitude).to.equal(127.75);
-
-          const seoul = _.find(kr.subdivisions, { isoCountrySubdivisionCode: 'KR-11' });
-          expect(seoul.country).to.equal(kr);
-          expect(seoul.isoSubdivisionCode).to.equal('11');
-          expect(seoul.wikipediaSlug).to.equal('Seoul');
-          expect(seoul.wikidataId).to.equal('Q8684');
-          expect(seoul.geoNamesId).to.equal('1835847');
-          expect(seoul.name).to.equal('Seoul');
-          expect(seoul.en.officialName).to.equal('Seoul');
-          expect(seoul.ko.officialName).to.equal('서울특별시');
-          expect(seoul.ko.alternateName).to.contain('서울');
-          expect(seoul.en.wikipediaLabel).to.equal('Seoul');
-          expect(seoul.ko.wikipediaLabel).to.equal('서울특별시');
-          expect(seoul.latitude).to.equal(37.58333);
-          expect(seoul.longitude).to.equal(127);
-
-          const flanders = _.find(data.subdivisions, { isoCountrySubdivisionCode: 'BE-VLG' });
-          const antwerp = _.find(flanders.subSubdivions, { isoCountrySubdivisionCode: 'BE-VAN' });
-          expect(antwerp.parentSubdivision).to.equal(flanders);
-        });
+        return promise.then(expectData);
       });
 
       And('the returned data will be stored in JSON files', () => {
@@ -242,11 +244,15 @@ Feature('Country Data Scraping',
           expect(JSON.parse(fs.readFileSync(`${__dirname}/data/countries.json`))).to.deep.equal(countries);
           const subdivisions = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/subdivisions.json`));
           expect(JSON.parse(fs.readFileSync(`${__dirname}/data/subdivisions.json`))).to.deep.equal(subdivisions);
-          rimraf.sync(`${__dirname}/data`);
         });
       });
 
+      And('the saved files will be able to be loaded into the memory', () => {
+        return scraper.loadData(`${__dirname}/data`).then(expectData);
+      });
+
       after(() => {
+        rimraf.sync(`${__dirname}/data`);
         nock.cleanAll();
         nock.restore();
       });
