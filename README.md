@@ -1,1 +1,1 @@
-ISO 3166 names and codes for countries and their subdivisions. Data are sourced from Wikipedia, and provided as a Tabular Data Package.
+Names and codes of countries, and their continents, regions, and principal subdivisions. Data are sourced from Wikipedia, UNSD, and GeoNames, and provieded as a Data Package.
