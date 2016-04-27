@@ -85,7 +85,7 @@ Feature('Country Data Scraping',
 
     Scenario('Connected Networks', () => {
       before(() => {
-        scraper = new Scraper();
+        scraper = new Scraper(`${__dirname}/data`);
         if (!nock.isActive()) nock.activate();
       });
 
@@ -235,7 +235,7 @@ Feature('Country Data Scraping',
       });
 
       And('the returned data will be stored in JSON files', () => {
-        return scraper.saveData(`${__dirname}/data`).then(() => {
+        return scraper.saveData().then(() => {
           const continents = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/continents.json`));
           expect(JSON.parse(fs.readFileSync(`${__dirname}/data/continents.json`))).to.deep.equal(continents);
           const regions = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/regions.json`));
@@ -248,7 +248,7 @@ Feature('Country Data Scraping',
       });
 
       And('the saved files will be able to be loaded into the memory', () => {
-        return scraper.loadData(`${__dirname}/data`).then(expectData);
+        return scraper.loadData().then(expectData);
       });
 
       after(() => {

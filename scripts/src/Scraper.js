@@ -25,9 +25,10 @@ import debug from 'debug';
 import Progress from 'progress';
 
 class Scraper {
-  constructor(data = {}) {
+  constructor(directoryName = './data', data = {}) {
     this.throttleTime = 250;
     this.progressBar = null;
+    this.directoryName = directoryName;
     this.data = data;
   }
 
@@ -542,14 +543,13 @@ class Scraper {
    * _saveData() saves data into a file under the data directory.
    *
    * @access private
-   * @param {String} directory name
    * @param {String} filename
    * @param {Array} data
    * @param {Object} options
    */
-  _saveData(directoryName, filename, data, options) {
+  _saveData(filename, data, options) {
     return new Promise((resolve, reject) => {
-      fs.mkdir(directoryName, (error) => {
+      fs.mkdir(this.directoryName, (error) => {
         if (error && (error.code !== 'EEXIST')) {
           reject(error);
         } else {
@@ -567,7 +567,7 @@ class Scraper {
             },
           });
 
-          stringifyReplacer.pipe(fs.createWriteStream(path.join(directoryName, filename)));
+          stringifyReplacer.pipe(fs.createWriteStream(path.join(this.directoryName, filename)));
           data.forEach((item) => {
             stringifyReplacer.write(item);
           });
@@ -583,12 +583,11 @@ class Scraper {
    * _loadData() loads data from a file under the data directory.
    *
    * @access private
-   * @param {String} directory name
    * @param {String} filename
    */
-  _loadData(directoryName, filename) {
+  _loadData(filename) {
     return new Promise((resolve, reject) => {
-      const filePath = path.join(directoryName, filename);
+      const filePath = path.join(this.directoryName, filename);
 
       fs.access(filePath, fs.R_OK, (accessError) => {
         if (accessError) {
@@ -718,10 +717,9 @@ class Scraper {
   * saveData() saves scraped data about countries, and their continents, regions, and principal subdivisions into respective files.
   *
   * @access public
-  * @param {String} directory name
   * @return {Promise}
   */
-  saveData(directoryName) {
+  saveData() {
     return new Promise((resolve, reject) => {
       if (_.isEmpty(this.data)) {
         this.getData().then((data) => {
@@ -734,18 +732,18 @@ class Scraper {
       }
     }).then((data) => {
       return Promise.all([
-        this._saveData(directoryName, 'continents.json', data.continents, {
+        this._saveData('continents.json', data.continents, {
           'regions': undefined,
         }),
-        this._saveData(directoryName, 'regions.json', data.regions, {
+        this._saveData('regions.json', data.regions, {
           'continent': 'unM49Code',
           'countries': undefined,
         }),
-        this._saveData(directoryName, 'countries.json', data.countries, {
+        this._saveData('countries.json', data.countries, {
           'region': 'unM49Code',
           'subdivisions': undefined,
         }),
-        this._saveData(directoryName, 'subdivisions.json', data.subdivisions, {
+        this._saveData('subdivisions.json', data.subdivisions, {
           'country': 'isoTwoLetterCountryCode',
           'parentSubdivision': 'isoCountrySubdivisionCode',
           'subSubdivions': undefined,
@@ -758,15 +756,14 @@ class Scraper {
   * loadData() loads the scraped data from the files.
   *
   * @access public
-  * @param {String} directory name
   * @return {Promise}
   */
-  loadData(directoryName) {
+  loadData() {
     return Promise.all([
-      this._loadData(directoryName, 'continents.json'),
-      this._loadData(directoryName, 'regions.json'),
-      this._loadData(directoryName, 'countries.json'),
-      this._loadData(directoryName, 'subdivisions.json'),
+      this._loadData('continents.json'),
+      this._loadData('regions.json'),
+      this._loadData('countries.json'),
+      this._loadData('subdivisions.json'),
     ]).then((data) => {
       this.data.continents = data[0];
       this.data.regions = data[1];
@@ -819,7 +816,7 @@ if (!module.parent) {
   });
 
   const scraper = new Scraper();
-  scraper.saveData('./data').then((data) => {
+  scraper.saveData().then((data) => {
     scraper.logData(data);
   });
 }
