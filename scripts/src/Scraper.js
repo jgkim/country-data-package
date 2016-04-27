@@ -787,8 +787,11 @@ class Scraper {
       this.data.countries.forEach((country) => {
         const countryReference = country;
 
-        countryReference.region = _.find(this.data.regions, { unM49Code: country.region });
-        countryReference.region.countries.push(countryReference);
+        if (country.region) {
+          countryReference.region = _.find(this.data.regions, { unM49Code: country.region });
+          countryReference.region.countries.push(countryReference);
+        }
+
         countryReference.subdivisions = [];
       });
 
