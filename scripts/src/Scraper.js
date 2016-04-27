@@ -489,7 +489,7 @@ class Scraper {
                           if (Iso31662WikipediaMappings[code]) {
                             newSubdivision._wikipediaUri = Iso31662WikipediaMappings[code];
                           }
-                        } else if (wikipediaUri) {
+                        } else if (wikipediaUri && !wikipediaUri.match(/action=edit/i)) {
                           newSubdivision._wikipediaUri = `https://en.wikipedia.org${wikipediaUri}`;
                         }
 

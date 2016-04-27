@@ -3,13 +3,6 @@ const Iso31662WikipediaMappings = {
   'IS-1': 'https://en.wikipedia.org/wiki/Capital_Region_(Iceland)',
   // Exception handling for Hainan, People's Republic of China
   'CN-46': 'https://en.wikipedia.org/wiki/Qiong',
-  // Exception handling for Monaco
-  'MC-GA': null,
-  'MC-SO': null,
-  'MC-MA': null,
-  'MC-MU': null,
-  'MC-SP': null,
-  'MC-VR': null,
   // TODO: cf. https://en.wikipedia.org/w/index.php?title=Shabuz_District&redirect=no
   'AZ-SAH': 'https://en.wikipedia.org/wiki/Shahbuz_District',
   // TODO: cf. https://en.wikipedia.org/w/index.php?title=ISO_3166-2:LB&oldid=700528943
