@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "title": "Country Data Package",
   "description": "A Data Package for names and codes of countries, and their continents, regions, and principal subdivisions",
+  "homepage": "",
   "keywords": [
     "data package",
     "continent",
@@ -22,7 +23,26 @@
     "web": "https://en.wikipedia.org/wiki/ISO_3166-1"
   }, {
     "name": "UNSD",
-    "http://unstats.un.org/unsd/methods/m49/m49regin.htm"
+    "web": "http://unstats.un.org/unsd/methods/m49/m49regin.htm"
+  }, {
+    "name": "GeoNames",
+    "web": "http://www.geonames.org/"
   }],
-  "resources": []
+  "resources": [{
+    "name": "Continents",
+    "path": "data/continents.json",
+    "hash": "fe2fc3123462902c170de6b6a48c62cb"
+  }, {
+    "name": "Regions",
+    "path": "data/regions.json",
+    "hash": "04ed99785a379072f231ffacd2485f82"
+  } , {
+    "name": "Countries",
+    "path": "data/countries.json",
+    "hash": "68c57f1da1b32cd231e94b78fb344f38"
+  }, {
+    "name": "Subdivisions",
+    "path": "data/subdivisions.json",
+    "hash": "6340401f20083b6313e2f63e3a7191f3"
+  }]
 }
