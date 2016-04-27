@@ -1,0 +1,5 @@
+reporting:
+  reports:
+    - html
+    - lcov
+  dir: ./tests/coverage
