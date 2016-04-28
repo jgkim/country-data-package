@@ -748,7 +748,9 @@ class Scraper {
           'parentSubdivision': 'isoCountrySubdivisionCode',
           'subSubdivions': undefined,
         }),
-      ]);
+      ]).then(() => {
+        return this.data;
+      });
     });
   }
 
