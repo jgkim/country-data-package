@@ -33,12 +33,12 @@ class Scraper {
   }
 
   /**
-  * _getCountryList() scrapes codes and links of countries in ISO 3166-1 from Wikipedia.
+  * getCountryList() scrapes codes and links of countries in ISO 3166-1 from Wikipedia.
   *
   * @access private
   * @return {Promise}
   */
-  _getCountryList() {
+  getCountryList() {
     return new Promise((resolve, reject) => {
       const scraper = xray();
 
@@ -48,7 +48,7 @@ class Scraper {
           isoTwoLetterCountryCode: 'td:nth-child(2)',
           isoThreeLetterCountryCode: 'td:nth-child(3)',
           isoThreeDigitCountryCode: 'td:nth-child(4)',
-          _wikipediaUri: 'td:nth-child(1) a@href',
+          wikipediaUri: 'td:nth-child(1) a@href',
         }])((error, data) => {
           if (error) {
             reject(error);
@@ -60,80 +60,77 @@ class Scraper {
   }
 
   /**
-  * _getWikiIds() scrapes the Wikipedia canonical slug of each entity.
+  * getWikiIds() scrapes the Wikipedia canonical slug of each entity.
   *
   * @access private
   * @param {Array} entities
   * @return {Promise} a promise that waits for all promises for entities to be fulfilled
   */
-  _getWikiIds(entities) {
-    const promises = [];
+  getWikiIds(entities) {
+    const promises = entities.map((entity, index) => new Promise((resolve, reject) => {
+      if (entity && entity.wikipediaUri) {
+        setTimeout(() => {
+          const entityReference = entity;
+          let slug = _.trimEnd(entityReference.wikipediaUri, '/');
+          delete entityReference.wikipediaUri;
+          slug = slug.substring(slug.lastIndexOf('/') + 1);
 
-    entities.map((entity, index) => {
-      promises.push(new Promise((resolve, reject) => {
-        if (entity && entity._wikipediaUri) {
-          setTimeout(() => {
-            const entityReference = entity;
-            let slug = _.trimRight(entityReference._wikipediaUri, '/');
-            delete entityReference._wikipediaUri;
-            slug = slug.substring(slug.lastIndexOf('/') + 1);
-
-            request
-              .get('https://en.wikipedia.org/w/api.php')
-              .query({
-                action: 'query',
-                prop: 'info',
-                inprop: 'url',
-                redirects: true,
-                format: 'json',
-                titles: decodeURIComponent(slug),
-              })
-              .end((error, response) => {
-                if (error) {
-                  reject(error);
-                } else {
-                  // Get the first page of the results.
-                  _.forEach(response.body.query.pages, (page, id) => {
-                    if (id !== '-1') {
-                      const canonicalSlug = _.trimRight(page.canonicalurl, '/');
-                      entityReference.wikipediaSlug = canonicalSlug.substring(canonicalSlug.lastIndexOf('/') + 1);
-                    }
-
-                    return false;
-                  });
-
-                  if (process.env.NODE_ENV !== 'test') {
-                    this.progressBar.tick();
+          request
+            .get('https://en.wikipedia.org/w/api.php')
+            .query({
+              action: 'query',
+              prop: 'info',
+              inprop: 'url',
+              redirects: true,
+              format: 'json',
+              titles: decodeURIComponent(slug),
+            })
+            .end((error, response) => {
+              if (error) {
+                reject(error);
+              } else {
+                // Get the first page of the results.
+                _.forEach(response.body.query.pages, (page, id) => {
+                  if (id !== '-1') {
+                    const canonicalSlug = _.trimEnd(page.canonicalurl, '/');
+                    entityReference.wikipediaSlug =
+                      canonicalSlug.substring(canonicalSlug.lastIndexOf('/') + 1);
                   }
 
-                  resolve(entityReference);
-                }
-              });
-          }, this.throttleTime * index);
-        } else {
-          if (process.env.NODE_ENV !== 'test') {
-            this.progressBar.tick();
-          }
+                  return false;
+                });
 
-          resolve(entity);
+                if (process.env.NODE_ENV !== 'test') {
+                  this.progressBar.tick();
+                }
+
+                resolve(entityReference);
+              }
+            });
+        }, this.throttleTime * index);
+      } else {
+        if (process.env.NODE_ENV !== 'test') {
+          this.progressBar.tick();
         }
-      }));
-    });
+
+        resolve(entity);
+      }
+    }));
 
     return Promise.all(promises);
   }
 
   /**
-  * _setValueWithLanguage() sets the property value with the language of the key on the object.
+  * setValueWithLanguage() sets the property value with the language of the key on the object.
   *
-  * @access public
+  * @access private
   * @param {Object} the object to augment
   * @param {string} the language of the property value
   * @param {string} the key of the property to set
   * @param {string} the value to set
   * @return {Object} the reference of the augmented object
   */
-  _setValueWithLanguage(object, language, key, value) {
+  setValueWithLanguage(object, language, key, value) {
     const objectReference = object;
 
     if (language) {
@@ -153,102 +150,106 @@ class Scraper {
   }
 
   /**
-  * _getGeoNamesIds() scrapes the GeoNames ID of each entity.
+  * getGeoNamesIds() scrapes the GeoNames ID of each entity.
   *
   * @access private
   * @param {Array} entities
   * @return {Promise} a promise that waits for all promises for entities to be fulfilled
   */
-  _getGeoNamesIds(entities) {
-    const promises = [];
+  getGeoNamesIds(entities) {
+    const promises = entities.map((entity, index) => new Promise((resolve, reject) => {
+      if (entity.wikipediaSlug) {
+        setTimeout(() => {
+          request
+            .get('https://www.wikidata.org/w/api.php')
+            .query({
+              action: 'wbgetentities',
+              sites: 'enwiki',
+              props: 'labels|claims',
+              format: 'json',
+              titles: decodeURIComponent(entity.wikipediaSlug),
+            })
+            .end((error, response) => {
+              if (error) {
+                reject(error);
+              } else {
+                const entityReference = entity;
 
-    entities.map((entity, index) => {
-      promises.push(new Promise((resolve, reject) => {
-        if (entity.wikipediaSlug) {
-          setTimeout(() => {
-            request
-              .get('https://www.wikidata.org/w/api.php')
-              .query({
-                action: 'wbgetentities',
-                sites: 'enwiki',
-                props: 'labels|claims',
-                format: 'json',
-                titles: decodeURIComponent(entity.wikipediaSlug),
-              })
-              .end((error, response) => {
-                if (error) {
-                  reject(error);
-                } else {
-                  const entityReference = entity;
+                // Get the first entity of the results.
+                _.forEach(response.body.entities, (wikidata, id) => {
+                  if (id !== '-1') {
+                    entityReference.wikidataId = id;
 
-                  // Get the first entity of the results.
-                  _.forEach(response.body.entities, (wikidata, id) => {
-                    if (id !== '-1') {
-                      entityReference.wikidataId = id;
-
-                      if (entityReference.wikidataId in WikidataGeoNamesMappings) {
-                        if (WikidataGeoNamesMappings[entityReference.wikidataId]) {
-                          entityReference.geoNamesId = WikidataGeoNamesMappings[entityReference.wikidataId];
-                        }
-                      } else {
-                        try {
-                          entityReference.geoNamesId = wikidata.claims.P1566[0].mainsnak.datavalue.value;
-                        } catch (exception) {
-                          reject(`Cannot find a GeoNames ID for this Wikidata entity: ${entityReference.wikidataId}`);
-                        }
+                    if (entityReference.wikidataId in WikidataGeoNamesMappings) {
+                      if (WikidataGeoNamesMappings[entityReference.wikidataId]) {
+                        entityReference.geoNamesId =
+                          WikidataGeoNamesMappings[entityReference.wikidataId];
                       }
-
-                      _.forEach(wikidata.labels, (label) => {
-                        this._setValueWithLanguage(entityReference, label.language, 'wikipediaLabel', label.value);
-                      });
+                    } else {
+                      try {
+                        entityReference.geoNamesId =
+                          wikidata.claims.P1566[0].mainsnak.datavalue.value;
+                      } catch (exception) {
+                        reject(
+                          'Cannot find a GeoNames ID for ' +
+                          `this Wikidata entity: ${entityReference.wikidataId}`
+                        );
+                      }
                     }
 
-                    return false;
-                  });
-
-                  if (process.env.NODE_ENV !== 'test') {
-                    this.progressBar.tick();
+                    _.forEach(wikidata.labels, label => {
+                      this.setValueWithLanguage(
+                        entityReference,
+                        label.language,
+                        'wikipediaLabel',
+                        label.value
+                      );
+                    });
                   }
 
-                  resolve(entityReference);
-                }
-              });
-          }, this.throttleTime * index);
-        } else {
-          if (process.env.NODE_ENV !== 'test') {
-            this.progressBar.tick();
-          }
+                  return false;
+                });
 
-          resolve(entity);
+                if (process.env.NODE_ENV !== 'test') {
+                  this.progressBar.tick();
+                }
+
+                resolve(entityReference);
+              }
+            });
+        }, this.throttleTime * index);
+      } else {
+        if (process.env.NODE_ENV !== 'test') {
+          this.progressBar.tick();
         }
-      }));
-    });
+
+        resolve(entity);
+      }
+    }));
 
     return Promise.all(promises);
   }
 
   /**
-  * _getGeoNamesData() scrapes the data of each entity from GeoNames.
+  * getGeoNamesData() scrapes the data of each entity from GeoNames.
   *
   * @access private
   * @param {Array} entities
   * @return {Promise} a promise that waits for all promises for entities to be fulfilled
   */
-  _getGeoNamesData(entities) {
-    const promises = [];
-
-    entities.map((entity, index) => {
-      promises.push(new Promise((resolve, reject) => {
-        if (entity.geoNamesId) {
-          setTimeout(() => {
-            rdf.defaultRequest('get', `http://sws.geonames.org/${entity.geoNamesId}/about.rdf`).then((response) => {
-              return rdf.parsers.parse('application/rdf+xml', response.content);
-            }).then((graph) => {
+  getGeoNamesData(entities) {
+    const promises = entities.map((entity, index) => new Promise((resolve, reject) => {
+      if (entity.geoNamesId) {
+        setTimeout(() => {
+          rdf
+            .defaultRequest('get', `http://sws.geonames.org/${entity.geoNamesId}/about.rdf`)
+            .then(response => rdf.parsers.parse('application/rdf+xml', response.content))
+            .then(graph => {
               const entityReference = entity;
 
-              graph.forEach((triple) => {
-                const gn = (name) => { return `http://www.geonames.org/ontology#${name}`; };
-                const wgs84 = (name) => { return `http://www.w3.org/2003/01/geo/wgs84_pos#${name}`; };
+              graph.forEach(triple => {
+                const gn = name => `http://www.geonames.org/ontology#${name}`;
+                const wgs84 = name => `http://www.w3.org/2003/01/geo/wgs84_pos#${name}`;
 
                 if (triple.predicate.equals(gn('name'))) {
                   entityReference.name = triple.object.toString();
@@ -258,9 +259,14 @@ class Scraper {
                   entityReference.longitude = parseFloat(triple.object.toString());
                 }
 
-                ['officialName', 'alternateName', 'shortName'].forEach((name) => {
+                ['officialName', 'alternateName', 'shortName'].forEach(name => {
                   if (triple.predicate.equals(gn(name))) {
-                    this._setValueWithLanguage(entityReference, triple.object.language, name, triple.object.toString());
+                    this.setValueWithLanguage(
+                      entityReference,
+                      triple.object.language,
+                      name,
+                      triple.object.toString()
+                    );
                   }
                 });
               });
@@ -270,33 +276,33 @@ class Scraper {
               }
 
               resolve(entityReference);
-            }).catch((exception) => {
+            })
+            .catch(exception => {
               reject(exception);
             });
 
-            // The hourly limit of GeoNames is 2000 credits.
-          }, this.throttleTime * index + (3600000 * Math.floor(index / 1700)));
-        } else {
-          if (process.env.NODE_ENV !== 'test') {
-            this.progressBar.tick();
-          }
-
-          resolve(entity);
+          // The hourly limit of GeoNames is 2000 credits.
+        }, this.throttleTime * index + (3600000 * Math.floor(index / 1700)));
+      } else {
+        if (process.env.NODE_ENV !== 'test') {
+          this.progressBar.tick();
         }
-      }));
-    });
+
+        resolve(entity);
+      }
+    }));
 
     return Promise.all(promises);
   }
 
   /**
-  * _getRegionList() scrapes codes and links of continental and sub-continental regions from UNSD.
+  * getRegionList() scrapes codes and links of continental and sub-continental regions from UNSD.
   *
   * @access public
   * @param {Array} countries
   * @return {Promise}
   */
-  _getRegionList(countries) {
+  getRegionList(countries) {
     return new Promise((resolve, reject) => {
       request
         .get('http://unstats.un.org/unsd/methods/m49/m49regin.htm')
@@ -317,7 +323,7 @@ class Scraper {
 
               // Break the loop if it's not the first header.
               if (tr.find('td.cheader2').length) {
-                return (index) ? false : true;
+                return !index;
               }
 
               const tds = tr.find('td');
@@ -337,7 +343,7 @@ class Scraper {
                 const newContinent = {
                   unM49Code: code,
                   // Rough mapping of names to Wikipedia URIs
-                  _wikipediaUri: `https://en.wikipedia.org/wiki/${continent.replace(/\s/g, '_')}`,
+                  wikipediaUri: `https://en.wikipedia.org/wiki/${continent.replace(/\s/g, '_')}`,
                   regions: [],
                 };
                 continents.push(newContinent);
@@ -358,7 +364,7 @@ class Scraper {
                 const newRegion = {
                   unM49Code: code,
                   // Rough mapping of names to Wikipedia URIs
-                  _wikipediaUri: `https://en.wikipedia.org/wiki/${region.replace(/\s/g, '_')}`,
+                  wikipediaUri: `https://en.wikipedia.org/wiki/${region.replace(/\s/g, '_')}`,
                   continent: _.last(continents),
                   countries: [],
                 };
@@ -378,28 +384,34 @@ class Scraper {
                 country.region = _.last(regions);
                 country.region.countries.push(country);
               }
+
+              return true;
             });
 
-            resolve([continents, regions, countries, _.flatten(_.pluck(countries, 'subdivisions'))]);
+            resolve([
+              continents,
+              regions,
+              countries,
+              _.flatten(_.map(countries, 'subdivisions')),
+            ]);
           }
         });
     });
   }
 
   /**
-  * _getSubdivisionList() scrapes codes and links of subdivisions of each country in ISO 3166-2 from Wikipedia.
+  * getSubdivisionList() scrapes codes and links of subdivisions of each country
+  * in ISO 3166-2 from Wikipedia.
   *
   * @access private
   * @param {Array} countries
   * @return {Promise}
   */
-  _getSubdivisionList(countries) {
-    const promises = [];
-
-    countries.map((country, index) => {
+  getSubdivisionList(countries) {
+    const promises = countries.map((country, index) => {
       const countryReference = country;
 
-      promises.push(new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         setTimeout(() => {
           request
             .get(`https://en.wikipedia.org/wiki/ISO_3166-2:${country.isoTwoLetterCountryCode.toUpperCase()}`)
@@ -413,7 +425,9 @@ class Scraper {
                 const subdivisions = [];
 
                 // For countries without category headings
-                let defaultCategory = DefaultCategoryMappings[countryReference.isoTwoLetterCountryCode.toUpperCase()];
+                let defaultCategory = DefaultCategoryMappings[
+                  countryReference.isoTwoLetterCountryCode.toUpperCase()
+                ];
                 let tableIndex = 0;
 
                 siblings.each((siblingIndex, sibling) => {
@@ -439,8 +453,9 @@ class Scraper {
                         defaultCategory = 'Parish';
                         break;
                       case 'Counties':
-                      // Exception handling for Kenya
+                        // falls through
                       case '47 counties':
+                        // Exception handling for Kenya
                         defaultCategory = 'County';
                         break;
                       case 'Autonomous republic':
@@ -475,43 +490,54 @@ class Scraper {
                     element.find('tr').each((rowIndex, tr) => {
                       const row = cheerio(tr);
 
-                      const code = _.trim(row.find(`td:nth-child(${codeIndex})`).text()).toUpperCase();
+                      const code = _.trim(row.find(`td:nth-child(${codeIndex})`).text())
+                                    .toUpperCase();
 
-                      if (code.length && !_.find(subdivisions, 'isoCountrySubdivisionCode', code)) {
+                      if (code.length && !_.find(subdivisions, ['isoCountrySubdivisionCode', code])) {
                         const newSubdivision = {};
                         newSubdivision.country = countryReference;
                         newSubdivision.isoCountrySubdivisionCode = code;
-                        newSubdivision.isoSubdivisionCode = newSubdivision.isoCountrySubdivisionCode.split('-').pop();
+                        newSubdivision.isoSubdivisionCode =
+                          newSubdivision.isoCountrySubdivisionCode.split('-').pop();
 
-                        let wikipediaUri = row.find(`td a`).attr('href');
-                        if (_.startsWith(wikipediaUri, '/wiki/File:') || _.endsWith(wikipediaUri, '_language')) {
-                          wikipediaUri = row.find(`td a`).next().attr('href');
+                        let wikipediaUri = row.find('td a').attr('href');
+                        if (_.startsWith(wikipediaUri, '/wiki/File:') ||
+                            _.endsWith(wikipediaUri, '_language')) {
+                          wikipediaUri = row.find('td a').next().attr('href');
                         }
 
                         if (code in Iso31662WikipediaMappings) {
                           if (Iso31662WikipediaMappings[code]) {
-                            newSubdivision._wikipediaUri = Iso31662WikipediaMappings[code];
+                            newSubdivision.wikipediaUri = Iso31662WikipediaMappings[code];
                           }
                         } else if (wikipediaUri && !wikipediaUri.match(/action=edit/i)) {
-                          newSubdivision._wikipediaUri = `https://en.wikipedia.org${wikipediaUri}`;
+                          newSubdivision.wikipediaUri = `https://en.wikipedia.org${wikipediaUri}`;
                         }
 
-                        if (!newSubdivision._wikipediaUri) {
-                          newSubdivision.name = _.trim(row.find(`td:nth-child(${codeIndex + 1})`).text());
+                        if (!newSubdivision.wikipediaUri) {
+                          newSubdivision.name =
+                            _.trim(row.find(`td:nth-child(${codeIndex + 1})`).text());
                         }
 
-                        newSubdivision.isoSubdivisionCategory = (categoryIndex) ? _.capitalize(_.trim(row.find(`td:nth-child(${categoryIndex})`).text())) : defaultCategory;
+                        newSubdivision.isoSubdivisionCategory =
+                          (categoryIndex) ?
+                            _.capitalize(_.trim(row.find(`td:nth-child(${categoryIndex})`).text()))
+                            : defaultCategory;
 
                         if (tableIndex > 0 && subdivisionIndex) {
-                          let parentSubdivision = row.find(`td:nth-child(${subdivisionIndex}) a`) || row.find(`td:nth-child(${subdivisionIndex})`);
+                          let parentSubdivision =
+                            row.find(`td:nth-child(${subdivisionIndex}) a`)
+                            || row.find(`td:nth-child(${subdivisionIndex})`);
                           parentSubdivision = _.trim(parentSubdivision.first().text());
                           if (parentSubdivision && !parentSubdivision.match(/(&#x2014;|—)/)) {
                             if (parentSubdivision.match(/\-/)) {
                               parentSubdivision = parentSubdivision.split('-').pop();
                             }
-                            newSubdivision.parentSubdivision = _.find(subdivisions, 'isoSubdivisionCode', parentSubdivision);
+                            newSubdivision.parentSubdivision =
+                              _.find(subdivisions, ['isoSubdivisionCode', parentSubdivision]);
 
-                            newSubdivision.parentSubdivision.subSubdivions = newSubdivision.parentSubdivision.subSubdivions || [];
+                            newSubdivision.parentSubdivision.subSubdivions =
+                              newSubdivision.parentSubdivision.subSubdivions || [];
                             newSubdivision.parentSubdivision.subSubdivions.push(newSubdivision);
                           }
                         }
@@ -522,6 +548,8 @@ class Scraper {
 
                     tableIndex++;
                   }
+
+                  return true;
                 });
                 countryReference.subdivisions = subdivisions;
 
@@ -533,23 +561,23 @@ class Scraper {
               }
             });
         }, this.throttleTime * index);
-      }));
+      });
     });
 
     return Promise.all(promises);
   }
 
   /**
-   * _saveData() saves data into a file under the data directory.
+   * saveFile() saves data into a file under the data directory.
    *
    * @access private
    * @param {String} filename
    * @param {Array} data
    * @param {Object} options
    */
-  _saveData(filename, data, options) {
+  saveFile(filename, data, options) {
     return new Promise((resolve, reject) => {
-      fs.mkdir(this.directoryName, (error) => {
+      fs.mkdir(this.directoryName, error => {
         if (error && (error.code !== 'EEXIST')) {
           reject(error);
         } else {
@@ -568,7 +596,7 @@ class Scraper {
           });
 
           stringifyReplacer.pipe(fs.createWriteStream(path.join(this.directoryName, filename)));
-          data.forEach((item) => {
+          data.forEach(item => {
             stringifyReplacer.write(item);
           });
           stringifyReplacer.end();
@@ -580,16 +608,16 @@ class Scraper {
   }
 
   /**
-   * _loadData() loads data from a file under the data directory.
+   * loadFile() loads data from a file under the data directory.
    *
    * @access private
    * @param {String} filename
    */
-  _loadData(filename) {
+  loadFile(filename) {
     return new Promise((resolve, reject) => {
       const filePath = path.join(this.directoryName, filename);
 
-      fs.access(filePath, fs.R_OK, (accessError) => {
+      fs.access(filePath, fs.R_OK, accessError => {
         if (accessError) {
           reject(accessError);
         } else {
@@ -613,14 +641,14 @@ class Scraper {
   logData(data) {
     const log = debug('scraper:log');
 
-    data.continents.forEach((continent) => {
+    data.continents.forEach(continent => {
       log(continent.name);
-      continent.regions.forEach((region) => {
+      continent.regions.forEach(region => {
         log(`=> ${region.name}`);
-        region.countries.forEach((country) => {
+        region.countries.forEach(country => {
           log(`  => ${country.name}`);
 
-          country.subdivisions.forEach((subdivision) => {
+          country.subdivisions.forEach(subdivision => {
             let subdivisionName = subdivision.name;
             if (!subdivisionName && subdivision.en) {
               subdivisionName = subdivision.en.wikipediaLabel;
@@ -641,69 +669,68 @@ class Scraper {
   }
 
   /**
-  * getData() scrapes data about countries, and their continents, regions, and principal subdivisions.
+  * getData() scrapes data about countries, and their continents, regions,
+  * and principal subdivisions.
   *
   * @access public
   * @return {Promise}
   */
   getData() {
-    return this._getCountryList()
-      .then((countries) => {
+    return this.getCountryList()
+      .then(countries => {
         if (process.env.NODE_ENV !== 'test') {
-          this.progressBar = new Progress('Subdivisions:  [:bar] :percent :etas', { total: countries.length });
+          this.progressBar = new Progress(
+            'Subdivisions:  [:bar] :percent :etas',
+            { total: countries.length }
+          );
         }
 
-        return this._getSubdivisionList(countries);
+        return this.getSubdivisionList(countries);
       })
-      .then((countries) => {
-        return this._getRegionList(countries);
-      })
-      .then((data) => {
+      .then(countries => this.getRegionList(countries))
+      .then(data => {
         if (process.env.NODE_ENV !== 'test') {
-          const length = data.reduce((previous, current) => {
-            return previous + current.length;
-          }, 0);
-          this.progressBar = new Progress('Wiki IDs:      [:bar] :percent :etas', { total: length });
-        }
-
-        return Promise.all([
-          this._getWikiIds(data[0]),
-          this._getWikiIds(data[1]),
-          this._getWikiIds(data[2]),
-          this._getWikiIds(data[3]),
-        ]);
-      })
-      .then((data) => {
-        if (process.env.NODE_ENV !== 'test') {
-          const length = data.reduce((previous, current) => {
-            return previous + current.length;
-          }, 0);
-          this.progressBar = new Progress('GeoNames IDs:  [:bar] :percent :etas', { total: length });
+          const length = data.reduce((previous, current) => previous + current.length, 0);
+          this.progressBar =
+            new Progress('Wiki IDs:      [:bar] :percent :etas', { total: length });
         }
 
         return Promise.all([
-          this._getGeoNamesIds(data[0]),
-          this._getGeoNamesIds(data[1]),
-          this._getGeoNamesIds(data[2]),
-          this._getGeoNamesIds(data[3]),
+          this.getWikiIds(data[0]),
+          this.getWikiIds(data[1]),
+          this.getWikiIds(data[2]),
+          this.getWikiIds(data[3]),
         ]);
       })
-      .then((data) => {
+      .then(data => {
         if (process.env.NODE_ENV !== 'test') {
-          const length = data.reduce((previous, current) => {
-            return previous + current.length;
-          }, 0);
-          this.progressBar = new Progress('GeoNames Data: [:bar] :percent :etas', { total: length });
+          const length = data.reduce((previous, current) => previous + current.length, 0);
+          this.progressBar =
+            new Progress('GeoNames IDs:  [:bar] :percent :etas', { total: length });
         }
 
         return Promise.all([
-          this._getGeoNamesData(data[0]),
-          this._getGeoNamesData(data[1]),
-          this._getGeoNamesData(data[2]),
-          this._getGeoNamesData(data[3]),
+          this.getGeoNamesIds(data[0]),
+          this.getGeoNamesIds(data[1]),
+          this.getGeoNamesIds(data[2]),
+          this.getGeoNamesIds(data[3]),
         ]);
       })
-      .then((data) => {
+      .then(data => {
+        if (process.env.NODE_ENV !== 'test') {
+          const length = data.reduce((previous, current) => previous + current.length, 0);
+          this.progressBar =
+            new Progress('GeoNames Data: [:bar] :percent :etas', { total: length });
+        }
+
+        return Promise.all([
+          this.getGeoNamesData(data[0]),
+          this.getGeoNamesData(data[1]),
+          this.getGeoNamesData(data[2]),
+          this.getGeoNamesData(data[3]),
+        ]);
+      })
+      .then(data => {
         this.data.continents = data[0];
         this.data.regions = data[1];
         this.data.countries = data[2];
@@ -714,7 +741,8 @@ class Scraper {
   }
 
   /**
-  * saveData() saves scraped data about countries, and their continents, regions, and principal subdivisions into respective files.
+  * saveData() saves scraped data about countries, and their continents, regions,
+  * and principal subdivisions into respective files.
   *
   * @access public
   * @return {Promise}
@@ -722,36 +750,32 @@ class Scraper {
   saveData() {
     return new Promise((resolve, reject) => {
       if (_.isEmpty(this.data)) {
-        this.getData().then((data) => {
+        this.getData().then(data => {
           resolve(data);
-        }, (error) => {
+        }, error => {
           reject(error);
         });
       } else {
         resolve(this.data);
       }
-    }).then((data) => {
-      return Promise.all([
-        this._saveData('continents.json', data.continents, {
-          'regions': undefined,
-        }),
-        this._saveData('regions.json', data.regions, {
-          'continent': 'unM49Code',
-          'countries': undefined,
-        }),
-        this._saveData('countries.json', data.countries, {
-          'region': 'unM49Code',
-          'subdivisions': undefined,
-        }),
-        this._saveData('subdivisions.json', data.subdivisions, {
-          'country': 'isoTwoLetterCountryCode',
-          'parentSubdivision': 'isoCountrySubdivisionCode',
-          'subSubdivions': undefined,
-        }),
-      ]).then(() => {
-        return this.data;
-      });
-    });
+    }).then(data => Promise.all([
+      this.saveFile('continents.json', data.continents, {
+        regions: undefined,
+      }),
+      this.saveFile('regions.json', data.regions, {
+        continent: 'unM49Code',
+        countries: undefined,
+      }),
+      this.saveFile('countries.json', data.countries, {
+        region: 'unM49Code',
+        subdivisions: undefined,
+      }),
+      this.saveFile('subdivisions.json', data.subdivisions, {
+        country: 'isoTwoLetterCountryCode',
+        parentSubdivision: 'isoCountrySubdivisionCode',
+        subSubdivions: undefined,
+      }),
+    ]).then(() => this.data));
   }
 
   /**
@@ -762,23 +786,23 @@ class Scraper {
   */
   loadData() {
     return Promise.all([
-      this._loadData('continents.json'),
-      this._loadData('regions.json'),
-      this._loadData('countries.json'),
-      this._loadData('subdivisions.json'),
-    ]).then((data) => {
+      this.loadFile('continents.json'),
+      this.loadFile('regions.json'),
+      this.loadFile('countries.json'),
+      this.loadFile('subdivisions.json'),
+    ]).then(data => {
       this.data.continents = data[0];
       this.data.regions = data[1];
       this.data.countries = data[2];
       this.data.subdivisions = data[3];
 
-      this.data.continents.forEach((continent) => {
+      this.data.continents.forEach(continent => {
         const continentReference = continent;
 
         continentReference.regions = [];
       });
 
-      this.data.regions.forEach((region) => {
+      this.data.regions.forEach(region => {
         const regionReference = region;
 
         regionReference.continent = _.find(this.data.continents, { unM49Code: region.continent });
@@ -786,7 +810,7 @@ class Scraper {
         regionReference.countries = [];
       });
 
-      this.data.countries.forEach((country) => {
+      this.data.countries.forEach(country => {
         const countryReference = country;
 
         if (country.region) {
@@ -797,15 +821,21 @@ class Scraper {
         countryReference.subdivisions = [];
       });
 
-      this.data.subdivisions.forEach((subdivision) => {
+      this.data.subdivisions.forEach(subdivision => {
         const subdivisionReference = subdivision;
 
-        subdivisionReference.country = _.find(this.data.countries, { isoTwoLetterCountryCode: subdivision.country });
+        subdivisionReference.country =
+          _.find(this.data.countries, { isoTwoLetterCountryCode: subdivision.country });
         subdivisionReference.country.subdivisions.push(subdivisionReference);
 
         if (subdivision.parentSubdivision) {
-          subdivisionReference.parentSubdivision = _.find(this.data.subdivisions, { isoCountrySubdivisionCode: subdivision.parentSubdivision });
-          subdivisionReference.parentSubdivision.subSubdivions = subdivisionReference.parentSubdivision.subSubdivions || [];
+          subdivisionReference.parentSubdivision =
+            _.find(
+              this.data.subdivisions,
+              { isoCountrySubdivisionCode: subdivision.parentSubdivision }
+            );
+          subdivisionReference.parentSubdivision.subSubdivions =
+            subdivisionReference.parentSubdivision.subSubdivions || [];
           subdivisionReference.parentSubdivision.subSubdivions.push(subdivisionReference);
         }
       });
@@ -816,12 +846,12 @@ class Scraper {
 }
 
 if (!module.parent) {
-  process.on('unhandledRejection', (error) => {
+  process.on('unhandledRejection', error => {
     debug('scraper:error')(error);
   });
 
   const scraper = new Scraper();
-  scraper.saveData().then((data) => {
+  scraper.saveData().then(data => {
     scraper.logData(data);
   });
 }
