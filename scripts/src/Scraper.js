@@ -493,7 +493,10 @@ class Scraper {
                       const code = _.trim(row.find(`td:nth-child(${codeIndex})`).text())
                                     .toUpperCase();
 
-                      if (code.length && !_.find(subdivisions, ['isoCountrySubdivisionCode', code])) {
+                      if (
+                        code.length &&
+                        !_.find(subdivisions, ['isoCountrySubdivisionCode', code])
+                      ) {
                         const newSubdivision = {};
                         newSubdivision.country = countryReference;
                         newSubdivision.isoCountrySubdivisionCode = code;
