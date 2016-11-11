@@ -547,6 +547,26 @@ const WikidataGeoNamesMappings = {
   Q41146: '3649151',
   // TODO: Exception handling for Yaracuy of Venezuela (cf. https://www.wikidata.org/w/index.php?title=Q201121&oldid=294357775)
   Q201121: '3625210',
+  // TODO: Exception handling for Équateur of the Democratic Republic of the Congo (cf. https://www.wikidata.org/w/index.php?title=Q988104&oldid=404919583)
+  Q988104: '216661',
+  // TODO: Exception handling for Bali of Indonesia (cf. https://www.wikidata.org/w/index.php?title=Q4648&oldid=404952140)
+  Q4648: '1650535',
+  // TODO: Exception handling for Hokkaido of Japan (cf. https://www.wikidata.org/w/index.php?title=Q35581&oldid=404986730)
+  Q35581: '2130038',
+  // TODO: Exception handling for Brvenica of Macedonia (cf. https://www.wikidata.org/w/index.php?title=Q850382&oldid=405058891)
+  Q850382: '792227',
+  // TODO: Exception handling for Oriental of Morocco (cf. https://www.wikidata.org/w/index.php?title=Q23048167&oldid=405460044)
+  Q23048167: '11281875',
+  // TODO: Exception handling for Penghu of Taiwan (cf. https://www.wikidata.org/w/index.php?title=Q198525&oldid=405460583)
+  Q198525: '1670651',
+  // TODO: Exception handling for Wolverhampton of the United Kingdom (cf. https://www.wikidata.org/w/index.php?title=Q126269&oldid=405461491)
+  Q126269: '2633691',
+  // TODO: Exception handling for Bournemouth of the United Kingdom (cf. https://www.wikidata.org/w/index.php?title=Q170478&oldid=405462193)
+  Q170478: '3333129',
+  // TODO: Exception handling for Nottingham of the United Kingdom (cf. https://www.wikidata.org/w/index.php?title=Q41262&oldid=405462622)
+  Q41262: '2641170',
+  // TODO: Exception handling for Southampton of the United Kingdom (cf. https://www.wikidata.org/w/index.php?title=Q79848&oldid=405463093)
+  Q79848: '2637487',
   // Exception handling for Shahbuz District of Azerbaijan
   Q388081: null,
   // Exception handling for Chobe District of Botswana
