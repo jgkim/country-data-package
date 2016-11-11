@@ -1,6 +1,6 @@
 {
   "name": "country-data-package",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A Data Package for names and codes of countries, and their continents, regions, and principal subdivisions",
   "keywords": [
     "data package",
@@ -14,6 +14,8 @@
     "un m.49"
   ],
   "author": "James G. Kim <jgkim@jayg.org> (http://jayg.org/)",
+  "bugs": "https://github.com/jgkim/country-data-package/issues",
+  "repository": "jgkim/country-data-package",
   "license": "MIT",
   "scripts": {
     "prepublish": "npm run build",
