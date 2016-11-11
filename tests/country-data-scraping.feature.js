@@ -108,84 +108,231 @@ Feature('Country Data Scraping',
           .get('/unsd/methods/m49/m49regin.htm')
           .replyWithFile(200, `${__dirname}/fixtures/UNSD.html`);
 
-        let defaultQuery = 'action=query&prop=info&inprop=url&redirects=true&format=json';
+        let defaultQuery = {
+          action: 'query',
+          prop: 'info',
+          inprop: 'url',
+          redirects: true,
+          format: 'json',
+        };
         nock('https://en.wikipedia.org')
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
           })
-          .get(`/w/api.php?${defaultQuery}&titles=Belgium`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Belgium',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/BE.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Korea_(Republic_of)`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Korea_(Republic_of)',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/KR.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=United_States_of_America`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'United_States_of_America',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/US.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Liechtenstein`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Liechtenstein',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/LI.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Monaco`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Monaco',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/MC.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Europe`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Europe',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Europe.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Asia`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Asia',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Asia.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Americas`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Americas',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Americas.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Western_Europe`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Western_Europe',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Western_Europe.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Eastern_Asia`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Eastern_Asia',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Eastern_Asia.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Northern_America`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Northern_America',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Northern_America.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Flemish_Region`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Flemish_Region',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/BE-VLG.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Antwerp_(province)`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Antwerp_(province)',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/BE-VAN.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Seoul`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Seoul',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/KR-11.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=California`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'California',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/US-CA.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Balzers`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Balzers',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/LI-01.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Sainte-D%C3%A9vote_Chapel`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Sainte-Dévote_Chapel',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/MC-SD.json`);
 
-        defaultQuery = 'action=wbgetentities&sites=enwiki&props=labels%7Cclaims&format=json';
+        defaultQuery = {
+          action: 'wbgetentities',
+          sites: 'enwiki',
+          props: 'labels|claims',
+          format: 'json',
+        };
         nock('https://www.wikidata.org')
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
           })
-          .get(`/w/api.php?${defaultQuery}&titles=United_States`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'United_States',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q30.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=South_Korea`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'South_Korea',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q884.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Belgium`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Belgium',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q31.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Liechtenstein`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Liechtenstein',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q347.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Monaco`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Monaco',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q235.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Europe`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Europe',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q46.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Asia`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Asia',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q48.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Americas`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Americas',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q828.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Northern_America`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Northern_America',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q2017699.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=East_Asia`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'East_Asia',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q27231.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Western_Europe`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Western_Europe',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q27496.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Flemish_Region`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Flemish_Region',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q9337.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Antwerp_(province)`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Antwerp_(province)',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q1116.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Seoul`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Seoul',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q8684.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=California`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'California',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q99.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Balzers`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Balzers',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q49663.json`)
-          .get(`/w/api.php?${defaultQuery}&titles=Sainte-D%C3%A9vote_Chapel`)
+          .get('/w/api.php')
+          .query({
+            ...defaultQuery,
+            titles: 'Sainte-Dévote_Chapel',
+          })
           .replyWithFile(200, `${__dirname}/fixtures/Q584191.json`);
 
         nock('http://sws.geonames.org')

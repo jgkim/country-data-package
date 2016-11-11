@@ -311,7 +311,7 @@ class Scraper {
             reject(error);
           } else {
             // Fix the borken HTML of the UNSD page.
-            const text = response.text.replace(/(Saint\-Barth[\s\S]+?<\/tr>)/m, '$1<tr>');
+            const text = response.text.replace(/(Saint-Barth[\s\S]+?<\/tr>)/m, '$1<tr>');
             const html = cheerio.load(text);
             const table = html('td.content[width="100%"]>table:nth-of-type(4)');
 
@@ -533,7 +533,7 @@ class Scraper {
                             || row.find(`td:nth-child(${subdivisionIndex})`);
                           parentSubdivision = _.trim(parentSubdivision.first().text());
                           if (parentSubdivision && !parentSubdivision.match(/(&#x2014;|—)/)) {
-                            if (parentSubdivision.match(/\-/)) {
+                            if (parentSubdivision.match(/-/)) {
                               parentSubdivision = parentSubdivision.split('-').pop();
                             }
                             newSubdivision.parentSubdivision =
