@@ -546,7 +546,7 @@
     },
     "debug": {
       "version": "2.3.2",
-      "from": "debug@>=2.3.0 <3.0.0",
+      "from": "debug@>=2.3.2 <3.0.0",
       "resolved": "https://registry.npmjs.org/debug/-/debug-2.3.2.tgz"
     },
     "deep-is": {
