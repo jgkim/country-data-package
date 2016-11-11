@@ -190,7 +190,7 @@ class Scraper {
                         entityReference.geoNamesId =
                           wikidata.claims.P1566[0].mainsnak.datavalue.value;
                       } catch (exception) {
-                        reject(
+                        debug('scraper:error')(
                           'Cannot find a GeoNames ID for ' +
                           `this Wikidata entity: ${entityReference.wikidataId}`
                         );
