@@ -1,6 +1,6 @@
 {
   "name": "country-data-package",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A Data Package for names and codes of countries, and their continents, regions, and principal subdivisions",
   "keywords": [
     "data package",
@@ -60,9 +60,11 @@
     "env-test": "^1.0.0",
     "eslint": "^3.9.1",
     "eslint-config-tipplr": "latest",
+    "eslint-plugin-ava": "^4.0.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^3.0.1",
     "eslint-plugin-react": "^6.6.0",
+    "eslint-plugin-react-native": "^2.0.0",
     "lodash": "^4.16.6",
     "mocha": "^3.1.2",
     "mocha-clean": "^1.0.0",
