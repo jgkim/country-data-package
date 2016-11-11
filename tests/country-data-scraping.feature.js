@@ -394,12 +394,12 @@ Feature('Country Data Scraping',
             JSON.parse(fs.readFileSync(`${__dirname}/fixtures/subdivisions.json`));
           expect(JSON.parse(fs.readFileSync(`${__dirname}/data/subdivisions.json`)))
             .to.deep.equal(subdivisions);
-        })
+        }),
       );
 
       And(
         'the saved files will be able to be loaded into the memory',
-        () => scraper.loadData().then(expectData)
+        () => scraper.loadData().then(expectData),
       );
 
       after(() => {
@@ -431,7 +431,7 @@ Feature('Country Data Scraping',
 
       Then(
         'an error will eventually be returned',
-        () => expect(promise).to.be.rejectedWith(Error, 'Connection refused')
+        () => expect(promise).to.be.rejectedWith(Error, 'Connection refused'),
       );
 
       after(() => {

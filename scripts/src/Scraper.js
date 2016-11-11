@@ -6,16 +6,9 @@ import xray from 'x-ray';
 
 import rdf from 'rdf-ext';
 import RdfXmlParser from 'rdf-parser-rdfxml';
-rdf.parsers = new rdf.Parsers({
-  'application/rdf+xml': RdfXmlParser,
-});
 
 import request from 'superagent';
 import cheerio from 'cheerio';
-
-import DefaultCategoryMappings from './DefaultCategoryMappings';
-import WikidataGeoNamesMappings from './WikidataGeoNamesMappings';
-import Iso31662WikipediaMappings from './Iso31662WikipediaMappings';
 
 import stringify from 'streaming-json-stringify';
 import fs from 'fs';
@@ -23,6 +16,14 @@ import path from 'path';
 
 import debug from 'debug';
 import Progress from 'progress';
+
+import DefaultCategoryMappings from './DefaultCategoryMappings';
+import WikidataGeoNamesMappings from './WikidataGeoNamesMappings';
+import Iso31662WikipediaMappings from './Iso31662WikipediaMappings';
+
+rdf.parsers = new rdf.Parsers({
+  'application/rdf+xml': RdfXmlParser,
+});
 
 class Scraper {
   constructor(directoryName = './data', data = {}) {
@@ -192,17 +193,17 @@ class Scraper {
                       } catch (exception) {
                         debug('scraper:error')(
                           'Cannot find a GeoNames ID for ' +
-                          `this Wikidata entity: ${entityReference.wikidataId}`
+                          `this Wikidata entity: ${entityReference.wikidataId}`,
                         );
                       }
                     }
 
-                    _.forEach(wikidata.labels, label => {
+                    _.forEach(wikidata.labels, (label) => {
                       this.setValueWithLanguage(
                         entityReference,
                         label.language,
                         'wikipediaLabel',
-                        label.value
+                        label.value,
                       );
                     });
                   }
@@ -244,10 +245,10 @@ class Scraper {
           rdf
             .defaultRequest('get', `http://sws.geonames.org/${entity.geoNamesId}/about.rdf`)
             .then(response => rdf.parsers.parse('application/rdf+xml', response.content))
-            .then(graph => {
+            .then((graph) => {
               const entityReference = entity;
 
-              graph.forEach(triple => {
+              graph.forEach((triple) => {
                 const gn = name => `http://www.geonames.org/ontology#${name}`;
                 const wgs84 = name => `http://www.w3.org/2003/01/geo/wgs84_pos#${name}`;
 
@@ -259,13 +260,13 @@ class Scraper {
                   entityReference.longitude = parseFloat(triple.object.toString());
                 }
 
-                ['officialName', 'alternateName', 'shortName'].forEach(name => {
+                ['officialName', 'alternateName', 'shortName'].forEach((name) => {
                   if (triple.predicate.equals(gn(name))) {
                     this.setValueWithLanguage(
                       entityReference,
                       triple.object.language,
                       name,
-                      triple.object.toString()
+                      triple.object.toString(),
                     );
                   }
                 });
@@ -277,12 +278,12 @@ class Scraper {
 
               resolve(entityReference);
             })
-            .catch(exception => {
+            .catch((exception) => {
               reject(exception);
             });
 
           // The hourly limit of GeoNames is 2000 credits.
-        }, this.throttleTime * index + (3600000 * Math.floor(index / 1700)));
+        }, (this.throttleTime * index) + (3600000 * Math.floor(index / 1700)));
       } else {
         if (process.env.NODE_ENV !== 'test') {
           this.progressBar.tick();
@@ -549,7 +550,7 @@ class Scraper {
                       }
                     });
 
-                    tableIndex++;
+                    tableIndex += 1;
                   }
 
                   return true;
@@ -580,7 +581,7 @@ class Scraper {
    */
   saveFile(filename, data, options) {
     return new Promise((resolve, reject) => {
-      fs.mkdir(this.directoryName, error => {
+      fs.mkdir(this.directoryName, (error) => {
         if (error && (error.code !== 'EEXIST')) {
           reject(error);
         } else {
@@ -599,7 +600,7 @@ class Scraper {
           });
 
           stringifyReplacer.pipe(fs.createWriteStream(path.join(this.directoryName, filename)));
-          data.forEach(item => {
+          data.forEach((item) => {
             stringifyReplacer.write(item);
           });
           stringifyReplacer.end();
@@ -620,7 +621,7 @@ class Scraper {
     return new Promise((resolve, reject) => {
       const filePath = path.join(this.directoryName, filename);
 
-      fs.access(filePath, fs.R_OK, accessError => {
+      fs.access(filePath, fs.R_OK, (accessError) => {
         if (accessError) {
           reject(accessError);
         } else {
@@ -644,14 +645,14 @@ class Scraper {
   logData(data) {
     const log = debug('scraper:log');
 
-    data.continents.forEach(continent => {
+    data.continents.forEach((continent) => {
       log(continent.name);
-      continent.regions.forEach(region => {
+      continent.regions.forEach((region) => {
         log(`=> ${region.name}`);
-        region.countries.forEach(country => {
+        region.countries.forEach((country) => {
           log(`  => ${country.name}`);
 
-          country.subdivisions.forEach(subdivision => {
+          country.subdivisions.forEach((subdivision) => {
             let subdivisionName = subdivision.name;
             if (!subdivisionName && subdivision.en) {
               subdivisionName = subdivision.en.wikipediaLabel;
@@ -680,18 +681,18 @@ class Scraper {
   */
   getData() {
     return this.getCountryList()
-      .then(countries => {
+      .then((countries) => {
         if (process.env.NODE_ENV !== 'test') {
           this.progressBar = new Progress(
             'Subdivisions:  [:bar] :percent :etas',
-            { total: countries.length }
+            { total: countries.length },
           );
         }
 
         return this.getSubdivisionList(countries);
       })
       .then(countries => this.getRegionList(countries))
-      .then(data => {
+      .then((data) => {
         if (process.env.NODE_ENV !== 'test') {
           const length = data.reduce((previous, current) => previous + current.length, 0);
           this.progressBar =
@@ -705,7 +706,7 @@ class Scraper {
           this.getWikiIds(data[3]),
         ]);
       })
-      .then(data => {
+      .then((data) => {
         if (process.env.NODE_ENV !== 'test') {
           const length = data.reduce((previous, current) => previous + current.length, 0);
           this.progressBar =
@@ -719,7 +720,7 @@ class Scraper {
           this.getGeoNamesIds(data[3]),
         ]);
       })
-      .then(data => {
+      .then((data) => {
         if (process.env.NODE_ENV !== 'test') {
           const length = data.reduce((previous, current) => previous + current.length, 0);
           this.progressBar =
@@ -733,7 +734,7 @@ class Scraper {
           this.getGeoNamesData(data[3]),
         ]);
       })
-      .then(data => {
+      .then((data) => {
         this.data.continents = data[0];
         this.data.regions = data[1];
         this.data.countries = data[2];
@@ -753,9 +754,9 @@ class Scraper {
   saveData() {
     return new Promise((resolve, reject) => {
       if (_.isEmpty(this.data)) {
-        this.getData().then(data => {
+        this.getData().then((data) => {
           resolve(data);
-        }, error => {
+        }, (error) => {
           reject(error);
         });
       } else {
@@ -793,19 +794,19 @@ class Scraper {
       this.loadFile('regions.json'),
       this.loadFile('countries.json'),
       this.loadFile('subdivisions.json'),
-    ]).then(data => {
+    ]).then((data) => {
       this.data.continents = data[0];
       this.data.regions = data[1];
       this.data.countries = data[2];
       this.data.subdivisions = data[3];
 
-      this.data.continents.forEach(continent => {
+      this.data.continents.forEach((continent) => {
         const continentReference = continent;
 
         continentReference.regions = [];
       });
 
-      this.data.regions.forEach(region => {
+      this.data.regions.forEach((region) => {
         const regionReference = region;
 
         regionReference.continent = _.find(this.data.continents, { unM49Code: region.continent });
@@ -813,7 +814,7 @@ class Scraper {
         regionReference.countries = [];
       });
 
-      this.data.countries.forEach(country => {
+      this.data.countries.forEach((country) => {
         const countryReference = country;
 
         if (country.region) {
@@ -824,7 +825,7 @@ class Scraper {
         countryReference.subdivisions = [];
       });
 
-      this.data.subdivisions.forEach(subdivision => {
+      this.data.subdivisions.forEach((subdivision) => {
         const subdivisionReference = subdivision;
 
         subdivisionReference.country =
@@ -835,7 +836,7 @@ class Scraper {
           subdivisionReference.parentSubdivision =
             _.find(
               this.data.subdivisions,
-              { isoCountrySubdivisionCode: subdivision.parentSubdivision }
+              { isoCountrySubdivisionCode: subdivision.parentSubdivision },
             );
           subdivisionReference.parentSubdivision.subSubdivions =
             subdivisionReference.parentSubdivision.subSubdivions || [];
@@ -849,12 +850,12 @@ class Scraper {
 }
 
 if (!module.parent) {
-  process.on('unhandledRejection', error => {
+  process.on('unhandledRejection', (error) => {
     debug('scraper:error')(error);
   });
 
   const scraper = new Scraper();
-  scraper.saveData().then(data => {
+  scraper.saveData().then((data) => {
     scraper.logData(data);
   });
 }
